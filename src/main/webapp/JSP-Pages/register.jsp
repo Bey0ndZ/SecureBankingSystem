@@ -4,13 +4,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Secure Banking System</title>
+    <title>Register here</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -51,7 +51,7 @@
 </style>
     
     
-    <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="../bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -105,77 +105,26 @@
       </div>
     </div>
     
-    
-    
-    
-
     <div class="container">
 
       <!-- Main hero unit for a primary marketing message or call to action -->
       <div class="hero-unit">
-        <h1>Hello, SBS team!</h1>
-        <p>Please join us to experience what secure banking is all about :P</p>
-        <p><a href="register.jsp" class="btn btn-primary btn-large">Sign Up &raquo;</a></p>
+        <h1>Register here</h1>
+        
+        <form action="register" method="post">
+        	Username:	<input type="text" name="usernameInput" /><br/>
+        	Password:	<input type="password" name="passwordInput" /><br/>
+        	Confirm Password:	<input type="password" name="confirmPasswordInput" /><br/>
+        	Firstname:	<input type="text" name="firstnameInput" /><br/>
+        	Lastname:	<input type="text" name="lastnameInput" /><br/>
+        	Email:	<input type="text" name="emailInput" /><br/>
+        	SSN:	<input type="text" name="ssnInput" /><br/>
+        	Phonenumber:	<input type="text" name="phonenumberInput" /><br/>
+        	Address:	<input type="text" name="addressInput" /><br/>
+        	<input type="submit" />
+        </form>
+        
       </div>
-
-<!-- Login box starts here author -->
-	<div id="login-box">
-
-		<h3>Login with Username and Password</h3>
-
-		<c:if test="${not empty error}">
-			<div class="error">${error}</div>
-		</c:if>
-		<c:if test="${not empty msg}">
-			<div class="msg">${msg}</div>
-		</c:if>
-
-		<form name='loginForm'
-			action="<c:url value='/j_spring_security_check' />" method='POST'>
-
-			<table>
-				<tr>
-					<td>User:</td>
-					<td><input type='text' name='username'></td>
-				</tr>
-				<tr>
-					<td>Password:</td>
-					<td><input type='password' name='password' /></td>
-				</tr>
-				<tr>
-					<td colspan='2'><input name="submit" type="submit"
-						value="submit" /></td>
-				</tr>
-			</table>
-
-			<input type="hidden" name="${_csrf.parameterName}"
-				value="${_csrf.token}" />
-
-		</form>
-	</div>
-
-
-
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="span4">
-          <h2>Recent News</h2>
-          <p>Had a meeting in Noble for 1.5 hours. Shivam - Login/ Neel - Registration</p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-        </div>
-        <div class="span4">
-          <h2>Misc.</h2>
-          <p>Sumanth doing tp, stealing Chaitali's work</p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-       </div>
-        <div class="span4">
-          <h2>Where's the party tonight?</h2>
-          <p>ELHEFE :D</p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-        </div>
-      </div>
-
-      <hr>
 
       <footer>
         <p>&copy; SBS 2014</p>
@@ -186,7 +135,7 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="bootstrap/js/jquery.js"></script>
+    <script src="../bootstrap/js/jquery.js"></script>
 
   </body>
 </html>

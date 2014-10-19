@@ -21,7 +21,6 @@ public class MainController {
 		model.addObject("message", "This is default page!");
 		model.setViewName("customer-home");
 		return model;
-
 	}
 
 	@RequestMapping(value = "/admin**", method = RequestMethod.GET)
@@ -33,7 +32,6 @@ public class MainController {
 		model.setViewName("admin-home");
 
 		return model;
-
 	}
 	
 	@RequestMapping(value = "/employee**", method = RequestMethod.GET)
@@ -45,7 +43,6 @@ public class MainController {
 		model.setViewName("employee-home");
 
 		return model;
-
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -63,7 +60,6 @@ public class MainController {
 		model.setViewName("login");
 
 		return model;
-
 	}
 	
 	//for 403 access denied page
