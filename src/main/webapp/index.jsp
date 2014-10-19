@@ -115,7 +115,7 @@
       <div class="hero-unit">
         <h1>Hello, SBS team!</h1>
         <p>Please join us to experience what secure banking is all about :P</p>
-        <p><a href="register.jsp" class="btn btn-primary btn-large">Sign Up &raquo;</a></p>
+        <p><a href="register" class="btn btn-primary btn-large">Sign Up &raquo;</a></p>
       </div>
 
 <!-- Login box starts here author -->

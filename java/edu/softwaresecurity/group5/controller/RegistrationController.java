@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/register")
+@RequestMapping(value="/register")
 public class RegistrationController {
 	@RequestMapping(method=RequestMethod.GET)
 	public ModelAndView registrationForm() {
@@ -16,7 +16,7 @@ public class RegistrationController {
 		return model;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(method=RequestMethod.POST)
 	public ModelAndView processRegistration(@RequestParam("usernameInput") String username,
    		 @RequestParam("passwordInput") String password, 
    		 @RequestParam("firstnameInput") String firstname,
@@ -27,10 +27,6 @@ public class RegistrationController {
 		 
 		 ModelAndView model = new ModelAndView("welcome");
 		 model.addObject("username", "Details submitted" + " " + username);
-		 
-		 
-		 
-		 
 		 return model;
 	}
 }
