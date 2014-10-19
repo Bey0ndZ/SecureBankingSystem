@@ -15,7 +15,7 @@ public class MainController {
 
 	@RequestMapping(value = { "/", "/welcome**" }, method = RequestMethod.GET)
 	public ModelAndView defaultPage() {
-
+		
 		ModelAndView model = new ModelAndView();
 		model.addObject("title", "You should not be landing here");
 		model.addObject("message", "This is default page!");
@@ -31,6 +31,18 @@ public class MainController {
 		model.addObject("title", "You are group5 members!!!!");
 		model.addObject("message", "This page is for ROLE_ADMIN only!");
 		model.setViewName("admin-home");
+
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/employee**", method = RequestMethod.GET)
+	public ModelAndView employeePage() {
+
+		ModelAndView model = new ModelAndView();
+		model.addObject("title", "You are group5 members!!!!");
+		model.addObject("message", "This page is for ROLE_ADMIN only!");
+		model.setViewName("employee-home");
 
 		return model;
 

@@ -2,6 +2,7 @@ create database if not exists `sbs`;
 
 USE `sbs`;
 
+DROP TABLE IF EXISTS `user_roles`;
 DROP TABLE IF EXISTS `users`;
 
 CREATE  TABLE users (
@@ -14,8 +15,8 @@ INSERT INTO users(username,password,enabled)
 VALUES ('shivam','shivam', true);
 INSERT INTO users(username,password,enabled)
 VALUES ('admin','admin', true);
-
-DROP TABLE IF EXISTS `user_roles`;
+INSERT INTO users(username,password,enabled)
+VALUES ('employee','employee', true);
 
 CREATE TABLE user_roles (
   user_role_id int(11) NOT NULL AUTO_INCREMENT,
@@ -30,3 +31,6 @@ INSERT INTO user_roles (username, role)
 VALUES ('shivam', 'ROLE_USER');
 INSERT INTO user_roles (username, role)
 VALUES ('admin', 'ROLE_ADMIN');
+INSERT INTO user_roles (username, role)
+VALUES ('employee', 'ROLE_EMPLOYEE');
+
