@@ -7,16 +7,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping(value="/register")
 public class RegistrationController {
-	@RequestMapping(method=RequestMethod.GET)
+	@RequestMapping(value="/register", method=RequestMethod.GET)
 	public ModelAndView registrationForm() {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("register");		
 		return model;
 	}
 	
-	@RequestMapping(method=RequestMethod.POST)
+	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public ModelAndView processRegistration(@RequestParam("usernameInput") String username,
    		 @RequestParam("passwordInput") String password, 
    		 @RequestParam("firstnameInput") String firstname,
