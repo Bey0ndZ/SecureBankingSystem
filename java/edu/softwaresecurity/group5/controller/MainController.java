@@ -19,15 +19,15 @@ public class MainController {
 		return model;
 	}
 
-//	@RequestMapping(value = { "/", "/welcome**" }, method = RequestMethod.GET)
-//	public ModelAndView defaultPage() {
-//		
-//		ModelAndView model = new ModelAndView();
-//		model.addObject("title", "You should not be landing here");
-//		model.addObject("message", "This is default page!");
-//		model.setViewName("customer-home");
-//		return model;
-//	}
+	@RequestMapping(value = { "/welcome**" }, method = RequestMethod.GET)
+	public ModelAndView defaultPage() {
+		
+		ModelAndView model = new ModelAndView();
+		model.addObject("title", "You should not be landing here");
+		model.addObject("message", "This is default page!");
+		model.setViewName("customer-home");
+		return model;
+	}
 
 	@RequestMapping(value = "/admin**", method = RequestMethod.GET)
 	public ModelAndView adminPage() {
@@ -70,7 +70,7 @@ public class MainController {
 	
 	//for 403 access denied page
 	@RequestMapping(value = "/403", method = RequestMethod.GET)
-	public ModelAndView accesssDenied() {
+	public ModelAndView accessDenied() {
 
 		ModelAndView model = new ModelAndView();
 		

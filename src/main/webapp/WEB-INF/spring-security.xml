@@ -12,17 +12,18 @@
 		<intercept-url pattern="/index*" access="permitAll" />
 		<intercept-url pattern="/register*" access="permitAll" />
         <intercept-url pattern="/**" access="permitAll" />
+        <intercept-url pattern="/welcome*" access="isAuthenticated()" />
 		
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />
 		<form-login 
 		    login-page="/login" 
 		    authentication-success-handler-ref="mySuccessHandler"
-			authentication-failure-url="/login=error" 
+			authentication-failure-url="/login?error" 
 			username-parameter="username"
 			password-parameter="password" />
 			
-		<logout logout-success-url="/logout=success"  />
+		<logout logout-success-url="/login?logout"  />
 		<!-- enable csrf protection -->
 		<csrf/>
 	</http>

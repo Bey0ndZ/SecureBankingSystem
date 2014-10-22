@@ -5,9 +5,9 @@ public class CustomerInformation {
 	private String password;
 	private String firstname;
 	private String lastname;
+	private String phonenumber;
 	private String email;
 	private String SSN;
-	private String phonenumber;
 	private String address;
 	/**
 	 * @return the username

@@ -8,20 +8,20 @@
 
 	<!--Google Fonts-->
 	<link href='http://fonts.googleapis.com/css@family=Open+Sans_3A400,300,300italic,400italic,600,600italic,700,700italic' rel='stylesheet' type='text/css'>
-	<link href="../resources/css/main.css" rel="stylesheet" type="text/css" />
-	<link href="../resources/css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+	<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" type="text/css" />
+	<link href="${pageContext.request.contextPath}/resources/css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
 	
 	<title>Bank of G5!</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 	<link rel="shortcut icon" href="img/favicon.png" />
 
-	<script type="text/javascript" src="../resources/js/jquery.flexslider-min.js"> </script>
-	<script type="text/javascript" src="../resources/js/jquery.easing.1.3.js"> </script>
-	<script type="text/javascript" src="../resources/js/hoverIntent.js"> </script>
-	<script type="text/javascript" src="../resources/js/jquery.sfmenu.js"> </script>
-	<script type="text/javascript" src="../resources/js/retina.js"> </script>
-	<script type="text/javascript" src="../resources/js/custom.js"> </script>
-	<script type="text/javascript" src="../resources/js/jquery.fancybox.js"> </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.flexslider-min.js"> </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.easing.1.3.js"> </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/hoverIntent.js"> </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.sfmenu.js"> </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/retina.js"> </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/custom.js"> </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.fancybox.js"> </script>
 
 
 	<script type="text/javascript">
@@ -80,7 +80,7 @@
 		
 			<!-- Start of logo -->
 			<div id="logo">
-				<a href="#"><img src="../resources/img/bank_logo.png" width="250" height="80" /></a>
+				<a href="#"><img src="${pageContext.request.contextPath}/resources/img/bank_logo.png" width="250" height="80" /></a>
 			</div><!-- End of logo -->
 	
 			<!-- Start of top menu wrapper -->
