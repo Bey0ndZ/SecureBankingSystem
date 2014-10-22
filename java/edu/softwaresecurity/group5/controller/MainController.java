@@ -12,8 +12,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MainController {
+	@RequestMapping(value={"/", "/index"}, method=RequestMethod.GET)
+	public ModelAndView indexPage() {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("index");
+		return model;
+	}
 
-	@RequestMapping(value = { "/", "/welcome**" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/welcome**" }, method = RequestMethod.GET)
 	public ModelAndView defaultPage() {
 		
 		ModelAndView model = new ModelAndView();
@@ -21,7 +27,6 @@ public class MainController {
 		model.addObject("message", "This is default page!");
 		model.setViewName("customer-home");
 		return model;
-
 	}
 
 	@RequestMapping(value = "/admin**", method = RequestMethod.GET)
@@ -33,7 +38,6 @@ public class MainController {
 		model.setViewName("admin-home");
 
 		return model;
-
 	}
 	
 	@RequestMapping(value = "/employee**", method = RequestMethod.GET)
@@ -45,7 +49,6 @@ public class MainController {
 		model.setViewName("employee-home");
 
 		return model;
-
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -63,12 +66,11 @@ public class MainController {
 		model.setViewName("login");
 
 		return model;
-
 	}
 	
 	//for 403 access denied page
 	@RequestMapping(value = "/403", method = RequestMethod.GET)
-	public ModelAndView accesssDenied() {
+	public ModelAndView accessDenied() {
 
 		ModelAndView model = new ModelAndView();
 		
