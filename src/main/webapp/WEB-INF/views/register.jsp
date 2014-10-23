@@ -1,6 +1,8 @@
-<!--
-
-<!DOCTYPE HTML>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>   
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
 <head>
@@ -116,7 +118,7 @@
 		<!-- Start of content wrapper -->
 		<div class="content_wrapper">
 			<div class="contentright" style="width: 35%">
-				<form method="POST" action="register">
+				<form:form method="POST" action="register" modelAttribute="registerForm">
 					<i><b>New User - Sign Up!</b></i> <br/>
 					<b>User Name:</b> <input type="text" name="usernameInput" id="u_name" style="color:#999;" /><br/>
 					<b>Password:</b> <input type="password" name="passwordInput" id="pwd" style="color:#999;" /><br/>
@@ -128,7 +130,7 @@
 					<b>Social Security Number:</b> <input type="text" name="ssnInput" id="ssn" style="color:#999;" /><br/>
 					<b>Address:</b> <input type="text" name="addressInput" id="add" style="color:#999;" /><br/>								
 					<input type="submit" style="margin-right: 5%" name="login" id="log_in" value="Register!" />
-				</form>
+				</form:form>
 			</div>
 
 			<div class="contenleft" style="width: 65%">
