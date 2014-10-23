@@ -1,30 +1,29 @@
 package edu.softwaresecurity.group5.dao.impl;
 
-import java.sql.Connection;
-import java.sql.Statement;
-
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import edu.softwaresecurity.group5.dao.CustomerDAO;
 import edu.softwaresecurity.group5.model.CustomerInformation;
 
+/*Using Spring JDBC Template
+  Reasons: Better connection management, no writing XML files
+  Cleans up resources by releasing DB connection
+  Better error detection 
+*/
 public class CustomerDAOImpl implements CustomerDAO {
-		@Autowired private DataSource dataSource;
-		public void registerCustomer(CustomerInformation custInfo) {
-			try {
-				Connection conn = dataSource.getConnection();
-				String insertQuery = "INSERT INTO users(username, password, firstname, lastname,"
-						+ "phonenumber, email, address"
-						+ "values("+custInfo.getUsername()+","+ custInfo.getPassword()+","+
-						custInfo.getFirstname()+","+custInfo.getLastname()+","+
-						custInfo.getPhonenumber()+","+custInfo.getEmail()+","+custInfo.getAddress()+")";
-				
-				Statement stmt = conn.createStatement();
-				stmt.addBatch(insertQuery);
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}		
-		}
+	@Autowired
+	DataSource dataSource;
+	
+	public void registerCustomer(CustomerInformation custInfo) {
+		custInfo.setEnabled(1);
+		String insertQuery = "INSERT into users" + "(username, password, enabled) VALUES (?,?,?)";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		jdbcTemplate.update(insertQuery, new Object[] {custInfo.getUsername(),
+				custInfo.getPassword(), custInfo.getEnabled()});
+		
+		
 	}
+}

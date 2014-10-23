@@ -111,6 +111,8 @@
 		<!-- Clear Fix --><div class="clear"></div>
 
 	</div><!-- End of header wrapper -->
+	
+	<center>${error}</center>
 
 	
 	<!-- Start of content wrapper -->
@@ -120,15 +122,15 @@
 			<div class="contentright" style="width: 35%">
 				<form:form method="POST" action="register" modelAttribute="registerForm">
 					<i><b>New User - Sign Up!</b></i> <br/>
-					<b>User Name:</b> <input type="text" name="usernameInput" id="u_name" style="color:#999;" /><br/>
-					<b>Password:</b> <input type="password" name="passwordInput" id="pwd" style="color:#999;" /><br/>
-					<b>Confirm Password:</b> <input type="password" name="confirmPasswordInput" id="cfrm_pwd" style="color:#999;" /><br/>
-					<b>First Name:</b> <input type="text" name="firstnameInput" id="f_name" style="color:#999;" /><br/>
-					<b>Last Name:</b> <input type="text" name="lastnameInput" id="l_name" style="color:#999;" /><br/>
-					<b>Phone Number:</b> <input type="text" name="phonenumberInput" id="contact" style="color:#999;" /><br/>
-					<b>Email Address:</b> <input type="email" name="emailInput" id="email" style="color:#999;" /><br/>
-					<b>Social Security Number:</b> <input type="text" name="ssnInput" id="ssn" style="color:#999;" /><br/>
-					<b>Address:</b> <input type="text" name="addressInput" id="add" style="color:#999;" /><br/>								
+					<b>User Name:</b> <input type="text" name="username" id="u_name" style="color:#999;" /><br/>
+					<b>Password:</b> <input type="password" name="password" id="pwd" style="color:#999;" /><br/>
+					<b>Confirm Password:</b> <input type="password" name="confirmPassword" id="cfrm_pwd" style="color:#999;" /><br/>
+					<b>First Name:</b> <input type="text" name="firstname" id="f_name" style="color:#999;" /><br/>
+					<b>Last Name:</b> <input type="text" name="lastname" id="l_name" style="color:#999;" /><br/>
+					<b>Phone Number:</b> <input type="text" name="phonenumber" id="contact" style="color:#999;" /><br/>
+					<b>Email Address:</b> <input type="email" name="email" id="email" style="color:#999;" /><br/>
+					<b>Social Security Number:</b> <input type="text" name="SSN" id="ssn" style="color:#999;" /><br/>
+					<b>Address:</b> <input type="text" name="address" id="add" style="color:#999;" /><br/>								
 					<input type="submit" style="margin-right: 5%" name="login" id="log_in" value="Register!" />
 				</form:form>
 			</div>
