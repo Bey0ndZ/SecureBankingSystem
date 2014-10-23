@@ -12,10 +12,20 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MainController {
-	@RequestMapping(value={"/", "/index"}, method=RequestMethod.GET)
-	public ModelAndView indexPage() {
+	@RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
+	public ModelAndView indexPage(@RequestParam(value = "error", required = false) String error,
+			@RequestParam(value = "logout", required = false) String logout) {
+
 		ModelAndView model = new ModelAndView();
+		if (error != null) {
+			model.addObject("error", "Invalid username and password!");
+		}
+
+		if (logout != null) {
+			model.addObject("msg", "You've been logged out successfully.");
+		}
 		model.setViewName("index");
+
 		return model;
 	}
 
@@ -47,23 +57,6 @@ public class MainController {
 		model.addObject("title", "You are group5 members!!!!");
 		model.addObject("message", "This page is for ROLE_ADMIN only!");
 		model.setViewName("employee-home");
-
-		return model;
-	}
-
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView login(@RequestParam(value = "error", required = false) String error,
-			@RequestParam(value = "logout", required = false) String logout) {
-
-		ModelAndView model = new ModelAndView();
-		if (error != null) {
-			model.addObject("error", "Invalid username and password!");
-		}
-
-		if (logout != null) {
-			model.addObject("msg", "You've been logged out successfully.");
-		}
-		model.setViewName("login");
 
 		return model;
 	}

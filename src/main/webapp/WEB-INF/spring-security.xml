@@ -17,13 +17,13 @@
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />
 		<form-login 
-		    login-page="/login" 
+		    login-page="/index" 
 		    authentication-success-handler-ref="mySuccessHandler"
-			authentication-failure-url="/login?error" 
+			authentication-failure-url="/index?error" 
 			username-parameter="username"
 			password-parameter="password" />
 			
-		<logout logout-success-url="/login?logout"  />
+		<logout logout-success-url="/index?logout"  />
 		<!-- enable csrf protection -->
 		<csrf/>
 	</http>
