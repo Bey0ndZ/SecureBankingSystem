@@ -31,10 +31,10 @@ CREATE TABLE user_roles (
   KEY fk_username_idx (username),
   CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES users (username));
   
-INSERT INTO user_roles (username, role)
-VALUES ('shivam', 'ROLE_USER');
+--INSERT INTO user_roles (username, role)
+--VALUES ('shivam', 'ROLE_USER');
 INSERT INTO user_roles (username, role)
 VALUES ('admin', 'ROLE_ADMIN');
-INSERT INTO user_roles (username, role)
-VALUES ('employee', 'ROLE_EMPLOYEE');
+--INSERT INTO user_roles (username, role)
+--VALUES ('employee', 'ROLE_EMPLOYEE');
 
