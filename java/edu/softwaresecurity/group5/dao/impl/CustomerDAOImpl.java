@@ -26,4 +26,16 @@ public class CustomerDAOImpl implements CustomerDAO {
 		
 		
 	}
+	
+	// Privileges - Add
+	public String removeCustomer(String username) {
+		String deleteQuery = "DELETE from users where username="+username;
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		int deletedRows = jdbcTemplate.update(deleteQuery);
+		if (deletedRows==1) {
+			return "User deleted";
+		} else {
+			return "User cannot be deleted";
+		}
+	}
 }

@@ -39,13 +39,11 @@ public class MainController {
 		return model;
 	}
 
-	@RequestMapping(value = "/admin**", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	public ModelAndView adminPage() {
 
 		ModelAndView model = new ModelAndView();
-		model.addObject("title", "You are group5 members!!!!");
-		model.addObject("message", "This page is for ROLE_ADMIN only!");
-		model.setViewName("admin-home");
+		model.setViewName("welcomeAdmin");
 
 		return model;
 	}

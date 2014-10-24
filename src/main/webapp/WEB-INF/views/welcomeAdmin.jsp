@@ -1,28 +1,28 @@
-<!--
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page session="true"%>
 
 <!DOCTYPE HTML>
-
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 	<!--Google Fonts-->
 	<link href='http://fonts.googleapis.com/css@family=Open+Sans_3A400,300,300italic,400italic,600,600italic,700,700italic' rel='stylesheet' type='text/css'>
-	<link href="../resources/css/main.css" rel="stylesheet" type="text/css" />
-	<link href="../resources/css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+	<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" type="text/css" />
+	<link href="${pageContext.request.contextPath}/resources/css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
 	
 	<title>Bank of G5!</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 	<link rel="shortcut icon" href="img/favicon.png" />
 
-	<script type="text/javascript" src="../resources/js/jquery.js"> </script>
-	<script type="text/javascript" src="../resources/js/jquery.flexslider-min.js"> </script>
-	<script type="text/javascript" src="../resources/js/jquery.easing.1.3.js"> </script>
-	<script type="text/javascript" src="../resources/js/hoverIntent.js"> </script>
-	<script type="text/javascript" src="../resources/js/jquery.sfmenu.js"> </script>
-	<script type="text/javascript" src="../resources/js/retina.js"> </script>
-	<script type="text/javascript" src="../resources/js/custom.js"> </script>
-	<script type="text/javascript" src="../resources/js/jquery.fancybox.js"> </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"> </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.flexslider-min.js"> </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.easing.1.3.js"> </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/hoverIntent.js"> </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.sfmenu.js"> </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/retina.js"> </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/custom.js"> </script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.fancybox.js"> </script>
 
 
 	<script type="text/javascript">
@@ -58,10 +58,16 @@
 	});
 	
 	</script>
+	
+	<script type="text/javascript">
+	function formSubmit() {
+		document.getElementById("logoutForm").submit();
+	}
+	</script>
+	
 </head>
 
 <body>
-
 	<!-- Start of top wrapper -->
 	<div id="top_wrapper">
 		<!-- Start of content wrapper -->
@@ -81,7 +87,7 @@
 		
 			<!-- Start of logo -->
 			<div id="logo">
-				<a href="#"><img src="../resources/img/bank_logo.png" width="250" height="80" /></a>
+				<a href="#"><img src="${pageContext.request.contextPath}/resources/img/bank_logo.png" width="250" height="80" /></a>
 			</div><!-- End of logo -->
 	
 			<!-- Start of top menu wrapper -->
@@ -94,7 +100,14 @@
 						<li><a href="viewUser.jsp">View User</a></li>
 						<li><a href="modifyUser.jsp">Modify User</a></li>
 						<li><a href="viewQueue.jsp">View Queue</a></li>
+						<li><a href="javascript:formSubmit()">Logout</a></li>
 					</ul>
+					
+					<c:url value="/j_spring_security_logout" var="logoutUrl" />
+						<form action="${logoutUrl}" method="post" id="logoutForm">
+							<input type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" />
+						</form>
 					
 				</nav><!-- End of topmenu -->
 	
@@ -119,7 +132,9 @@
 		<div class="content_wrapper">
 			<div class="contentright" style="width: 100%">
 				<form method="post" action="#">					
-					<p> Welcome Administrator!</p> <br/> <br/> <br/> <br/> <br/> <br/> <br/>
+					<c:if test="${pageContext.request.userPrincipal.name != null}">
+						<p>Welcome, ${pageContext.request.userPrincipal.name}</p>
+					</c:if>
 				</form>
 			</div>
 	

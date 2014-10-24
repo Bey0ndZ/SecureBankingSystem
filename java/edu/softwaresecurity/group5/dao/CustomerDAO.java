@@ -4,4 +4,5 @@ import edu.softwaresecurity.group5.model.CustomerInformation;
 
 public interface CustomerDAO {
 	public void registerCustomer(CustomerInformation custInfo);
+	public String removeCustomer(String username);
 }
