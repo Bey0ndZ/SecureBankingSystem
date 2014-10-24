@@ -1,17 +1,24 @@
 package edu.softwaresecurity.group5.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.softwaresecurity.group5.service.CustomerService;
+
 @Controller
 public class MainController {
+	@Autowired
+	CustomerService custService;
+	
 	@RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
 	public ModelAndView indexPage(@RequestParam(value = "error", required = false) String error,
 			@RequestParam(value = "logout", required = false) String logout) {
@@ -71,13 +78,24 @@ public class MainController {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			System.out.println(userDetail);
 		
-			model.addObject("username", userDetail.getUsername());
-			
+			model.addObject("username", userDetail.getUsername());	
 		}
-		
 		model.setViewName("permission-denied");
 		return model;
-
 	}
-
+	
+	// Displaying the removeUser.jsp page
+	@RequestMapping(value="/removeUser", method=RequestMethod.GET)
+	public ModelAndView returnRemoveUserPage() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("removeUser");
+		return modelAndView;
+	}
+	
+	// Removing the user
+	public ModelAndView getUserDetails(@ModelAttribute("usernameSearch") String usernameSearch) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("removeUser");
+		return modelAndView;
+	}
 }

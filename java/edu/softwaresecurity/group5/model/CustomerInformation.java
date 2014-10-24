@@ -15,6 +15,7 @@ public class CustomerInformation {
 	private String firstname;
 	@NotEmpty(message="Please enter your lastname.")
 	private String lastname;
+	private String selection;
 	@NotEmpty(message="Please enter your phonenumber.")
 	private String phonenumber;
 	@Email(message="Your email is invalid.")
@@ -132,5 +133,17 @@ public class CustomerInformation {
 	 */
 	public void setEnabled(int enabled) {
 		this.enabled = enabled;
+	}
+	/**
+	 * @return the selection
+	 */
+	public String getSelection() {
+		return selection;
+	}
+	/**
+	 * @param selection the selection to set
+	 */
+	public void setSelection(String selection) {
+		this.selection = selection;
 	}
 }

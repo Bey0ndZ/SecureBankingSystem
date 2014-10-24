@@ -127,6 +127,11 @@
 					<b>Confirm Password:</b> <input type="password" name="confirmPassword" id="cfrm_pwd" style="color:#999;" /><br/>
 					<b>First Name:</b> <input type="text" name="firstname" id="f_name" style="color:#999;" /><br/>
 					<b>Last Name:</b> <input type="text" name="lastname" id="l_name" style="color:#999;" /><br/>
+					<b>Individual or Merchant:</b>
+					<select name="selection">
+						<option value="Individual">Individual</option>
+						<option value="Merchant">Merchant</option>
+					</select><br/><br/>
 					<b>Phone Number:</b> <input type="text" name="phonenumber" id="contact" style="color:#999;" /><br/>
 					<b>Email Address:</b> <input type="email" name="email" id="email" style="color:#999;" /><br/>
 					<b>Social Security Number:</b> <input type="text" name="SSN" id="ssn" style="color:#999;" /><br/>

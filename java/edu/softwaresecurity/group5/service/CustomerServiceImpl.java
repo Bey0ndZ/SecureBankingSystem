@@ -12,4 +12,8 @@ public class CustomerServiceImpl implements CustomerService {
 	public void insertCustomerInformation(CustomerInformation custInfo) {
 		custDAO.registerCustomer(custInfo);
 	}
+	
+//	public void fetchUserDetails(String usernameSearch) {
+//		custDAO.retrieveUserDetails(usernameSearch);
+//	}
 }

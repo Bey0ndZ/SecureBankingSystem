@@ -1,7 +1,7 @@
-<!--
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>  
 <!DOCTYPE HTML>
-
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -118,7 +118,7 @@
 		<!-- Start of content wrapper -->
 		<div class="content_wrapper">
 			<div class="contentright" style="width: 100%">
-				<form method="post" action="#">					
+				<form:form method="post" action="removeUser" modelAttribute="usernameSearch">					
 					<b>Account Number :</b> <br/> <input type="number" name="removeUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
 					<a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/> <br/> <br/>
 					<table style="width:100%">
@@ -133,7 +133,7 @@
 						    <td> <a href="removeUserSuccess.jsp"> <input type="button" style="margin-right: 5%" name="removeUser" id="removeUserButton" value="Remove User" onclick=""/></a></td>
 						</tr>
 					</table>
-				</form>
+				</form:form>
 			</div>
 	
 			<div class="clear"></div>

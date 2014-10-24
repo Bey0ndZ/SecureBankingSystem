@@ -13,6 +13,7 @@
 		<intercept-url pattern="/register*" access="permitAll" />
         <intercept-url pattern="/**" access="permitAll" />
         <intercept-url pattern="/welcome*" access="isAuthenticated()" />
+        <intercept-url pattern="/removeUser*" access="permitAll" />
 		
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />
