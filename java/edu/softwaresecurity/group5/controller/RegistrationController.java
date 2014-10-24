@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import edu.softwaresecurity.group5.dto.CustomerService;
 import edu.softwaresecurity.group5.model.CustomerInformation;
+import edu.softwaresecurity.group5.service.CustomerService;
 
 @Controller
 @RequestMapping(value="/register")
@@ -32,7 +32,7 @@ public class RegistrationController {
 	
 		// Have validation annotations/ implement logic
 		custService.insertCustomerInformation(custInfo);
-		modelAndView.setViewName("welcome");
+		modelAndView.setViewName("customer-home");
 		modelAndView.addObject("username", custInfo.getUsername());
 		return modelAndView;
 		

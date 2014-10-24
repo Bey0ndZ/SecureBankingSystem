@@ -1,4 +1,4 @@
-package edu.softwaresecurity.group5.dto;
+package edu.softwaresecurity.group5.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

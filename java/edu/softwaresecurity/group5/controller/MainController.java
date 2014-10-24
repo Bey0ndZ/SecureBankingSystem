@@ -29,8 +29,8 @@ public class MainController {
 		return model;
 	}
 
-	@RequestMapping(value = { "/welcome**" }, method = RequestMethod.GET)
-	public ModelAndView defaultPage() {
+	@RequestMapping(value = "/welcome", method = RequestMethod.GET)
+	public ModelAndView welcomePage() {
 		
 		ModelAndView model = new ModelAndView();
 		model.addObject("title", "You should not be landing here");
@@ -50,7 +50,7 @@ public class MainController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/employee**", method = RequestMethod.GET)
+	@RequestMapping(value = "/employee", method = RequestMethod.GET)
 	public ModelAndView employeePage() {
 
 		ModelAndView model = new ModelAndView();
