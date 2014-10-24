@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -98,7 +97,7 @@ public class MainController {
 	
 	// Getting the userdetails
 	@RequestMapping(value="/removeUser", method=RequestMethod.POST)
-	public ModelAndView getUserDetails(@ModelAttribute("usernameSearch") String usernameSearch) {
+	public ModelAndView getUserDetails(@RequestParam("removeUser") String usernameSearch) {
 		ModelAndView modelAndView = new ModelAndView();
 		List<CustomerInformationDTO> customerDetails = new ArrayList<CustomerInformationDTO>();
 		customerDetails = custService.fetchUserDetails(usernameSearch);
