@@ -18,12 +18,9 @@ CREATE  TABLE users (
   enabled TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (username));
   
-INSERT INTO users(username,password,enabled)
-VALUES ('shivam','shivam', true);
-INSERT INTO users(username,password,enabled)
-VALUES ('admin','admin', true);
-INSERT INTO users(username,password,enabled)
-VALUES ('employee','employee', true);
+  INSERT INTO users 
+  VALUES ('admin', 'admin', 'admin', 'admin', 'Merchant', '4808452326',
+  'skulkar9@asu.edu', 'ssn', 'address', true);
 
 CREATE TABLE user_roles (
   user_role_id int(11) NOT NULL AUTO_INCREMENT,

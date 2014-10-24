@@ -1,8 +1,11 @@
 package edu.softwaresecurity.group5.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.softwaresecurity.group5.dao.CustomerDAO;
+import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.model.CustomerInformation;
 
 public class CustomerServiceImpl implements CustomerService {
@@ -13,7 +16,7 @@ public class CustomerServiceImpl implements CustomerService {
 		custDAO.registerCustomer(custInfo);
 	}
 	
-//	public void fetchUserDetails(String usernameSearch) {
-//		custDAO.retrieveUserDetails(usernameSearch);
-//	}
+	public List<CustomerInformationDTO> fetchUserDetails(String usernameSearch) {
+		return custDAO.retrieveUserDetails(usernameSearch);
+	}
 }

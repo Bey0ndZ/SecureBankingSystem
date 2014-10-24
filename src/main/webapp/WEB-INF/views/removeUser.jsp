@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>  
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page session="true"%>
+  
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -119,21 +122,24 @@
 		<div class="content_wrapper">
 			<div class="contentright" style="width: 100%">
 				<form:form method="post" action="removeUser" modelAttribute="usernameSearch">					
-					<b>Account Number :</b> <br/> <input type="number" name="removeUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
+					<b>Account Number :</b> <br/> <input type="text" name="removeUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
 					<a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/> <br/> <br/>
-					<table style="width:100%">
-	  					<tr>
-						    <td> Account Number</td>
-						    <td> Name</td> 
-						    <td></td>
-						</tr>
-	  					<tr>
-						    <td> PRINT ACCOUNT NUMBER HERE</td>
-						    <td> PRINT FULL NAME OF USER HERE</td> 
-						    <td> <a href="removeUserSuccess.jsp"> <input type="button" style="margin-right: 5%" name="removeUser" id="removeUserButton" value="Remove User" onclick=""/></a></td>
-						</tr>
-					</table>
 				</form:form>
+				<c:if test="${not empty customerDetails}">
+					   <table style="width: 100%">
+					       <c:forEach var="o" items="${customerDetails}">
+					           <tr>
+					               <td>${o.username}</td>
+					               <td>${o.firstname}</td>
+					               <td>${o.lastname}</td>
+					               <td>${o.selection}</td>
+					               <td>${o.phonenumber}</td>
+					               <td>${o.email}</td>
+					               <td>${o.address}</td>   
+					            </tr>
+					        </c:forEach>
+					    </table>
+					</c:if>
 			</div>
 	
 			<div class="clear"></div>

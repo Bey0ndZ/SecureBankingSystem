@@ -1,5 +1,8 @@
 package edu.softwaresecurity.group5.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.service.CustomerService;
 
 @Controller
@@ -60,7 +64,7 @@ public class MainController {
 
 		ModelAndView model = new ModelAndView();
 		model.addObject("title", "You are group5 members!!!!");
-		model.addObject("message", "This page is for ROLE_ADMIN only!");
+		model.addObject("message", "This attributeValuepage is for ROLE_ADMIN only!");
 		model.setViewName("employee-home");
 
 		return model;
@@ -92,9 +96,13 @@ public class MainController {
 		return modelAndView;
 	}
 	
-	// Removing the user
+	// Getting the userdetails
+	@RequestMapping(value="/removeUser", method=RequestMethod.POST)
 	public ModelAndView getUserDetails(@ModelAttribute("usernameSearch") String usernameSearch) {
 		ModelAndView modelAndView = new ModelAndView();
+		List<CustomerInformationDTO> customerDetails = new ArrayList<CustomerInformationDTO>();
+		customerDetails = custService.fetchUserDetails(usernameSearch);
+		modelAndView.addObject("customerDetails", customerDetails);
 		modelAndView.setViewName("removeUser");
 		return modelAndView;
 	}

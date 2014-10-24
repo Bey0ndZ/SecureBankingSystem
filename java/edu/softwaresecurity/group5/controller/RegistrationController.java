@@ -29,7 +29,7 @@ public class RegistrationController {
 	@RequestMapping(method=RequestMethod.POST)
 	public ModelAndView registerCustomer(@ModelAttribute("registerForm") CustomerInformation custInfo) {
 		ModelAndView modelAndView = new ModelAndView();
-		
+	
 		// Have validation annotations/ implement logic
 		custService.insertCustomerInformation(custInfo);
 		modelAndView.setViewName("customer-home");
