@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>   
+<%@ page import="net.tanesha.recaptcha.ReCaptcha" %>
+<%@ page import="net.tanesha.recaptcha.ReCaptchaFactory" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -135,8 +138,12 @@
 					<b>Phone Number:</b> <input type="text" name="phonenumber" id="contact" style="color:#999;" /><br/>
 					<b>Email Address:</b> <input type="email" name="email" id="email" style="color:#999;" /><br/>
 					<b>Social Security Number:</b> <input type="text" name="SSN" id="ssn" style="color:#999;" /><br/>
-					<b>Address:</b> <input type="text" name="address" id="add" style="color:#999;" /><br/>								
-					<input type="submit" style="margin-right: 5%" name="login" id="log_in" value="Register!" />
+					<b>Address:</b> <input type="text" name="address" id="add" style="color:#999;" /><br/>	
+					<%
+          				ReCaptcha c = ReCaptchaFactory.newReCaptcha("6LelnPwSAAAAAEdizJnYFeutV2At7VHSkC9PYxZX", "6LelnPwSAAAAAEIVuVPz5_wWsq3skomEaVJ_5eZH", false);
+          				out.print(c.createRecaptchaHtml(null, null));
+        			%>							
+					<br/> <br/> <input type="submit" style="margin-right: 5%" name="login" id="log_in" value="Register!" />
 				</form:form>
 			</div>
 

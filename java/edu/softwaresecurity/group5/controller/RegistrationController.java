@@ -1,13 +1,19 @@
 package edu.softwaresecurity.group5.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import net.tanesha.recaptcha.ReCaptchaImpl;
+import net.tanesha.recaptcha.ReCaptchaResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -30,25 +36,40 @@ public class RegistrationController {
 	}	
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ModelAndView registerCustomer(@Valid @ModelAttribute("registerForm") CustomerInformation custInfo, BindingResult result) {
+	public ModelAndView registerCustomer(@Valid @ModelAttribute("registerForm") CustomerInformation custInfo, HttpServletRequest req, @RequestParam("recaptcha_challenge_field") String challenge,
+		    @RequestParam("recaptcha_response_field") String response, BindingResult result) {
 		ModelAndView modelAndView = new ModelAndView();
 		
 		RegistrationValidation.validate (custInfo, result);
-		System.out.println("COUNT "+result.getErrorCount());
 		
-		System.out.println("ERROR "+result.getAllErrors());
+		String remoteAddr = req.getRemoteAddr();
+		ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
+		reCaptcha.setPrivateKey("6LelnPwSAAAAAEIVuVPz5_wWsq3skomEaVJ_5eZH");
+		ReCaptchaResponse reCaptchaResponse =
+		    reCaptcha.checkAnswer(remoteAddr, challenge, response);
+		
+		System.out.println("CHecking Captcha result: "+reCaptchaResponse.isValid());
+		if (!reCaptchaResponse.isValid()) {
+			System.out.println("Entered in captcha error!");
+			FieldError fieldError = new FieldError(
+			        "comment",
+			        "captcha",
+			        "Please try again.");
+			    result.addError(fieldError);
+		}
+		
+//		System.out.println("COUNT "+result.getErrorCount());
+//		System.out.println("ERROR "+result.getAllErrors());
 		
         if (result.hasErrors()) {
-        	System.out.println("CHECKING 3");
+        	//System.out.println("CHECKING 3");
+        	modelAndView.setViewName("register");
                 return modelAndView;
-                
         }
 		System.out.println(custInfo.getUsername());
-        // Have validation annotations/ implement logic
 		custService.insertCustomerInformation(custInfo);
-		modelAndView.setViewName("login");
-		//modelAndView.addObject("username", custInfo.getUsername());
-		System.out.println("CHECKING 4");
+		modelAndView.setViewName("index");
+		//System.out.println("CHECKING 4");
 		return modelAndView;
 			
 	}

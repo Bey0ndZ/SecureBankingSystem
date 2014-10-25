@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -24,18 +25,34 @@ public class CustomerDAOImpl implements CustomerDAO {
 	
 	public void registerCustomer(CustomerInformation custInfo) {
 		custInfo.setEnabled(1);
-		String insertQuery = "INSERT into users" + "(username, password, confirmpassword,"
+		String registerCustomerQuery = "INSERT into users" + "(username, password, confirmpassword,"
 				+ "firstname,"
 				+ "lastname, MerchantorIndividual, phonenumber,"
 				+ "email, SSN, address, enabled) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		jdbcTemplate.update(insertQuery, new Object[] {custInfo.getUsername(),
-				custInfo.getPassword(), custInfo.getConfirmPassword(),
+		String insertIntoUserRolesTable = "INSERT into user_roles (username, role) "
+				+ "VALUES (?,?)";
+		
+		JdbcTemplate jdbcTemplateForRegisterCustomer = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForUserRoles = new JdbcTemplate(dataSource);
+		
+		String salt = "$$Random^^^Salt**Valur&&ForBetter&&&&Protection###";
+		String saltedString = salt+custInfo.getPassword();
+		String hash = DigestUtils.md5Hex(saltedString);
+		
+		jdbcTemplateForRegisterCustomer.update(registerCustomerQuery, new Object[] {custInfo.getUsername(),
+				hash, hash,
 				custInfo.getFirstname(),
 				custInfo.getLastname(), custInfo.getSelection(),
 				custInfo.getPhonenumber(), custInfo.getEmail(), 
-				custInfo.getSSN(), custInfo.getAddress(), custInfo.getEnabled()});		
+				custInfo.getSSN(), custInfo.getAddress(), custInfo.getEnabled()});	
+		
+		jdbcTemplateForUserRoles.update(insertIntoUserRolesTable, new Object[] 
+				{custInfo.getUsername(), "ROLE_USER"});
 	}
+	
+	
+	
+	
 	
 	// Privileges - Add
 	public List<CustomerInformationDTO> retrieveUserDetails(String username) {
