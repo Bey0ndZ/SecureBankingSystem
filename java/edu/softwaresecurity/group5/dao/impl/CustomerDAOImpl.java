@@ -24,12 +24,14 @@ public class CustomerDAOImpl implements CustomerDAO {
 	
 	public void registerCustomer(CustomerInformation custInfo) {
 		custInfo.setEnabled(1);
-		String insertQuery = "INSERT into users" + "(username, password, firstname,"
+		String insertQuery = "INSERT into users" + "(username, password, confirmpassword,"
+				+ "firstname,"
 				+ "lastname, MerchantorIndividual, phonenumber,"
-				+ "email, SSN, address, enabled) VALUES (?,?,?,?,?,?,?,?,?,?)";
+				+ "email, SSN, address, enabled) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update(insertQuery, new Object[] {custInfo.getUsername(),
-				custInfo.getPassword(), custInfo.getFirstname(),
+				custInfo.getPassword(), custInfo.getConfirmPassword(),
+				custInfo.getFirstname(),
 				custInfo.getLastname(), custInfo.getSelection(),
 				custInfo.getPhonenumber(), custInfo.getEmail(), 
 				custInfo.getSSN(), custInfo.getAddress(), custInfo.getEnabled()});		

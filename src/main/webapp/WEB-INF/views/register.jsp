@@ -122,8 +122,8 @@
 			<div class="contentright" style="width: 35%">
 				<form:form method="POST" action="register" modelAttribute="registerForm">
 					<i><b>New User - Sign Up!</b></i> <br/>
-					<b>User Name:</b> <input type="text" name="username" id="u_name" style="color:#999;" /><br/>
-					<b>Password:</b> <input type="password" name="password" id="pwd" style="color:#999;" /><br/>
+					<b>User Name:</b><FONT color="red"><form:errors path="username" /></FONT> <input type="text" name="username" id="username" style="color:#999;" /><br/>
+					<b>Password:</b><FONT color="red"><form:errors path="password" /></FONT> <input type="password" name="password" id="password" style="color:#999;" /><br/>
 					<b>Confirm Password:</b> <input type="password" name="confirmPassword" id="cfrm_pwd" style="color:#999;" /><br/>
 					<b>First Name:</b> <input type="text" name="firstname" id="f_name" style="color:#999;" /><br/>
 					<b>Last Name:</b> <input type="text" name="lastname" id="l_name" style="color:#999;" /><br/>

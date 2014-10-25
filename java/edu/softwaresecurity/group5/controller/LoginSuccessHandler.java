@@ -52,7 +52,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         }
  
         if (usertype == 1) {
-            return "/welcome";
+            return "/index";
         } else if (usertype == 2) {
             return "/admin";
         } else if (usertype == 3) {

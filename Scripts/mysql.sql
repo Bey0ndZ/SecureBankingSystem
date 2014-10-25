@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE  TABLE users (
   username VARCHAR(45) NOT NULL,
   password VARCHAR(45) NOT NULL,
+  confirmpassword VARCHAR(45) NOT NULL,
   firstname VARCHAR(45) NOT NULL,
   lastname VARCHAR(45) NOT NULL,
   MerchantorIndividual VARCHAR(45) NOT NULL,
@@ -19,7 +20,7 @@ CREATE  TABLE users (
   PRIMARY KEY (username));
   
   INSERT INTO users 
-  VALUES ('admin', 'admin', 'admin', 'admin', 'Merchant', '4808452326',
+  VALUES ('admin', 'admin', 'admin', 'admin', 'admin', 'Merchant', '4808452326',
   'skulkar9@asu.edu', 'ssn', 'address', true);
 
 CREATE TABLE user_roles (

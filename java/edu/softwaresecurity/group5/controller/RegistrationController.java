@@ -1,7 +1,10 @@
 package edu.softwaresecurity.group5.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,15 +30,27 @@ public class RegistrationController {
 	}	
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ModelAndView registerCustomer(@ModelAttribute("registerForm") CustomerInformation custInfo) {
+	public ModelAndView registerCustomer(@Valid @ModelAttribute("registerForm") CustomerInformation custInfo, BindingResult result) {
 		ModelAndView modelAndView = new ModelAndView();
-	
-		// Have validation annotations/ implement logic
-		custService.insertCustomerInformation(custInfo);
-		modelAndView.setViewName("customer-home");
-		modelAndView.addObject("username", custInfo.getUsername());
-		return modelAndView;
 		
+		RegistrationValidation.validate (custInfo, result);
+		System.out.println("COUNT "+result.getErrorCount());
+		
+		System.out.println("ERROR "+result.getAllErrors());
+		
+        if (result.hasErrors()) {
+        	System.out.println("CHECKING 3");
+                return modelAndView;
+                
+        }
+		System.out.println(custInfo.getUsername());
+        // Have validation annotations/ implement logic
+		custService.insertCustomerInformation(custInfo);
+		modelAndView.setViewName("login");
+		//modelAndView.addObject("username", custInfo.getUsername());
+		System.out.println("CHECKING 4");
+		return modelAndView;
+			
 	}
 }
 

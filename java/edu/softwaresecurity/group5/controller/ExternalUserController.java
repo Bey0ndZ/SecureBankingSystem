@@ -9,10 +9,10 @@ import org.springframework.web.servlet.ModelAndView;
  */
 
 public class ExternalUserController {
-	@RequestMapping(value="/customer-home", method=RequestMethod.GET)
+	@RequestMapping(value="/accountSummary", method=RequestMethod.GET)
 	public ModelAndView returnCustomerPage() {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("customer-home");
+		modelAndView.setViewName("accountSummary");
 		return modelAndView;
 	}
 }

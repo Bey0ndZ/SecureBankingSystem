@@ -11,6 +11,9 @@ public class CustomerInformation {
 	@NotEmpty(message = "Please enter your password.")
     @Size(min = 6, max = 15, message = "Your password must between 6 and 15 characters")
 	private String password;
+	@NotEmpty(message = "Please enter your password again to confirm.")
+    @Size(min = 6, max = 15, message = "Your password must between 6 and 15 characters")
+	private String confirmPassword;
 	@NotEmpty(message="Please enter your firstname.")
 	private String firstname;
 	@NotEmpty(message="Please enter your lastname.")
@@ -50,6 +53,13 @@ public class CustomerInformation {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
+	}
 	/**
 	 * @return the firstname
 	 */
@@ -63,7 +73,12 @@ public class CustomerInformation {
 		this.firstname = firstname;
 	}
 	/**
-	 * @return the lastname
+	 * @return the lastnamepublic String getConfirmPassword() {
+		return confirmPassword;
+	}
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
+	}
 	 */
 	public String getLastname() {
 		return lastname;
