@@ -4,6 +4,7 @@ USE `sbs`;
 
 DROP TABLE IF EXISTS `user_roles`;
 DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `account`;
 
 CREATE  TABLE users (
   username VARCHAR(45) NOT NULL,
@@ -38,4 +39,10 @@ INSERT INTO user_roles (username, role)
 VALUES ('admin', 'ROLE_ADMIN');
 --INSERT INTO user_roles (username, role)
 --VALUES ('employee', 'ROLE_EMPLOYEE');
+
+CREATE TABLE account (
+	username VARCHAR(45) NOT NULL,
+	accountnumber VARCHAR(45) NOT NULL,
+	accountbalance VARCHAR(45) NOT NULL
+	);
 
