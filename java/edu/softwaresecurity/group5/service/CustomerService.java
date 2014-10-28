@@ -8,4 +8,5 @@ import edu.softwaresecurity.group5.model.CustomerInformation;
 public interface CustomerService {
 	public void insertCustomerInformation(CustomerInformation custInfo);
 	public List<CustomerInformationDTO> fetchUserDetails(String usernameSearch);
+	public List<CustomerInformationDTO> getUserList();
 }

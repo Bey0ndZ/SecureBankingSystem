@@ -59,11 +59,21 @@ public class CustomerDAOImpl implements CustomerDAO {
 		List<CustomerInformationDTO> customerInformationToDisplay = new ArrayList<CustomerInformationDTO>();
 		String retrieveDetailsQuery = "SELECT username, firstname, lastname, "
 				+ "MerchantorIndividual, phonenumber, email, "
-				+ "address from users where username=?";
+				+ "address from users where enabled = true and username=?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		customerInformationToDisplay = jdbcTemplate.query(retrieveDetailsQuery, 
 				new Object[]{username}, new UserRowMapper());
 		return customerInformationToDisplay;
 		
 	}
+	
+	 public List<CustomerInformationDTO> getUserList() {  
+		 List<CustomerInformationDTO> userList = new ArrayList<CustomerInformationDTO>();  
+		  
+		  String sql = "select * from users where enabled = true";  
+		  
+		  JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);  
+		  userList = jdbcTemplate.query(sql, new UserRowMapper());  
+		  return userList;  
+		 }  
 }

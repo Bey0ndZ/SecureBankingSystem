@@ -19,4 +19,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public List<CustomerInformationDTO> fetchUserDetails(String usernameSearch) {
 		return custDAO.retrieveUserDetails(usernameSearch);
 	}
+	public List<CustomerInformationDTO> getUserList() {  
+	  return custDAO.getUserList();  
+	 }  
 }

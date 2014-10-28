@@ -62,9 +62,9 @@ public class MainController {
 	public ModelAndView employeePage() {
 
 		ModelAndView model = new ModelAndView();
-		model.addObject("title", "You are group5 members!!!!");
-		model.addObject("message", "This attributeValuepage is for ROLE_ADMIN only!");
-		model.setViewName("employee-home");
+	//	model.addObject("title", "You are group5 members!!!!");
+	//	model.addObject("message", "This attributeValuepage is for ROLE_ADMIN only!");
+		model.setViewName("welcomeInternal");
 
 		return model;
 	}
@@ -105,4 +105,19 @@ public class MainController {
 		modelAndView.setViewName("removeUser");
 		return modelAndView;
 	}
+	
+	// Displaying the ViewUser(SearchUser).jsp page
+		@RequestMapping(value="/viewUser", method=RequestMethod.GET)
+		public ModelAndView returnViewUserPage() {
+			ModelAndView modelAndView = new ModelAndView();
+			modelAndView.setViewName("viewUser");
+			return modelAndView;
+		}
+		
+		@RequestMapping("/getList")  
+		 public ModelAndView getUserLIst() {  
+		  List<CustomerInformationDTO> userList = custService.getUserList(); 
+		  return new ModelAndView("userList", "userList", userList);  
+		 }  
+	
 }

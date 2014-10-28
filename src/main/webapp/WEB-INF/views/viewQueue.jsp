@@ -89,11 +89,11 @@
 				<!-- Start of topmenu -->
 				<nav class="topmenu"> 
 					<ul class="sf-menu">
-						<li><a href="addUser.jsp">Add User</a></li>  
-						<li><a href="removeUser.jsp">Remove User</a></li>
-						<li><a href="viewUser.jsp">View User</a></li>
-						<li><a href="modifyUser.jsp">Modify User</a></li>
-						<li><a href="viewQueue.jsp">View Queue</a></li>
+						<li><a href="addUser">Add User</a></li>  
+						<li><a href="removeUser">Remove User</a></li>
+						<li><a href="viewUser">View User</a></li>
+						<li><a href="modifyUser">Modify User</a></li>
+						<li><a href="viewQueue">View Queue</a></li>
 					</ul>
 					
 				</nav><!-- End of topmenu -->

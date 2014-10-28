@@ -12,6 +12,8 @@
 		<intercept-url pattern="/register*" access="permitAll" />
         <intercept-url pattern="/**" access="permitAll" />
         <intercept-url pattern="/removeUser*" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/viewUser*" access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/getList*" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/accountSummary*" access="isAuthenticated()" />
 		
 		<!-- access denied page -->

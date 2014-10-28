@@ -23,6 +23,15 @@ CREATE  TABLE users (
   INSERT INTO users 
   VALUES ('admin', 'admin', 'admin', 'admin', 'admin', 'Merchant', '4808452326',
   'skulkar9@asu.edu', 'ssn', 'address', true);
+  INSERT INTO users 
+  VALUES ('shivam', 'shivam', 'shivam', 'shivam', 'shivam', 'Merchant', '4804804801',
+  'shivam@asu.edu', 'ssn', 'address', true);
+  INSERT INTO users 
+  VALUES ('skgarg', 'shivam', 'shivam', 'shivam', 'shivam', 'Merchant', '4804804801',
+  'shivam@asu.edu', 'ssn', 'address', true);
+  INSERT INTO users 
+  VALUES ('employee', 'employee', 'employee', 'employee', 'employee', 'Merchant', '4804804802',
+  'employee@asu.edu', 'ssn', 'address', true);
 
 CREATE TABLE user_roles (
   user_role_id int(11) NOT NULL AUTO_INCREMENT,
@@ -33,16 +42,23 @@ CREATE TABLE user_roles (
   KEY fk_username_idx (username),
   CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES users (username));
   
---INSERT INTO user_roles (username, role)
---VALUES ('shivam', 'ROLE_USER');
+
 INSERT INTO user_roles (username, role)
 VALUES ('admin', 'ROLE_ADMIN');
---INSERT INTO user_roles (username, role)
---VALUES ('employee', 'ROLE_EMPLOYEE');
+INSERT INTO user_roles (username, role)
+VALUES ('shivam', 'ROLE_USER');
+INSERT INTO user_roles (username, role)
+VALUES ('skgarg', 'ROLE_USER');
+INSERT INTO user_roles (username, role)
+VALUES ('employee', 'ROLE_EMPLOYEE');
+
 
 CREATE TABLE account (
 	username VARCHAR(45) NOT NULL,
-	accountnumber VARCHAR(45) NOT NULL,
-	accountbalance VARCHAR(45) NOT NULL
-	);
+	accountnumber int(11) NOT NULL AUTO_INCREMENT,
+	accountbalance VARCHAR(45) NOT NULL,
+	PRIMARY KEY (accountnumber))
+;
 
+insert into account values ("skgarg","1234567890","500");
+insert into account values ("shivam","124","500");
