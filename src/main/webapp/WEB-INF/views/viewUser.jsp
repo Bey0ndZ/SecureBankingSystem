@@ -1,5 +1,8 @@
-<!--
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page session="true"%>
 <!DOCTYPE HTML>
 
 <html>
@@ -118,17 +121,21 @@
 		<!-- Start of content wrapper -->
 		<div class="content_wrapper">
 			<div class="contentright" style="width: 100%">
-			<b>Account Number :</b> <br/> <input type="number" name="removeUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
-			<a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/> <br/> <br/>
-			<form method="post" action="#">					
-				<b>First Name:</b> <br/> <br/>
-				<b>Last Name:</b> <br/> <br/>
-				<b>Contact:</b> <br/> <br/>
-				<b>Address:</b> <br/> <br/>
-				<b>Email Address:</b> <br/><br/>
-				<b>User Name:</b> <br/> <br/>
-				<b>User Type:</b> 
-			</form>
+			<form:form method="post" action="viewUser" modelAttribute="accountNumber">					
+					<b>Account Number :</b> <br/> <input type="text" name="viewUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
+					<a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/> <br/> <br/>
+				</form:form>
+				<c:if test="${not empty customerDetails}">
+					  
+				<b>First Name:</b> ${customerDetails.firstname}<br/> <br/>
+				<b>Last Name:</b> ${customerDetails.lastname}<br/> <br/>
+				<b>Contact:</b> ${customerDetails.phonenumber}<br/> <br/>
+				<b>Address:</b> ${customerDetails.address}<br/> <br/>
+				<b>Email Address:</b> ${customerDetails.email}<br/><br/>
+				<b>User Name:</b> ${customerDetails.username} <br/> <br/>
+				<b>User Type:</b> ${customerDetails.selection}
+				</c:if>
+			
 		</div>
 	
 			<div class="clear"></div>

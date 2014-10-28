@@ -1,4 +1,8 @@
-<!--
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page session="true"%>
 
 <!DOCTYPE HTML>
 
@@ -120,15 +124,25 @@
 			<div class="contentright" style="width: 100%">
 			<b>Account Number :</b> <br/> <input type="number" name="removeUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
 			<a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/> <br/> <br/>
-			<form method="post" action="#">					
-				<b>First Name:</b> <br/> <input type="text_small" name="firstName" id="f_name_modifyUser" style="color:#999;" /><br/>
-				<b>Last Name:</b> <br/> <input type="text_small" name="lastName" id="l_name_modifyUser" style="color:#999;" /><br/>
-				<b>Contact:</b> <br/> <input type="text_small" name="contactNumber" id="contact_modifyUser" style="color:#999;" /><br/>
-				<b>Address:</b> <br/> <input type="text_small" name="address" id="add_modifyUser" style="color:#999;" /><br/>
-				<b>Email Address:</b> <br/> <input type="email_small" name="emailAddress_modifyUser" id="email" style="color:#999;" /><br/>
-				<b>User Name:</b> <br/> <input type="text_small" name="userName" id="u_name_modifyUser" style="color:#999;" /><br/> <br/>
+			
+			
+			<form:form method="post" action="modifyUser" modelAttribute="accountNumber">					
+					<b>Account Number :</b> <br/> <input type="text" name="modifyUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
+					<a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/> <br/> <br/>
+				</form:form>
+				<c:if test="${not empty customerDetails}">
+					  
+					  <form method="post" action="#">					
+				<b>First Name:</b> <br/> <input type="text" name="firstName" id="f_name_modifyUser" value="${customerDetails.firstname}" style="color:#999;" /><br/>
+				<b>Last Name:</b> <br/> <input type="text" name="lastName" id="l_name_modifyUser" value="${customerDetails.lastname}" style="color:#999;" /><br/>
+				<b>Contact:</b> <br/> <input type="text" name="contactNumber" id="contact_modifyUser" value="${customerDetails.phonenumber}" style="color:#999;" /><br/>
+				<b>Address:</b> <br/> <input type="text" name="address" id="add_modifyUser" value="${customerDetails.address}" style="color:#999;" /><br/>
+				<b>Email Address:</b> <br/> <input type="email" name="emailAddress_modifyUser" id="email" value="${customerDetails.email}" style="color:#999;" /><br/>
+				<b>User Name:</b> <br/> <input type="text" name="userName" id="u_name_modifyUser" value="${customerDetails.username}" style="color:#999;" /><br/> <br/>
 				<a href="modifyUserSuccess.jsp"> <input type="button" style="margin-right: 5%" name="modifyUser" id="modifyUserButton" value="Modify User" onclick=""/></a>
 			</form>
+
+				</c:if>
 		</div>
 	
 			<div class="clear"></div>

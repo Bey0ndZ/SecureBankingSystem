@@ -76,4 +76,16 @@ public class CustomerDAOImpl implements CustomerDAO {
 		  userList = jdbcTemplate.query(sql, new UserRowMapper());  
 		  return userList;  
 		 }  
+	 
+	 public CustomerInformationDTO getUserFromAccount(String accountNumber) {
+			List<CustomerInformationDTO> customerInformationToDisplay = new ArrayList<CustomerInformationDTO>();
+			String retrieveDetailsQuery = "SELECT users.username, users.firstname, users.lastname, "
+					+ "users.MerchantorIndividual, users.phonenumber, users.email, "
+					+ "users.address from users inner join account on users.username = account.username where enabled = true and accountnumber=?";
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			customerInformationToDisplay = jdbcTemplate.query(retrieveDetailsQuery, 
+					new Object[]{accountNumber}, new UserRowMapper());
+			return customerInformationToDisplay.get(0);
+			
+		}
 }

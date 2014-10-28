@@ -56,8 +56,8 @@ td {
      <td>${user.firstname}</td>  
      <td>${user.lastname}</td>   
      <td>${user.lastname}</td>  
-     <td><a href="edit?id=${CustomerInformationDTO.username}">Edit</a></td>  
-     <td><a href="delete?id=${CustomerInformationDTO.username}">Delete</a></td>  
+     <td><a href="modifyUser?id=${CustomerInformationDTO.username}">Modify</a></td>  
+     <td><a href="removeUser?id=${CustomerInformationDTO.username}">Remove user</a></td>  
     </tr>  
    </c:forEach>  
    <tr><td colspan="7"><a href="register">Add New User</a></td></tr>  

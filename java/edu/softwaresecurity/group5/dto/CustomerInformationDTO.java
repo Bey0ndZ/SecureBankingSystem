@@ -9,6 +9,13 @@ public class CustomerInformationDTO {
 	private String phonenumber;
 	private String email;
 	private String address;
+	private int accountNumber;
+	public int getAccountNumber() {
+		return accountNumber;
+	}
+	public void setAccountNumber(int accountNumber) {
+		this.accountNumber = accountNumber;
+	}
 	/**
 	 * @return the username
 	 */

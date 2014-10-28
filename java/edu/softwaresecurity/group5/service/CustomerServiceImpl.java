@@ -22,4 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public List<CustomerInformationDTO> getUserList() {  
 	  return custDAO.getUserList();  
 	 }  
+	public CustomerInformationDTO getUserFromAccount(String accountNumber){
+		return custDAO.getUserFromAccount(accountNumber);
+	}
 }

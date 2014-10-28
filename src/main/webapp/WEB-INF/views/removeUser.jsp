@@ -92,11 +92,11 @@
 				<!-- Start of topmenu -->
 				<nav class="topmenu"> 
 					<ul class="sf-menu">
-						<li><a href="addUser.jsp">Add User</a></li>  
-						<li><a href="removeUser.jsp">Remove User</a></li>
-						<li><a href="viewUser.jsp">View User</a></li>
-						<li><a href="modifyUser.jsp">Modify User</a></li>
-						<li><a href="viewQueue.jsp">View Queue</a></li>
+						<li><a href="addUser">Add User</a></li>  
+						<li><a href="removeUser">Remove User</a></li>
+						<li><a href="viewUser">View User</a></li>
+						<li><a href="modifyUser">Modify User</a></li>
+						<li><a href="viewQueue">View Queue</a></li>
 					</ul>
 					
 				</nav><!-- End of topmenu -->
@@ -122,7 +122,7 @@
 		<div class="content_wrapper">
 			<div class="contentright" style="width: 100%">
 				<form:form method="post" action="removeUser" modelAttribute="usernameSearch">					
-					<b>Account Number :</b> <br/> <input type="text" name="removeUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
+					<b>User Name :</b> <br/> <input type="text" name="removeUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
 					<a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/> <br/> <br/>
 				</form:form>
 				<c:if test="${not empty customerDetails}">

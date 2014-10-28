@@ -9,7 +9,7 @@ public interface CustomerDAO {
 	public void registerCustomer(CustomerInformation custInfo);
 	public List<CustomerInformationDTO> retrieveUserDetails(String username);
 	public List<CustomerInformationDTO> getUserList();  
-//	public void updateData(CustomerInformationDTO user);  
+//	public void updateAccount(CustomerInformationDTO custInfo);  
 //	public void deleteData(String id);  
-//	public CustomerInformationDTO getUser(String id);  
+	public CustomerInformationDTO getUserFromAccount(String accountNumber);  
 }
