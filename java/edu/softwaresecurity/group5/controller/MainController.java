@@ -30,7 +30,7 @@ public class MainController {
 
 		ModelAndView model = new ModelAndView();
 		if (error != null) {
-			model.addObject("error", "Invalid username and password!");
+			model.addObject("error", "Invalid username and password! hllo world");
 		}
 
 		if (logout != null) {
@@ -144,29 +144,30 @@ public class MainController {
 		modelAndView.setViewName("modifyUser");
 		return modelAndView;
 	}
-	
+
 	// Getting the userdetails
-		@RequestMapping(value = "/modifyUser", method = RequestMethod.POST)
-		public ModelAndView getmodifyUserDetail(
-				@RequestParam("modifyUser") String accountNumber) {
-			ModelAndView modelAndView = new ModelAndView();
-			CustomerInformationDTO customerDetails = new CustomerInformationDTO();
-			customerDetails = custService.getUserFromAccount(accountNumber);
-			modelAndView.addObject("customerDetails", customerDetails);
-			modelAndView.setViewName("modifyUser");
-			return modelAndView;
-		}
-		// Getting the userdetails
-				@RequestMapping(value = "/modifyUserDataBase", method = RequestMethod.POST)
-				public ModelAndView getmodifyUserDatabase(
-						@ModelAttribute("customerDetails") CustomerInformationDTO customerDetail) {
-					ModelAndView modelAndView = new ModelAndView();
-					CustomerInformationDTO customerDetails = customerDetail;
-					String status = custService.updateAccount(customerDetails);
-					modelAndView.addObject("customerDetails", customerDetails);
-					modelAndView.addObject("status", status);
-					modelAndView.setViewName("modifyUser");
-					return modelAndView;
-				}
-		
+	@RequestMapping(value = "/modifyUser", method = RequestMethod.POST)
+	public ModelAndView getmodifyUserDetail(
+			@RequestParam("modifyUser") String accountNumber) {
+		ModelAndView modelAndView = new ModelAndView();
+		CustomerInformationDTO customerDetails = new CustomerInformationDTO();
+		customerDetails = custService.getUserFromAccount(accountNumber);
+		modelAndView.addObject("customerDetails", customerDetails);
+		modelAndView.setViewName("modifyUser");
+		return modelAndView;
+	}
+
+	// Getting the userdetails
+	@RequestMapping(value = "/modifyUserDataBase", method = RequestMethod.POST)
+	public ModelAndView getmodifyUserDatabase(
+			@ModelAttribute("customerDetails") CustomerInformationDTO customerDetail) {
+		ModelAndView modelAndView = new ModelAndView();
+		CustomerInformationDTO customerDetails = customerDetail;
+		String status = custService.updateAccount(customerDetails);
+		modelAndView.addObject("customerDetails", customerDetails);
+		modelAndView.addObject("status", status);
+		modelAndView.setViewName("modifyUser");
+		return modelAndView;
+	}
+
 }

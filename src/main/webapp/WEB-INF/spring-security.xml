@@ -33,10 +33,12 @@
 	
 	<beans:bean id="mySuccessHandler"
         class="edu.softwaresecurity.group5.controller.LoginSuccessHandler" />
-	
 	<!-- Select users and user_roles from database -->
 	<authentication-manager>
 		<authentication-provider>
+		
+        
+        <password-encoder ref="encoder" />  
 			<jdbc-user-service data-source-ref="dataSource"
 				users-by-username-query=
 					"select username,password,enabled from users where username=?"
@@ -44,5 +46,10 @@
 					"select username,role from user_roles where username=?" />
 		</authentication-provider>
 	</authentication-manager>
+	 
+  <beans:bean id="encoder"  
+  class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">  
+  <beans:constructor-arg name="strength" value="10" />  
+ </beans:bean>  
 
 </beans:beans>
