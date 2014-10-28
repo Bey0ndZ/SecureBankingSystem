@@ -8,8 +8,8 @@ DROP TABLE IF EXISTS `account`;
 
 CREATE  TABLE users (
   username VARCHAR(45) NOT NULL,
-  password VARCHAR(45) NOT NULL,
-  confirmpassword VARCHAR(45) NOT NULL,
+  password VARCHAR(60) NOT NULL,
+  confirmpassword VARCHAR(60) NOT NULL,
   firstname VARCHAR(45) NOT NULL,
   lastname VARCHAR(45) NOT NULL,
   MerchantorIndividual VARCHAR(45) NOT NULL,
