@@ -122,25 +122,26 @@
 		<!-- Start of content wrapper -->
 		<div class="content_wrapper">
 			<div class="contentright" style="width: 100%">
-			<b>Account Number :</b> <br/> <input type="number" name="removeUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
-			<a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/> <br/> <br/>
-			
-			
+					
 			<form:form method="post" action="modifyUser" modelAttribute="accountNumber">					
 					<b>Account Number :</b> <br/> <input type="text" name="modifyUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
 					<a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/> <br/> <br/>
 				</form:form>
 				<c:if test="${not empty customerDetails}">
+				
+				<c:if test="${not empty status}">
+				<b>hi : "${status}"</b>
+				</c:if>
 					  
-					  <form method="post" action="#">					
-				<b>First Name:</b> <br/> <input type="text" name="firstName" id="f_name_modifyUser" value="${customerDetails.firstname}" style="color:#999;" /><br/>
-				<b>Last Name:</b> <br/> <input type="text" name="lastName" id="l_name_modifyUser" value="${customerDetails.lastname}" style="color:#999;" /><br/>
-				<b>Contact:</b> <br/> <input type="text" name="contactNumber" id="contact_modifyUser" value="${customerDetails.phonenumber}" style="color:#999;" /><br/>
+				<form:form method="post" action="modifyUserDataBase" modelAttribute="customerDetails">				
+				<b>First Name:</b> <br/> <input type="text" name="firstname" id="f_name_modifyUser" value="${customerDetails.firstname}" style="color:#999;" /><br/>
+				<b>Last Name:</b> <br/> <input type="text" name="lastname" id="l_name_modifyUser" value="${customerDetails.lastname}" style="color:#999;" /><br/>
+				<b>Contact:</b> <br/> <input type="text" name="phonenumber" id="contact_modifyUser" value="${customerDetails.phonenumber}" style="color:#999;" /><br/>
 				<b>Address:</b> <br/> <input type="text" name="address" id="add_modifyUser" value="${customerDetails.address}" style="color:#999;" /><br/>
-				<b>Email Address:</b> <br/> <input type="email" name="emailAddress_modifyUser" id="email" value="${customerDetails.email}" style="color:#999;" /><br/>
-				<b>User Name:</b> <br/> <input type="text" name="userName" id="u_name_modifyUser" value="${customerDetails.username}" style="color:#999;" /><br/> <br/>
-				<a href="modifyUserSuccess.jsp"> <input type="button" style="margin-right: 5%" name="modifyUser" id="modifyUserButton" value="Modify User" onclick=""/></a>
-			</form>
+				<b>Email Address:</b> <br/> <input type="email" name="email" id="email" value="${customerDetails.email}" style="color:#999;" /><br/>
+			    <input type="hidden" name="username" id="u_name_modifyUser" value="${customerDetails.username}" style="color:#999;" /><br/> <br/>
+				<a><input type="submit" style="margin-right: 5%" name="modifyUser" id="modifyUserButton" value="Modify User"/></a>
+				</form:form>
 
 				</c:if>
 		</div>

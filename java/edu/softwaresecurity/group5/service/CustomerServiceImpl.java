@@ -25,4 +25,9 @@ public class CustomerServiceImpl implements CustomerService {
 	public CustomerInformationDTO getUserFromAccount(String accountNumber){
 		return custDAO.getUserFromAccount(accountNumber);
 	}
+
+	public String updateAccount(CustomerInformationDTO cust) {
+		// TODO Auto-generated method stub
+		return custDAO.updateAccount(cust);
+	}
 }

@@ -10,4 +10,5 @@ public interface CustomerService {
 	public List<CustomerInformationDTO> fetchUserDetails(String usernameSearch);
 	public List<CustomerInformationDTO> getUserList();
 	public CustomerInformationDTO getUserFromAccount(String accountNumber);  
+	public String updateAccount(CustomerInformationDTO cust);  
 }
