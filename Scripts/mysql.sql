@@ -5,6 +5,8 @@ USE `sbs`;
 DROP TABLE IF EXISTS `user_roles`;
 DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `account`;
+DROP TABLE IF EXISTS `user_attempts`;
+
 
 CREATE  TABLE users (
   username VARCHAR(45) NOT NULL,
@@ -18,20 +20,23 @@ CREATE  TABLE users (
   SSN VARCHAR(45) NOT NULL,
   address VARCHAR(45) NOT NULL,
   enabled TINYINT NOT NULL DEFAULT 1,
+  userExpired TINYINT NOT NULL DEFAULT 1 ,
+  userLocked TINYINT NOT NULL DEFAULT 1 ,
+  userDetailsExpired TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (username));
   
   INSERT INTO users 
-  VALUES ('admin', 'admin', 'admin', 'admin', 'admin', 'Merchant', '4808452326',
-  'skulkar9@asu.edu', 'ssn', 'address', true);
+  VALUES ('admin', '$2a$10$ocmyR6rP7eo1qRsV1rpvO.Mlh1QqtabUvD3sBhTlHobRKij/ZxZ1e', '$2a$10$ocmyR6rP7eo1qRsV1rpvO.Mlh1QqtabUvD3sBhTlHobRKij/ZxZ1e', 'admin', 'admin', 'Merchant', '4808452326',
+  'skulkar9@asu.edu', 'ssn', 'address', true,true,true,true);
   INSERT INTO users 
-  VALUES ('shivam', 'shivam', 'shivam', 'shivam', 'shivam', 'Merchant', '4804804801',
-  'shivam@asu.edu', 'ssn', 'address', true);
+  VALUES ('shivam', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam', 'Merchant', '4804804801',
+  'shivam@asu.edu', 'ssn', 'address', true,true,true,true);
   INSERT INTO users 
-  VALUES ('skgarg', 'shivam', 'shivam', 'shivam', 'shivam', 'Merchant', '4804804801',
-  'shivam@asu.edu', 'ssn', 'address', true);
+  VALUES ('skgarg', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam', 'Merchant', '4804804801',
+  'shivam@asu.edu', 'ssn', 'address', true,true,true,true);
   INSERT INTO users 
   VALUES ('employee', 'employee', 'employee', 'employee', 'employee', 'Merchant', '4804804802',
-  'employee@asu.edu', 'ssn', 'address', true);
+  'employee@asu.edu', 'ssn', 'address', true,true,true,true);
 
 CREATE TABLE user_roles (
   user_role_id int(11) NOT NULL AUTO_INCREMENT,
@@ -62,3 +67,11 @@ CREATE TABLE account (
 
 insert into account values ("skgarg","1234567890","500");
 insert into account values ("shivam","124","500");
+
+CREATE TABLE user_attempts (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  username VARCHAR(45) NOT NULL,
+  attempts VARCHAR(45) NOT NULL,
+  lastModified datetime NOT NULL,
+  PRIMARY KEY (id)
+);

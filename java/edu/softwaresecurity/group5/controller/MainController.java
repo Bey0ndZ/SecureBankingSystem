@@ -3,8 +3,12 @@ package edu.softwaresecurity.group5.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,11 +30,12 @@ public class MainController {
 	@RequestMapping(value = { "/", "/index" }, method = RequestMethod.GET)
 	public ModelAndView indexPage(
 			@RequestParam(value = "error", required = false) String error,
-			@RequestParam(value = "logout", required = false) String logout) {
+			@RequestParam(value = "logout", required = false) String logout,HttpServletRequest request)
+	{
 
 		ModelAndView model = new ModelAndView();
 		if (error != null) {
-			model.addObject("error", "Invalid username and password! hllo world");
+			model.addObject("error", getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
 		}
 
 		if (logout != null) {
@@ -40,6 +45,23 @@ public class MainController {
 
 		return model;
 	}
+	
+	// customize the error message
+		private String getErrorMessage(HttpServletRequest request, String key) {
+
+			Exception exception = (Exception) request.getSession().getAttribute(key);
+
+			String error = "";
+			if (exception instanceof BadCredentialsException) {
+				error = "Invalid username and password!";
+			} else if (exception instanceof LockedException) {
+				error = exception.getMessage();
+			} else {
+				error = "Invalid username and password!";
+			}
+
+			return error;
+		}
 
 	@RequestMapping(value = "/welcome", method = RequestMethod.GET)
 	public ModelAndView welcomePage() {
