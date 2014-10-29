@@ -36,18 +36,19 @@ public class RegistrationController {
 	}	
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ModelAndView registerCustomer(@Valid @ModelAttribute("registerForm") CustomerInformation custInfo, HttpServletRequest req, @RequestParam("recaptcha_challenge_field") String challenge,
-		    @RequestParam("recaptcha_response_field") String response, BindingResult result,
-		    HttpServletRequest request) {
+	public ModelAndView registerCustomer(@Valid @ModelAttribute("registerForm") CustomerInformation custInfo,
+		   BindingResult result, HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 		
 		RegistrationValidation.validateForm(custInfo, result);
 		
-		String remoteAddr = req.getRemoteAddr();
+		String remoteAddr = request.getRemoteAddr();
 		ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
 		reCaptcha.setPrivateKey("6LelnPwSAAAAAEIVuVPz5_wWsq3skomEaVJ_5eZH");
+		String challenge = request.getParameter("recaptcha_challenge_field");
+		String uresponse = request.getParameter("recaptcha_response_field");
 		ReCaptchaResponse reCaptchaResponse =
-		    reCaptcha.checkAnswer(remoteAddr, challenge, response);
+		    reCaptcha.checkAnswer(remoteAddr, challenge, uresponse);
 		
 		if (!reCaptchaResponse.isValid()) {
 			System.out.println("Entered in captcha error!");
