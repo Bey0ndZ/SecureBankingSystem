@@ -1,35 +1,141 @@
 package edu.softwaresecurity.group5.controller;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
+
 import edu.softwaresecurity.group5.model.CustomerInformation;
 
 @Component("registrationValidator")
 public class RegistrationValidation {
-  public boolean supports(Class<?> klass) {
-    return CustomerInformation.class.isAssignableFrom(klass);
+  public boolean supports(Class<?> c) {
+    return CustomerInformation.class.isAssignableFrom(c);
   }
 
-  public static void validate(Object target, Errors errors) {
-	  CustomerInformation cinfo = (CustomerInformation) target;
-    ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username",
+  public static void validateForm(Object info, Errors errors) {
+	  
+	  int count = 0;
+	  int number = 0;
+	  int ssnNum = 0;
+	  int phNum = 0;
+	  
+	  CustomerInformation cinfo = (CustomerInformation) info;
+	  ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username",
         "NotEmpty.CustomerInformation.username",
         "User Name must not be Empty.");
-    String userName = cinfo.getUsername(); //-----
-    System.out.println("CHECKING IN VALIDATION FILE: "+userName);
-    if ((userName.length()) > 50) {
+    
+	  ValidationUtils.rejectIfEmptyOrWhitespace(errors, "socialSecurityNumber",
+		"NotEmpty.CustomerInformation.socialSecurityNumber",
+		"SSN must not be Empty.");
+	  
+	  String userName = cinfo.getUsername();
+	  if ((userName.length()) > 10) {
       errors.rejectValue("username",
           "lengthOfUser.CustomerInformation.username",
-          "User Name must not more than 50 characters.");
-      System.out.println("CHECKING 1");
-    }
-    if (!(cinfo.getPassword()).equals(cinfo
-        .getConfirmPassword())) {
+          "User Name must not more than 10 characters.");
+      }
+	  
+	  String firstName = cinfo.getFirstname();
+	  if ((firstName.length()) > 10) {
+      errors.rejectValue("firstname",
+          "lengthOfFirst.CustomerInformation.firstname",
+          "First Name must not more than 10 characters.");
+      }
+	  
+	  String lastName = cinfo.getLastname();
+	  if ((lastName.length()) > 10) {
+      errors.rejectValue("lastname",
+          "lengthOfLast.CustomerInformation.lastname",
+          "Last Name must not more than 10 characters.");
+      }
+	  
+	  String add = cinfo.getAddress();
+	  if ((add.length()) > 50) {
+      errors.rejectValue("address",
+          "lengthOfAddress.CustomerInformation.address",
+          "Address must not more than 50 characters.");
+      }
+	  
+	  String ssn = cinfo.getSSN();
+	  
+	  for (char c: ssn.toCharArray()) {
+		  if(Character.isDigit(c)) {
+			  ssnNum++;
+		  }
+	  }
+	  if(ssnNum != 10) {
+		  errors.rejectValue("socialSecurityNumber", 
+				  "lengthOfSocialSecurityNumber.CustomerInformation.socialSecurityNumber",
+				  "SSN must have all numericals.");
+	  }
+	  
+	  
+	  String pNumber = cinfo.getPhonenumber();
+	  for (char c: pNumber.toCharArray()) {
+		  if(Character.isDigit(c)) {
+			  phNum++;
+		  }
+	  }
+	  if(phNum != 10) {
+		  errors.rejectValue("phonenumber", "lengthOfPhoneNumber.CustomerInformation.phonenumber",
+				  "Phone number must be all numbers.");
+	  }
+	  
+	  
+	  
+	  if (!(cinfo.getPassword()).equals(cinfo.getConfirmPassword())) {
       errors.rejectValue("password",
           "matchingPassword.CustomerInformation.password",
           "Password and Confirm Password Not match.");
-      System.out.println("CHECKING 2");
-    }
-  }
+      }
+	  
+	  String pass = cinfo.getPassword();
+	  if(pass.length()<6) { 
+		  errors.rejectValue("password",
+	          "matchingPassword.CustomerInformation.password",
+	          "Password too small");
+		  }
+	  
+	  if(pass.length()>15) { 
+		  errors.rejectValue("password",
+	          "matchingPassword.CustomerInformation.password",
+	          "Password too big");
+	  }
+	  
+	  //-------------------------------------------------------------
+	  for (char c: pass.toCharArray()) {
+		  if (Character.isDigit(c)) {
+			  number ++;
+		  }
+	  }
+	  if(number<=0) {
+		  errors.rejectValue("password",
+	          "matchingPassword.CustomerInformation.password",
+	          "Password has no digit"); 
+	  }
+	 //-------------------------------------------------------------
+	 
+	  
+	  for (char c: pass.toCharArray()) {
+		  if (Character.isUpperCase(c)) {
+			  count++;
+		  }
+	  }
+	  if(count <= 0) {
+		  errors.rejectValue("password",
+		      "matchingPassword.CustomerInformation.password",
+		      "Password has no capital letter");
+	  }
+	  
+	  Pattern p = Pattern.compile("[!@#$%^&*+_.-]");
+	  Matcher match = p.matcher(pass.subSequence(0, pass.length()));
+	  if (match.find() == false) {
+		  errors.rejectValue("password",
+			  "matchingPassword.CustomerInformation.password",
+			  "Password has no special character");
+	  }
+   } 
 }

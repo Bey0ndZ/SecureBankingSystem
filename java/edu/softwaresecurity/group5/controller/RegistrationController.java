@@ -37,10 +37,11 @@ public class RegistrationController {
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public ModelAndView registerCustomer(@Valid @ModelAttribute("registerForm") CustomerInformation custInfo, HttpServletRequest req, @RequestParam("recaptcha_challenge_field") String challenge,
-		    @RequestParam("recaptcha_response_field") String response, BindingResult result) {
+		    @RequestParam("recaptcha_response_field") String response, BindingResult result,
+		    HttpServletRequest request) {
 		ModelAndView modelAndView = new ModelAndView();
 		
-		RegistrationValidation.validate (custInfo, result);
+		RegistrationValidation.validateForm(custInfo, result);
 		
 		String remoteAddr = req.getRemoteAddr();
 		ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
@@ -48,7 +49,6 @@ public class RegistrationController {
 		ReCaptchaResponse reCaptchaResponse =
 		    reCaptcha.checkAnswer(remoteAddr, challenge, response);
 		
-		System.out.println("CHecking Captcha result: "+reCaptchaResponse.isValid());
 		if (!reCaptchaResponse.isValid()) {
 			System.out.println("Entered in captcha error!");
 			FieldError fieldError = new FieldError(
@@ -58,20 +58,15 @@ public class RegistrationController {
 			    result.addError(fieldError);
 		}
 		
-//		System.out.println("COUNT "+result.getErrorCount());
-//		System.out.println("ERROR "+result.getAllErrors());
-		
         if (result.hasErrors()) {
-        	//System.out.println("CHECKING 3");
         	modelAndView.setViewName("register");
                 return modelAndView;
+        } else {
+			System.out.println(custInfo.getUsername());
+			custService.insertCustomerInformation(custInfo);
+			modelAndView.setViewName("index");
+			return modelAndView;
         }
-		System.out.println(custInfo.getUsername());
-		custService.insertCustomerInformation(custInfo);
-		modelAndView.setViewName("index");
-		//System.out.println("CHECKING 4");
-		return modelAndView;
-			
 	}
 }
 

@@ -1,14 +1,13 @@
 package edu.softwaresecurity.group5.dao.impl;
 
 import java.util.ArrayList;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;  
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import edu.softwaresecurity.group5.dao.CustomerDAO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
@@ -37,16 +36,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 		JdbcTemplate jdbcTemplateForRegisterCustomer = new JdbcTemplate(
 				dataSource);
 		JdbcTemplate jdbcTemplateForUserRoles = new JdbcTemplate(dataSource);
-
-//		String salt = "$$Random^^^Salt**ValurForBetterProtection###";
-//		String saltedString = salt + custInfo.getPassword();
-//		String hash = DigestUtils.md5Hex(saltedString);
 		
-		
-		 BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();  
-		  String hash = passwordEncoder.encode(custInfo.getPassword());  
-		  
-		  System.out.println(hash);  
+	    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();  
+	    String hash = passwordEncoder.encode(custInfo.getPassword());  
 
 		jdbcTemplateForRegisterCustomer.update(
 				registerCustomerQuery,

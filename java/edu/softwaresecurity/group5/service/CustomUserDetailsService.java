@@ -44,7 +44,7 @@ public class CustomUserDetailsService extends JdbcDaoImpl {
 
 				});
 	}
-
+	
 	@Override
 	public UserDetails createUserDetails(String username, UserDetails userFromUserQuery,
 			List<GrantedAuthority> combinedAuthorities) {
