@@ -30,7 +30,7 @@ public class LoginAttemptsLockResetDAOImpl extends JdbcDaoSupport implements Log
 	private boolean isUserExists(String username) {
  
 	  if (getJdbcTemplate().queryForObject(
-			  "SELECT count(*) FROM USERS WHERE username = ?", new Object[] { username }, Integer.class) > 0) {
+			  "SELECT count(*) FROM users WHERE username = ?", new Object[] { username }, Integer.class) > 0) {
 		  return true;
 	  }
  
@@ -44,18 +44,18 @@ public class LoginAttemptsLockResetDAOImpl extends JdbcDaoSupport implements Log
 		  if (user == null) {
 			if (isUserExists(username)) {
 				// insert record.
-				getJdbcTemplate().update("INSERT INTO USER_ATTEMPTS (USERNAME, ATTEMPTS, LASTMODIFIED) VALUES(?,?,?)", new Object[] { username, 1, new Date() });
+				getJdbcTemplate().update("INSERT INTO user_attempts ( (USERNAME, ATTEMPTS, LASTMODIFIED) VALUES(?,?,?)", new Object[] { username, 1, new Date() });
 			}
 		  } else {
 	 
 			if (isUserExists(username)) {
 				// update records
-				getJdbcTemplate().update("UPDATE USER_ATTEMPTS SET attempts = attempts + 1, lastmodified = ? WHERE username = ?", new Object[] { new Date(), username});
+				getJdbcTemplate().update("UPDATE user_attempts SET attempts = attempts + 1, lastmodified = ? WHERE username = ?", new Object[] { new Date(), username});
 			}
 	 
 			if (user.getTries() + 1 >= 3) {
 				// lock user
-				getJdbcTemplate().update("UPDATE USERS SET userLocked = ? WHERE username = ?", new Object[] { false, username });
+				getJdbcTemplate().update("UPDATE users SET userLocked = ? WHERE username = ?", new Object[] { false, username });
 				// throw exception
 				throw new LockedException("User Account is locked!");
 			}
@@ -66,7 +66,7 @@ public class LoginAttemptsLockResetDAOImpl extends JdbcDaoSupport implements Log
 	public void unlockAccount(String username) {
 		// TODO Auto-generated method stub
 		 getJdbcTemplate().update(
-				 "UPDATE USER_ATTEMPTS SET attempts = attempts + 1, lastmodified = ? WHERE username = ?", new Object[] { new Date(),username });
+				 "UPDATE user_attempts SET attempts = attempts + 1, lastmodified = ? WHERE username = ?", new Object[] { new Date(),username });
 	 
 	}
 
