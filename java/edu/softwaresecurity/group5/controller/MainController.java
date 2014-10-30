@@ -191,5 +191,15 @@ public class MainController {
 		modelAndView.setViewName("modifyUser");
 		return modelAndView;
 	}
+	
+	// Displaying the removeUser.jsp page
+		@RequestMapping(value = "/addUser", method = RequestMethod.GET)
+		public ModelAndView returnAddUserPage() {
+			ModelAndView modelAndView = new ModelAndView();
+			modelAndView.setViewName("addUser");
+			return modelAndView;
+		}
+		
+		
 
 }

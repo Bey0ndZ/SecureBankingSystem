@@ -1,4 +1,8 @@
-<!--
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page session="true"%>
 
 <!DOCTYPE HTML>
 
@@ -128,14 +132,31 @@
 		<!-- Start of content wrapper -->
 		<div class="content_wrapper">
 			<div class="contentright" style="width: 100%">
+			<form:form method="post" action="transferMoney" modelAttribute="accountNumber">	
+			<i><b>Transfer Money at Bank of G5!</b></i>				
+					<b>Account Number :</b> <br/> <input type="text" name="verifyUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
+					<a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/> <br/> <br/>
+				</form:form>
+				<c:if test="${not empty customerDetails}">
+					  
+				<b>First Name:</b> ${customerDetails.firstname}<br/>
+				<b>Last Name:</b> ${customerDetails.lastname}<br/>
+				<b>Contact:</b> ${customerDetails.phonenumber}<br/> <br/>
+				<b>Address:</b> ${customerDetails.address}<br/> <br/>
+				<b>Email Address:</b> ${customerDetails.email}<br/><br/>
+
+				
+			
+			<!-- commented by shivam, to enable above form temporary for chaitali to start working. -->
 				<form method="post" action="#">
 					<i><b>Transfer Money at Bank of G5!</b></i> <br/>					
 					<p> Current Account Balance: PRINT BALANCE HERE --</p>
-					
-					<h6>Transfer Money To:</h6><input type="number" name="transferTo" id="receiver" style="color:#999;" /><br/>
+					<b>Account no:</b> ${customerDetails.accountNumber}<br/><br/>
+<!-- 					<h6>Transfer Money To:</h6><input type="number" name="transferTo" id="receiver" style="color:#999;" /><br/> -->
 					<h6>Amount:</h6><input type="number" name="amount" id="transfer_amount" style="color:#999;" /> <br/>
 					<input type="submit" name="transfer" id="transferButton" value="Transfer" />
 				</form>
+				</c:if>
 			</div>
 	
 			<div class="clear"></div>

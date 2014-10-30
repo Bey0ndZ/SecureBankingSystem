@@ -2,6 +2,7 @@ create database if not exists `sbs`;
 
 USE `sbs`;
 
+DROP TABLE IF EXISTS `pendingtransactions`;
 DROP TABLE IF EXISTS `user_roles`;
 DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `account`;
@@ -61,12 +62,26 @@ VALUES ('employee', 'ROLE_EMPLOYEE');
 CREATE TABLE account (
 	username VARCHAR(45) NOT NULL,
 	accountnumber int(11) NOT NULL AUTO_INCREMENT,
-	accountbalance VARCHAR(45) NOT NULL,
+	accountbalance float(45) NOT NULL,
+    debit float(45) NOT NULL,
+    credit float(45) NOT NULL,
 	PRIMARY KEY (accountnumber))
 ;
 
-insert into account values ("skgarg","1234567890","500");
-insert into account values ("shivam","124","500");
+CREATE TABLE pendingtransactions (
+id INT(11) NOT NULL AUTO_INCREMENT,
+username VARCHAR(45) NOT NULL,
+amount float(45) NOT NULL,
+pending TINYINT NOT NULL DEFAULT 1,
+accountnumberfrom int(11) NOT NULL,
+accountnumberto int(11) NOT NULL,
+PRIMARY KEY (id),
+KEY fk_username_idx (username),
+CONSTRAINT fk_username_pending FOREIGN KEY (username) REFERENCES users (username)
+);
+
+insert into account values ("skgarg","1234567890","500","0","0");
+insert into account values ("shivam","124","500","0","0");
 
 CREATE TABLE user_attempts (
   id INT(11) NOT NULL AUTO_INCREMENT,

@@ -7,16 +7,26 @@
 
     <!-- enable use-expressions -->
 	<http auto-config="true" use-expressions="true">
+	<!-- These are admin/internal user specific -->
 		<intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/index*" access="permitAll"/>
-		<intercept-url pattern="/register*" access="permitAll" />
-		<intercept-url pattern="/login*" access="permitAll" />
-        <intercept-url pattern="/**" access="permitAll" />
-        <intercept-url pattern="/removeUser*" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/addUser**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/removeUser*" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/viewUser*" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/getList*" access="hasRole('ROLE_ADMIN')" />
         <intercept-url pattern="/modifyUser*" access="hasRole('ROLE_ADMIN')" />
+		
+        
+        <!-- These are permitAll -->
         <intercept-url pattern="/accountSummary*" access="isAuthenticated()" />
+        <intercept-url pattern="/transferMoney*" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="/transferActivity*" access="hasRole('ROLE_USER')" />
+        <intercept-url pattern="/verifyUser*" access="hasRole('ROLE_USER')" />
+        
+        <!-- These are external user specific -->
+        <intercept-url pattern="/index*" access="permitAll"/>
+		<intercept-url pattern="/register*" access="permitAll" />
+		<intercept-url pattern="/login*" access="permitAll" />
+        <intercept-url pattern="/**" access="permitAll" />
 			
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />

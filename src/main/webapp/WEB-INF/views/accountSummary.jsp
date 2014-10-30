@@ -86,21 +86,21 @@
 				<!-- Start of topmenu -->
 				<nav class="topmenu"> 
 					<ul class="sf-menu">
-						<li><a href="accountSummary.jsp">Accounts</a></li>  
-						<li><a href="billPay.jsp">Bill Pay</a></li>
-						<li><a href="transferMoney.jsp">Transfer Money</a>
+						<li><a href="accountSummary">Accounts</a></li>  
+						<li><a href="billPay">Bill Pay</a></li>
+						<li><a href="transferMoney">Transfer Money</a>
 							<ul>
-								<li><a href="transferMoney.jsp"> Make A Transfer</a></li>
-								<li><a href="transferActivity.jsp"> View Transfer Activity</a></li>
+								<li><a href="transferMoney"> Make A Transfer</a></li>
+								<li><a href="transferActivity"> View Transfer Activity</a></li>
 							</ul>
 						</li>
 						<li><a href="">Debit/Credit Funds</a>
 							<ul>
-								<li><a href="debitAmount.jsp"> Debit Money</a></li>
-								<li><a href="creditAmount.jsp"> Credit Money</a></li>
+								<li><a href="debitAmount"> Debit Money</a></li>
+								<li><a href="creditAmount"> Credit Money</a></li>
 							</ul>
 						</li>
-						<li><a href="helpSupport.jsp">Help and Support</a></li>
+						<li><a href="helpSupport">Help and Support</a></li>
 					</ul>
 					
 				</nav><!-- End of topmenu -->
