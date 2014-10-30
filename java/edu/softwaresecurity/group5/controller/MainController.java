@@ -199,7 +199,4 @@ public class MainController {
 			modelAndView.setViewName("addUser");
 			return modelAndView;
 		}
-		
-		
-
 }

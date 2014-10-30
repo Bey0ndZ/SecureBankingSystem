@@ -21,7 +21,6 @@ public class ExternalUserController {
 
 	@RequestMapping(value = "/accountSummary", method = RequestMethod.GET)
 	public ModelAndView returnCustomerPage() {
-		System.out.println("Hello world!");
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("accountSummary");
 		return modelAndView;

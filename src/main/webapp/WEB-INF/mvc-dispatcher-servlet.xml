@@ -29,6 +29,6 @@
 	<bean id="CustomerInformationDTO" class="edu.softwaresecurity.group5.dto.CustomerInformationDTO" />
 	
 	
-	<mvc:resources mapping="/resources/**" location="/resources/uifiles/" />
+	<mvc:resources mapping="/resources/**" location="/resources/grayscale/" />
 	<mvc:annotation-driven />
 </beans>

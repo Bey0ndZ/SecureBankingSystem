@@ -7,8 +7,6 @@ import net.tanesha.recaptcha.ReCaptchaImpl;
 import net.tanesha.recaptcha.ReCaptchaResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -24,11 +22,6 @@ import edu.softwaresecurity.group5.service.CustomerService;
 @Controller
 @RequestMapping(value="/register")
 public class RegistrationController {
-	private MailSender mailSender;
-	
-	public void setMailSender(MailSender mailSender) {
-		this.mailSender = mailSender;
-	}
 	@Autowired
 	CustomerService custService;	
 	@RequestMapping(method=RequestMethod.GET)
