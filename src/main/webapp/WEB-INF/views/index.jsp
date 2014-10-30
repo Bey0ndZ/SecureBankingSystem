@@ -4,7 +4,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -99,6 +98,9 @@
 				        <div class="checkbox">
 				          <label>
 				            <input type="checkbox" value="remember-me"> Remember me
+				          </label>
+				          <label>
+				          	Not a member? Click <a href="register">here</a>
 				          </label>
 				        </div>
 				        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
