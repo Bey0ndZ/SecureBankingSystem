@@ -44,7 +44,7 @@ public class LoginAttemptsLockResetDAOImpl extends JdbcDaoSupport implements Log
 		  if (user == null) {
 			if (isUserExists(username)) {
 				// insert record.
-				getJdbcTemplate().update("INSERT INTO user_attempts ( (USERNAME, ATTEMPTS, LASTMODIFIED) VALUES(?,?,?)", new Object[] { username, 1, new Date() });
+				getJdbcTemplate().update("INSERT INTO user_attempts (USERNAME, ATTEMPTS, LASTMODIFIED) VALUES(?,?,?)", new Object[] { username, 1, new Date() });
 			}
 		  } else {
 	 
