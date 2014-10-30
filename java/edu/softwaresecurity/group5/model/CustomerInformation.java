@@ -20,15 +20,19 @@ public class CustomerInformation {
 	private String lastname;
 	private String selection;
 	@NotEmpty(message="Please enter your phonenumber.")
+	@Size(min = 10, max = 10, message = "Phone Number must be of exactly 10 digits")
 	private String phonenumber;
 	@Email(message="Your email is invalid.")
 	@NotEmpty(message="Please enter your email.")
 	private String email;
-	@NotEmpty(message="Please enter your SSN.")
-	private String SSN;
+	@Size(min = 10, max = 10, message = "SSN must be of exactly 10 digits")
+	private String socialSecurityNumber;
 	@NotEmpty(message="Please enter your address.")
 	private String address;
 	private int enabled;
+	private int userExpired;
+	private int userLocked;
+	private int userDetailsExpired;
 	/**
 	 * @return the username
 	 */
@@ -104,20 +108,19 @@ public class CustomerInformation {
 	/**
 	 * @return the sSN
 	 */
-	public String getSSN() {
-		return SSN;
-	}
-	/**
-	 * @param sSN the sSN to set
-	 */
-	public void setSSN(String sSN) {
-		SSN = sSN;
-	}
+	
+	
 	/**
 	 * @return the phonenumber
 	 */
 	public String getPhonenumber() {
 		return phonenumber;
+	}
+	public String getSocialSecurityNumber() {
+		return socialSecurityNumber;
+	}
+	public void setSocialSecurityNumber(String socialSecurityNumber) {
+		this.socialSecurityNumber = socialSecurityNumber;
 	}
 	/**
 	 * @param phonenumber the phonenumber to set
@@ -160,5 +163,41 @@ public class CustomerInformation {
 	 */
 	public void setSelection(String selection) {
 		this.selection = selection;
+	}
+	/**
+	 * @return the userExpired
+	 */
+	public int getUserExpired() {
+		return userExpired;
+	}
+	/**
+	 * @param userExpired the userExpired to set
+	 */
+	public void setUserExpired(int userExpired) {
+		this.userExpired = userExpired;
+	}
+	/**
+	 * @return the userLocked
+	 */
+	public int getUserLocked() {
+		return userLocked;
+	}
+	/**
+	 * @param userLocked the userLocked to set
+	 */
+	public void setUserLocked(int userLocked) {
+		this.userLocked = userLocked;
+	}
+	/**
+	 * @return the userDetailsExpired
+	 */
+	public int getUserDetailsExpired() {
+		return userDetailsExpired;
+	}
+	/**
+	 * @param userDetailsExpired the userDetailsExpired to set
+	 */
+	public void setUserDetailsExpired(int userDetailsExpired) {
+		this.userDetailsExpired = userDetailsExpired;
 	}
 }

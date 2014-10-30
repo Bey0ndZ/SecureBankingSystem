@@ -59,7 +59,7 @@ public class RegistrationValidation {
           "Address must not more than 50 characters.");
       }
 	  
-	  String ssn = cinfo.getSSN();
+	  String ssn = cinfo.getSocialSecurityNumber();
 	  
 	  for (char c: ssn.toCharArray()) {
 		  if(Character.isDigit(c)) {

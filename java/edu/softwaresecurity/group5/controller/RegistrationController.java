@@ -7,13 +7,14 @@ import net.tanesha.recaptcha.ReCaptchaImpl;
 import net.tanesha.recaptcha.ReCaptchaResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -23,6 +24,11 @@ import edu.softwaresecurity.group5.service.CustomerService;
 @Controller
 @RequestMapping(value="/register")
 public class RegistrationController {
+	private MailSender mailSender;
+	
+	public void setMailSender(MailSender mailSender) {
+		this.mailSender = mailSender;
+	}
 	@Autowired
 	CustomerService custService;	
 	@RequestMapping(method=RequestMethod.GET)
@@ -62,7 +68,7 @@ public class RegistrationController {
         if (result.hasErrors()) {
         	modelAndView.setViewName("register");
                 return modelAndView;
-        } else {
+        } else {        	
 			System.out.println(custInfo.getUsername());
 			custService.insertCustomerInformation(custInfo);
 			modelAndView.setViewName("index");

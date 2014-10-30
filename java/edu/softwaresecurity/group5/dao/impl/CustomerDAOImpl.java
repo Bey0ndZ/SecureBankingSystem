@@ -25,11 +25,15 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 	public void registerCustomer(CustomerInformation custInfo) {
 		custInfo.setEnabled(1);
+		custInfo.setUserLocked(1);
+		custInfo.setUserExpired(1);
+		custInfo.setUserDetailsExpired(1);
 		String registerCustomerQuery = "INSERT into users"
 				+ "(username, password, confirmpassword,"
 				+ "firstname,"
 				+ "lastname, MerchantorIndividual, phonenumber,"
-				+ "email, SSN, address, enabled) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+				+ "email, SSN, address, enabled, "
+				+ "userExpired, userLocked, userDetailsExpired) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		String insertIntoUserRolesTable = "INSERT into user_roles (username, role) "
 				+ "VALUES (?,?)";
 
@@ -45,8 +49,10 @@ public class CustomerDAOImpl implements CustomerDAO {
 				new Object[] { custInfo.getUsername(), hash, hash,
 						custInfo.getFirstname(), custInfo.getLastname(),
 						custInfo.getSelection(), custInfo.getPhonenumber(),
-						custInfo.getEmail(), custInfo.getSSN(),
-						custInfo.getAddress(), custInfo.getEnabled() });
+						custInfo.getEmail(), custInfo.getSocialSecurityNumber(),
+						custInfo.getAddress(), custInfo.getEnabled(),
+						custInfo.getUserExpired(), custInfo.getUserLocked(),
+						custInfo.getUserDetailsExpired()});
 
 		jdbcTemplateForUserRoles.update(insertIntoUserRolesTable, new Object[] {
 				custInfo.getUsername(), "ROLE_USER" });
