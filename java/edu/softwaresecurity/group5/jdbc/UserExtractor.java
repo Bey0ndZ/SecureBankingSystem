@@ -18,10 +18,13 @@ public class UserExtractor implements ResultSetExtractor<CustomerInformationDTO>
 	  custInfoDTO.setUsername(resultSet.getString(1));
 	  custInfoDTO.setFirstname(resultSet.getString(2));
 	  custInfoDTO.setLastname(resultSet.getString(3));
-	  custInfoDTO.setSelection(resultSet.getString(4));
-	  custInfoDTO.setPhonenumber(resultSet.getString(5));
-	  custInfoDTO.setEmail(resultSet.getString(6));
-	  custInfoDTO.setAddress(resultSet.getString(7));
+	  custInfoDTO.setSex(resultSet.getString(4));
+	  custInfoDTO.setSelection(resultSet.getString(5));
+	  custInfoDTO.setPhonenumber(resultSet.getString(6));
+	  custInfoDTO.setEmail(resultSet.getString(7));
+	  custInfoDTO.setAddress(resultSet.getString(8));
+	  custInfoDTO.setAccountNumber(resultSet.getInt(9));
+	  
 	  
 	  return custInfoDTO;
 	 }
