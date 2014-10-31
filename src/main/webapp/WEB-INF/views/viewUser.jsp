@@ -97,6 +97,7 @@
 						<li><a href="viewUser">View User</a></li>
 						<li><a href="modifyUser">Modify User</a></li>
 						<li><a href="viewQueue">View Queue</a></li>
+						<li><a href="javascript:formSubmit()">Logout</a></li>
 					</ul>
 					
 				</nav><!-- End of topmenu -->
