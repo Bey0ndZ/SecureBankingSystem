@@ -70,20 +70,20 @@
                 <h1>Register here</h1>
                 <form:form method="POST" action="register" modelAttribute="registerForm">
 					<i><b>New User - Sign Up!</b></i> <br/>
-					<b>User Name:</b><FONT color="red"><form:errors path="username" /></FONT> <input type="text" name="username" id="username" style="color:#999;" /><br/>
+					<b>User Name:</b><FONT color="red"><form:errors path="username" /></FONT> <input type="text" name="username" value="${registerForm.username}" id="username" style="color:#999;" /><br/>
 					<b>Password:</b><FONT color="red"><form:errors path="password" /></FONT> <input type="password" name="password" id="password" style="color:#999;" /><br/>
 					<b>Confirm Password:</b> <input type="password" name="confirmPassword" id="cfrm_pwd" style="color:#999;" /><br/>
-					<b>First Name:</b> <FONT color="red"><form:errors path="firstname" /></FONT> <input type="text" name="firstname" id="f_name" style="color:#999;" /><br/>
-					<b>Last Name:</b> <FONT color="red"><form:errors path="lastname" /></FONT><input type="text" name="lastname" id="l_name" style="color:#999;" /><br/>
+					<b>First Name:</b> <FONT color="red"><form:errors path="firstname" /></FONT> <input type="text" name="firstname" value="${registerForm.firstname}" id="f_name" style="color:#999;" /><br/>
+					<b>Last Name:</b> <FONT color="red"><form:errors path="lastname" /></FONT><input type="text" name="lastname" value="${registerForm.lastname}" id="l_name" style="color:#999;" /><br/>
 					<b>Individual or Merchant:</b>
 					<select name="selection">
 						<option value="Individual">Individual</option>
 						<option value="Merchant">Merchant</option>
 					</select><br/><br/>
-					<b>Phone Number:</b> <FONT color="red"> <form:errors path="phonenumber" /> </FONT> <input type="text" name="phonenumber" id="contact" style="color:#999;" /><br/>
+					<b>Phone Number:</b> <FONT color="red"> <form:errors path="phonenumber" /> </FONT> <input type="text" name="phonenumber" value="${registerForm.phonenumber}" id="contact" style="color:#999;" /><br/>
 					<b>Email Address:</b> <input type="email" name="email" id="email" style="color:#999;" /><br/>
-					<b>Social Security Number:</b> <FONT color="red"><form:errors path="socialSecurityNumber" /> </FONT> <input type="text" name="socialSecurityNumber" id="socialSecurityNumber" style="color:#999;" /><br/>
-					<b>Address:</b> <FONT color="red"><form:errors path="address" /></FONT> <input type="text" name="address" id="add" style="color:#999;" /><br/>	
+					<b>Social Security Number:</b> <FONT color="red"><form:errors path="socialSecurityNumber" /> </FONT> <input type="text" name="socialSecurityNumber" value="${registerForm.socialSecurityNumber}" id="socialSecurityNumber" style="color:#999;" /><br/>
+					<b>Address:</b> <FONT color="red"><form:errors path="address" /></FONT> <input type="text" name="address" value="${registerForm.address}" id="add" style="color:#999;" /><br/>	
 					<%
           				ReCaptcha c = ReCaptchaFactory.newReCaptcha("6LelnPwSAAAAAEdizJnYFeutV2At7VHSkC9PYxZX", "6LelnPwSAAAAAEIVuVPz5_wWsq3skomEaVJ_5eZH", false);
           				out.print(c.createRecaptchaHtml(null, null));
