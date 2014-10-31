@@ -165,16 +165,16 @@
                         <a href="addUser"><i class="fa fa-fw fa-dashboard"></i> Add User</a>
                     </li>
                     <li>
-                        <a href="charts.html"><i class="fa fa-fw fa-dashboard"></i> Remove User</a>
+                        <a href="removeUser"><i class="fa fa-fw fa-dashboard"></i> Remove User</a>
                     </li>
                      <li>
-                        <a href="charts.html"><i class="fa fa-fw fa-dashboard"></i> View User</a>
+                        <a href="viewUser"><i class="fa fa-fw fa-dashboard"></i> View User</a>
                     </li>
                      <li>
-                        <a href="charts.html"><i class="fa fa-fw fa-dashboard"></i> Modify User</a>
+                        <a href="modifyUser"><i class="fa fa-fw fa-dashboard"></i> Modify User</a>
                     </li>
                      <li>
-                        <a href="charts.html"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
+                        <a href="viewQueue"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
                     </li>
                 </ul>
             </div>
