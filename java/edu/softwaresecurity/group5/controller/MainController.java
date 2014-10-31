@@ -1,6 +1,7 @@
 package edu.softwaresecurity.group5.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,8 +11,10 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,12 +33,34 @@ public class MainController {
 	@RequestMapping(value = { "/", "/index" }, method = RequestMethod.GET)
 	public ModelAndView indexPage(
 			@RequestParam(value = "error", required = false) String error,
-			@RequestParam(value = "logout", required = false) String logout,HttpServletRequest request)
-	{
+			@RequestParam(value = "logout", required = false) String logout,
+			HttpServletRequest request) {
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+
+			Collection<? extends GrantedAuthority> authorities = auth
+					.getAuthorities();
+			for (GrantedAuthority grantedAuthority : authorities) {
+				if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
+					return new ModelAndView("forward:/accountSummary");
+				} else if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
+					return new ModelAndView("forward:/admin");
+				} else if (grantedAuthority.getAuthority().equals(
+						"ROLE_EMPLOYEE")) {
+					return new ModelAndView("forward:/employee");
+
+				}
+			}
+
+			return new ModelAndView("forward:/welcome");
+		}
 
 		ModelAndView model = new ModelAndView();
 		if (error != null) {
-			model.addObject("error", getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
+			model.addObject("error",
+					getErrorMessage(request, "SPRING_SECURITY_LAST_EXCEPTION"));
 		}
 
 		if (logout != null) {
@@ -45,23 +70,26 @@ public class MainController {
 
 		return model;
 	}
-	
+
 	// customize the error message
-		private String getErrorMessage(HttpServletRequest request, String key) {
+	private String getErrorMessage(HttpServletRequest request, String key) {
 
-			Exception exception = (Exception) request.getSession().getAttribute(key);
+		Exception exception = (Exception) request.getSession()
+				.getAttribute(key);
 
-			String error = "";
-			if (exception instanceof BadCredentialsException) {
-				error = "Invalid username and password!";
-			} else if (exception instanceof LockedException) {
-				error = exception.getMessage();
-			} else {
-				error = "Invalid username and password!";
-			}
-
-			return error;
+		String error = "";
+		if (exception instanceof BadCredentialsException) {
+			error = "Invalid username and password!";
+		} else if (exception instanceof LockedException) {
+			error = exception.getMessage();
+		} else if (exception instanceof SessionAuthenticationException) {
+			error = exception.getMessage();
+		} else {
+			error = "Invalid username and password!";
 		}
+
+		return error;
+	}
 
 	@RequestMapping(value = "/welcome", method = RequestMethod.GET)
 	public ModelAndView welcomePage() {
@@ -191,12 +219,12 @@ public class MainController {
 		modelAndView.setViewName("modifyUser");
 		return modelAndView;
 	}
-	
+
 	// Displaying the removeUser.jsp page
-		@RequestMapping(value = "/addUser", method = RequestMethod.GET)
-		public ModelAndView returnAddUserPage() {
-			ModelAndView modelAndView = new ModelAndView();
-			modelAndView.setViewName("addUser");
-			return modelAndView;
-		}
+	@RequestMapping(value = "/addUser", method = RequestMethod.GET)
+	public ModelAndView returnAddUserPage() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("addUser");
+		return modelAndView;
+	}
 }
