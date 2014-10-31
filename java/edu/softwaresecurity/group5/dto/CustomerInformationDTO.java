@@ -5,6 +5,7 @@ public class CustomerInformationDTO {
 	private String username;
 	private String firstname;
 	private String lastname;
+	private String sex;
 	private String selection;
 	private String phonenumber;
 	private String email;
@@ -21,6 +22,12 @@ public class CustomerInformationDTO {
 	 */
 	public String getUsername() {
 		return username;
+	}
+	public String getSex() {
+		return sex;
+	}
+	public void setSex(String sex) {
+		this.sex = sex;
 	}
 	/**
 	 * @param username the username to set

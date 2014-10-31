@@ -15,6 +15,7 @@ CREATE  TABLE users (
   confirmpassword VARCHAR(60) NOT NULL,
   firstname VARCHAR(45) NOT NULL,
   lastname VARCHAR(45) NOT NULL,
+  sex VARCHAR(10) NOT NULL,
   MerchantorIndividual VARCHAR(45) NOT NULL,
   phonenumber VARCHAR(45) NOT NULL,
   email VARCHAR(45) NOT NULL,
@@ -27,16 +28,16 @@ CREATE  TABLE users (
   PRIMARY KEY (username));
   
   INSERT INTO users 
-  VALUES ('admin', '$2a$10$ocmyR6rP7eo1qRsV1rpvO.Mlh1QqtabUvD3sBhTlHobRKij/ZxZ1e', '$2a$10$ocmyR6rP7eo1qRsV1rpvO.Mlh1QqtabUvD3sBhTlHobRKij/ZxZ1e', 'admin', 'admin', 'Merchant', '4808452326',
+  VALUES ('admin', '$2a$10$ocmyR6rP7eo1qRsV1rpvO.Mlh1QqtabUvD3sBhTlHobRKij/ZxZ1e', '$2a$10$ocmyR6rP7eo1qRsV1rpvO.Mlh1QqtabUvD3sBhTlHobRKij/ZxZ1e', 'admin', 'admin', 'male','Merchant', '4808452326',
   'skulkar9@asu.edu', 'ssn', 'address', true,true,true,true);
   INSERT INTO users 
-  VALUES ('shivam', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam', 'Merchant', '4804804801',
+  VALUES ('shivam', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam','male', 'Merchant', '4804804801',
   'shivam@asu.edu', 'ssn', 'address', true,true,true,true);
   INSERT INTO users 
-  VALUES ('skgarg', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam', 'Merchant', '4804804801',
+  VALUES ('skgarg', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam','male', 'Merchant', '4804804801',
   'shivam@asu.edu', 'ssn', 'address', true,true,true,true);
   INSERT INTO users 
-  VALUES ('employee', 'employee', 'employee', 'employee', 'employee', 'Merchant', '4804804802',
+  VALUES ('employee', 'employee', 'employee', 'employee', 'employee','male', 'Merchant', '4804804802',
   'employee@asu.edu', 'ssn', 'address', true,true,true,true);
 
 CREATE TABLE user_roles (
