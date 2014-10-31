@@ -3,6 +3,7 @@ package edu.softwaresecurity.group5.service;
 import java.util.List;
 
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.model.CustomerInformation;
 
 public interface CustomerService {
@@ -11,4 +12,6 @@ public interface CustomerService {
 	public List<CustomerInformationDTO> getUserList();
 	public CustomerInformationDTO getUserFromAccount(String accountNumber);  
 	public String updateAccount(CustomerInformationDTO cust);  
+	public String changeAccountPassword(ChangePassword cust);
 }
+

@@ -27,6 +27,7 @@
 		<intercept-url pattern="/register*" access="permitAll" />
 		<intercept-url pattern="/login*" access="permitAll" />
 		<intercept-url pattern="/**" access="permitAll" />
+		<intercept-url pattern="/changePassword*" access="isAuthenticated()" />
 
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />

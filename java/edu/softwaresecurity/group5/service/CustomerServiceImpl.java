@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.softwaresecurity.group5.dao.CustomerDAO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.model.CustomerInformation;
 
 public class CustomerServiceImpl implements CustomerService {
@@ -29,5 +30,10 @@ public class CustomerServiceImpl implements CustomerService {
 	public String updateAccount(CustomerInformationDTO cust) {
 		// TODO Auto-generated method stub
 		return custDAO.updateAccount(cust);
+	}
+	
+	public String changeAccountPassword(ChangePassword cust) {
+		// TODO Auto-generated method stub
+		return custDAO.changeAccountPassword(cust);
 	}
 }

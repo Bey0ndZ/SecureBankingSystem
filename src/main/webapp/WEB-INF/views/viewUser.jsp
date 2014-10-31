@@ -61,6 +61,12 @@
 	});
 	
 	</script>
+	
+	<script type="text/javascript">
+	function formSubmit() {
+		document.getElementById("logoutForm").submit();
+	}
+	</script>
 </head>
 
 <body>
@@ -97,6 +103,7 @@
 						<li><a href="viewUser">View User</a></li>
 						<li><a href="modifyUser">Modify User</a></li>
 						<li><a href="viewQueue">View Queue</a></li>
+						<li><a href="changePassword">Change password(self)</a></li>
 						<li><a href="javascript:formSubmit()">Logout</a></li>
 					</ul>
 					

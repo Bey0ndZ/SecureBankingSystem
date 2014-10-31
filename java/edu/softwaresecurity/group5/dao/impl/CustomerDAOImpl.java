@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import edu.softwaresecurity.group5.dao.CustomerDAO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.jdbc.UserRowMapper;
+import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.model.CustomerInformation;
 
 /*Using Spring JDBC Template
@@ -108,5 +109,22 @@ public class CustomerDAOImpl implements CustomerDAO {
 		}
 
 		return "Databse not updated, please contact Branch Representative";
+	}
+	
+	public String changeAccountPassword(ChangePassword custInfo){
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();  
+	    String hash = passwordEncoder.encode(custInfo.getPassword());  
+	    String sql = "UPDATE users set password = ?,confirmpassword = ?"
+				+ " where enabled = true  and username = ?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		int status = jdbcTemplate.update(sql,
+				new Object[] { custInfo.getPassword(), custInfo.getConfirmPassword(),
+						custInfo.getUsername() });
+		if(status==1){
+			return "Updated account details Succesfully";
+		}
+
+		return "Databse not updated, please contact Branch Representative";
+	    
 	}
 }

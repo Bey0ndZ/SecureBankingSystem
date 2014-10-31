@@ -1,4 +1,8 @@
-<!--
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page session="true"%>
 
 <!DOCTYPE HTML>
 
@@ -126,23 +130,18 @@
 		<!-- Start of content wrapper -->
 		<div class="content_wrapper">
 			<div class="contentright" style="width: 100%">
-				<form method="post" action="#">					
-					<table style="width:100%">
-	  					<tr>
-						    <td> Ticket Number</td> <br/>
-						    <td> Invoked By</td> <br/>
-						    <td> Description</td> <br/>
-						</tr>
-						<br/><br/>
-	  					<tr>
-						    <td> PRINT TICKET HERE</td>
-						    <td> PRINT USERNAME HERE</td> 
-						    <td> <a href="ticketDetails.jsp"> <input type="button" style="margin-right: 5%" name="ticketDetails" id="removeUserButton" value="View Detais" onclick=""/></a></td>
-						</tr>
-					</table>
-					<br/><br/> <br/>
-				</form>
-			</div>
+				
+				<c:if test="${not empty status}">
+				<b>"${status}"</b>
+				</c:if>
+					  
+				<form:form method="post" action="changePassword" modelAttribute="customerDetails">				
+				<b>Password:</b><FONT color="red"><form:errors path="password" /></FONT> <input type="password" name="password" id="password" style="color:#999;" /><br/>
+				<b>Confirm Password:</b> <input type="password" name="confirmPassword" id="cfrm_pwd" style="color:#999;" /><br/>
+				<a><input type="submit" style="margin-right: 5%" name="modifyUser" id="modifyUserButton" value="Modify User"/></a>
+				</form:form>
+
+		</div>
 	
 			<div class="clear"></div>
 		</div><!-- End of content wrapper -->

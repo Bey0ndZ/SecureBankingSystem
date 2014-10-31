@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.service.CustomerService;
 
 @Controller
@@ -217,6 +218,32 @@ public class MainController {
 		modelAndView.addObject("customerDetails", customerDetails);
 		modelAndView.addObject("status", status);
 		modelAndView.setViewName("modifyUser");
+		return modelAndView;
+	}
+
+	// change password.
+	@RequestMapping(value = "/changePassword", method = RequestMethod.GET)
+	public ModelAndView returnchangePasswordPage() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("changePassword");
+		return modelAndView;
+	}
+
+	// Getting the userdetails
+	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
+	public ModelAndView getchangePassword(
+			@ModelAttribute("customerDetails") ChangePassword customerDetail) {
+		ModelAndView modelAndView = new ModelAndView();
+		ChangePassword customerDetails = customerDetail;
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			customerDetail.setUsername(userDetail.getUsername());
+		}
+		String status = custService.changeAccountPassword(customerDetails);
+		modelAndView.addObject("status", status);
+		modelAndView.setViewName("changePassword");
 		return modelAndView;
 	}
 

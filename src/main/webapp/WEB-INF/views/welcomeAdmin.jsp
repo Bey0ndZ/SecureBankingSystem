@@ -101,6 +101,7 @@
 						<li><a href="modifyUser">Modify User</a></li>
 						<li><a href="viewQueue">View Queue</a></li>
 						<li><a href="getList">View All Cust</a></li>
+						<li><a href="changePassword">Change password(self)</a></li>
 						<li><a href="javascript:formSubmit()">Logout</a></li>
 					</ul>
 					
