@@ -1,5 +1,5 @@
-<!--
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE HTML>
 
 <html>
@@ -125,26 +125,24 @@
 		<!-- Start of content wrapper -->
 		<div class="content_wrapper">
 			<div class="contentright" style="width: 100%">
-				<form method="post" action="#">					
-					<b>First Name:</b> <br/> <input type="text_small" name="firstName" id="f_name_addUser" style="color:#999;" /><br/>
-					<b>Last Name:</b> <br/> <input type="text_small" name="lastName" id="l_name_addUser" style="color:#999;" /><br/>
-					<b>Contact:</b> <br/> <input type="text_small" name="contactNumber" id="contact_addUser" style="color:#999;" /><br/>
-					<b>Address:</b> <br/> <input type="text_small" name="address" id="add_addUser" style="color:#999;" /><br/>
-					<b>Email Address:</b> <br/> <input type="email_small" name="emailAddress_addUser" id="email" style="color:#999;" /><br/>
-					<b>User Name:</b> <br/> <input type="text_small" name="userName" id="u_name_addUser" style="color:#999;" /><br/>
-					<b>Password:</b> <br/> <input type="password_small" name="password" id="temp_pwd_addUser" style="color:#999;" /><br/>
-					<b>Confirm Password:</b> <br/> <input type="password_small" name="confirmPassword" id="confirm_pwd_addUser" style="color:#999;" /><br/>
-					<b>SSN:</b> <br/> <input type="number" name="ssn" id="ssn_addUser" style="color:#999;" /><br/>
+				<form:form method="POST" action="addUser" modelAttribute="addUserForm">					
+					<b>First Name:</b> <FONT color="red"> <form:errors path="firstName" /> </FONT> <br/> <input type="text" name="firstName" value="${addUserForm.firstName}" id="f_name_addUser" style="color:#999;" /><br/> <br/>
+					<b>Last Name:</b> <FONT color="red"> <form:errors path="lastName" /> </FONT> <br/> <input type="text" name="lastName" value="${addUserForm.lastName}" id="l_name_addUser" style="color:#999;" /><br/> <br/>
+					<b>Contact:</b> <FONT color="red"> <form:errors path="contactNumber" /> </FONT> <br/> <input type="text" name="contactNumber" value="${addUserForm.contactNumber}" id="contact_addUser" style="color:#999;" /><br/> <br/>
+					<b>Address:</b> <FONT color="red"> <form:errors path="address" /> </FONT> <br/> <input type="text" name="address" value="${addUserForm.address}" id="add_addUser" style="color:#999;" /><br/> <br/>
+					<b>Email Address:</b> <FONT color="red"> <form:errors path="emailAddress_addUser" /> </FONT> <br/> <input type="email" name="emailAddress_addUser" value="${addUserForm.emailAddress_addUser}" id="email" style="color:#999;" /><br/> <br/>
+					<b>User Name:</b> <FONT color="red"> <form:errors path="userName" /> </FONT> <br/> <input type="text" name="userName" value="${addUserForm.userName}" id="u_name_addUser" style="color:#999;" /><br/> <br/>
+					<b>Password:</b> <FONT color="red"> <form:errors path="password" /> </FONT> <br/> <input type="password" name="password" id="temp_pwd_addUser" style="color:#999;" /><br/> <br/>
+					<b>Confirm Password:</b> <FONT color="red"> <form:errors path="confirmPassword" /> </FONT> <br/> <input type="password" name="confirmPassword" id="confirm_pwd_addUser" style="color:#999;" /><br/> <br/>
+					<b>SSN:</b> <FONT color="red"> <form:errors path="socialSecurityNumber" /> </FONT> <br/> <input type="number" name="socialSecurityNumber" value="${addUserForm.socialSecurityNumber}" id="ssn_addUser" style="color:#999;" /><br/> <br/>
 					<b>User Type:</b> 
-						<form action="">
-							<select>
-							<option value="internalUser">Internal User</option>
-							<option value="externalUser">External User</option>
-							</select>
-							</form>
-					<br/>					
-					<a href="addUserSuccess.jsp"> <input type="submit" style="margin-right: 5%" name="addUser" id="addUserButton" value="Add User" /></a>
-				</form>
+					<select>
+						<option value="internalUser">Internal User</option>
+						<option value="externalUser">External User</option>
+					</select>
+					<br/> <br/>					
+					<a href="addUserSuccess.jsp"> <input type="submit" style="margin-right: 5%" name="addUser" id="addUserButton" value="Add User" /></a><br/>
+				</form:form>
 			</div>
 	
 			<div class="clear"></div>

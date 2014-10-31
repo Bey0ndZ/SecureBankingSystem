@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.session.SessionAuthenticationException;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.service.CustomerService;
 
@@ -244,11 +247,33 @@ public class MainController {
 		return modelAndView;
 	}
 
-	// Displaying the removeUser.jsp page
-	@RequestMapping(value = "/addUser", method = RequestMethod.GET)
+	@RequestMapping(value = "/addUser", method=RequestMethod.GET)
 	public ModelAndView returnAddUserPage() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("addUser");
 		return modelAndView;
+	}
+	
+	@RequestMapping(value="/addUser", method=RequestMethod.POST)
+	public ModelAndView returnAddUserPage(@Valid @ModelAttribute("addUserForm") AddUserInformation addUserInfo,
+                BindingResult result) {
+         
+		ModelAndView modelAndView = new ModelAndView();         
+        AddUserValidation.validateForm(addUserInfo, result);
+         
+        if (result.hasErrors()) {
+         	modelAndView.setViewName("addUser");
+                 return modelAndView;
+         } 
+        else {        	
+ 			System.out.println(addUserInfo.getUserName());
+ 			
+ 			
+ 			//custService.insertCustomerInformation(addUserInfo);
+ 			// WRITE CODE FOR ADDING THE INFORMATION INTO DATABASE HERE -----
+ 			
+ 			modelAndView.setViewName("addUserSuccess");
+ 			return modelAndView;
+         }
 	}
 }
