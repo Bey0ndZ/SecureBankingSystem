@@ -74,7 +74,7 @@ public class LoginAttemptsLockResetDAOImpl extends JdbcDaoSupport implements Log
 		// TODO Auto-generated method stub
 		try {
 			 
-			AccountAttempts userAttempts = getJdbcTemplate().queryForObject("SELECT * FROM USER_ATTEMPTS WHERE username = ?",
+			AccountAttempts userAttempts = getJdbcTemplate().queryForObject("SELECT * FROM user_attempts WHERE username = ?",
 				new Object[] { username }, new RowMapper<AccountAttempts>() {
 				public AccountAttempts mapRow(ResultSet rs, int rowNum) throws SQLException {
 	 
