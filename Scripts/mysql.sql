@@ -37,7 +37,7 @@ CREATE  TABLE users (
   VALUES ('skgarg', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam','male', 'Merchant', '4804804801',
   'shivam@asu.edu', 'ssn', 'address', true,true,true,true);
   INSERT INTO users 
-  VALUES ('employee', 'employee', 'employee', 'employee', 'employee','male', 'Merchant', '4804804802',
+  VALUES ('employee', '$2a$10$G5HnxB7yjAEdxUQ4lDwkHuSPAoaITmM7O2DFp762bpytmUlisTTxa', '$2a$10$G5HnxB7yjAEdxUQ4lDwkHuSPAoaITmM7O2DFp762bpytmUlisTTxa', 'employee', 'employee','male', 'Merchant', '4804804802',
   'employee@asu.edu', 'ssn', 'address', true,true,true,true);
 
 CREATE TABLE user_roles (

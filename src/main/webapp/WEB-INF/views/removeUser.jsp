@@ -61,6 +61,12 @@
 	});
 	
 	</script>
+	
+	<script type="text/javascript">
+	function formSubmit() {
+		document.getElementById("logoutForm").submit();
+	}
+	</script>
 </head>
 
 <body>

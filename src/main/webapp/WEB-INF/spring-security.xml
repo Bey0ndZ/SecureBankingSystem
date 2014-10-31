@@ -9,11 +9,12 @@
 	<http auto-config="true" use-expressions="true">
 		<!-- These are admin/internal user specific -->
 		<intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/addUser**" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/removeUser*" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/viewUser*" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/getList*" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/modifyUser*" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/employee**" access="hasRole('ROLE_EMPLOYEE')" />
+		<intercept-url pattern="/addUser**" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
+		<intercept-url pattern="/removeUser*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
+		<intercept-url pattern="/viewUser*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
+		<intercept-url pattern="/getList*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
+		<intercept-url pattern="/modifyUser*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
 
 
 		<!-- These are permitAll -->
