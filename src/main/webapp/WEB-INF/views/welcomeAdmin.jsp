@@ -1,3 +1,6 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page session="true"%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,6 +22,13 @@
 
     <!-- Custom Fonts -->
     <link href="${pageContext.request.contextPath}/resources/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- Logout Script -->
+    <script type="text/javascript">
+		function formSubmit() {
+			document.getElementById("logoutForm").submit();
+		}
+	</script>
 
 </head>
 
@@ -36,7 +46,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index">Customer</a>
+                <a class="navbar-brand" href="index">Admin</a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
@@ -134,41 +144,35 @@
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                            <a href="javascript:formSubmit()"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                         </li>
                     </ul>
                 </li>
             </ul>
+            
+            <!-- Logout feature implementation -->
+            <c:url value="/j_spring_security_logout" var="logoutUrl" />
+			<form action="${logoutUrl}" method="post" id="logoutForm">
+				<input type="hidden" name="${_csrf.parameterName}"
+					value="${_csrf.token}" />
+			</form>
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
-                        <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Account</a>
+                        <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Add User</a>
                     </li>
                     <li>
-                        <a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i> Bill Pay</a>
+                        <a href="charts.html"><i class="fa fa-fw fa-dashboard"></i> Remove User</a>
                     </li>
-                    <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo1"><i class="fa fa-fw fa-arrows-v"></i> Transfer Money <i class="fa fa-fw fa-caret-down"></i></a>
-                        <ul id="demo1" class="collapse">
-                            <li>
-                                <a href="#">Make a Transfer</a>
-                            </li>
-                            <li>
-                                <a href="#">View Transfer Activity</a>
-                            </li>
-                        </ul>
+                     <li>
+                        <a href="charts.html"><i class="fa fa-fw fa-dashboard"></i> View User</a>
                     </li>
-                    <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo2"><i class="fa fa-fw fa-arrows-v"></i> Debit or Credit Funds <i class="fa fa-fw fa-caret-down"></i></a>
-                        <ul id="demo2" class="collapse">
-                            <li>
-                                <a href="#">Debit</a>
-                            </li>
-                            <li>
-                                <a href="#">Credit</a>
-                            </li>
-                        </ul>
+                     <li>
+                        <a href="charts.html"><i class="fa fa-fw fa-dashboard"></i> Modify User</a>
+                    </li>
+                     <li>
+                        <a href="charts.html"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
                     </li>
                 </ul>
             </div>
