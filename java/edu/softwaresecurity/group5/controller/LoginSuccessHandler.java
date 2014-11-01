@@ -66,7 +66,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         HttpSession session = request.getSession(false);
         if (session == null) {
             return;
-        }
+        } 
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
     }
  
