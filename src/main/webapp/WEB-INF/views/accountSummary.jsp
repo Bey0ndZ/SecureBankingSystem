@@ -13,7 +13,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Welcome, Customer!</title>
+    <title>Welcome, ${username }</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
@@ -222,7 +222,12 @@
                                 <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Information</h3>
                             </div>
                             <div class="panel-body">
-                                <div id="morris-area-chart"></div>
+                                <div id="morris-area-chart">
+                                
+                                	<!-- User information goes here -->
+                                	${userInformation } 
+                                
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -18,6 +18,7 @@ public class CustomerInformation {
 	private String firstname;
 	@NotEmpty(message="Please enter your lastname.")
 	private String lastname;
+	private String sex;
 	private String selection;
 	@NotEmpty(message="Please enter your phonenumber.")
 	@Size(min = 10, max = 10, message = "Phone Number must be of exactly 10 digits")
@@ -76,14 +77,7 @@ public class CustomerInformation {
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;
 	}
-	/**
-	 * @return the lastnamepublic String getConfirmPassword() {
-		return confirmPassword;
-	}
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
-	}
-	 */
+	
 	public String getLastname() {
 		return lastname;
 	}
@@ -199,5 +193,17 @@ public class CustomerInformation {
 	 */
 	public void setUserDetailsExpired(int userDetailsExpired) {
 		this.userDetailsExpired = userDetailsExpired;
+	}
+	/**
+	 * @return the sex
+	 */
+	public String getSex() {
+		return sex;
+	}
+	/**
+	 * @param sex the sex to set
+	 */
+	public void setSex(String sex) {
+		this.sex = sex;
 	}
 }

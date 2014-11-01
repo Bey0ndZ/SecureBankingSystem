@@ -1,6 +1,15 @@
 package edu.softwaresecurity.group5.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,8 +31,25 @@ public class ExternalUserController {
 	CustomerService custService;
 
 	@RequestMapping(value = "/accountSummary", method = RequestMethod.GET)
-	public ModelAndView returnCustomerPage() {
+	public ModelAndView returnCustomerPage(HttpServletRequest session) {
 		ModelAndView modelAndView = new ModelAndView();
+		List<CustomerInformationDTO> custInfoFromDTO = new ArrayList<CustomerInformationDTO>();
+		
+		// check if user is login
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			String loggedInUser = userDetail.getUsername();
+			modelAndView.addObject("username", loggedInUser);
+			System.out.println(loggedInUser);
+			
+			// Call the DAOImpl layer
+			custInfoFromDTO = custService.fetchUserDetails(loggedInUser);
+			
+			// Add it to the model
+			modelAndView.addObject("userInformation", custInfoFromDTO);
+		}
 		modelAndView.setViewName("accountSummary");
 		return modelAndView;
 	}

@@ -37,9 +37,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 		String registerCustomerQuery = "INSERT into users"
 				+ "(username, password, confirmpassword,"
 				+ "firstname,"
-				+ "lastname, MerchantorIndividual, phonenumber,"
+				+ "lastname, sex, MerchantorIndividual, phonenumber,"
 				+ "email, SSN, address, enabled, "
-				+ "userExpired, userLocked, userDetailsExpired) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "userExpired, userLocked, userDetailsExpired) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		String insertIntoUserRolesTable = "INSERT into user_roles (username, role) "
 				+ "VALUES (?,?)";
 
@@ -54,6 +54,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 				registerCustomerQuery,
 				new Object[] { custInfo.getUsername(), hash, hash,
 						custInfo.getFirstname(), custInfo.getLastname(),
+						custInfo.getSex(),
 						custInfo.getSelection(), custInfo.getPhonenumber(),
 						custInfo.getEmail(),
 						custInfo.getSocialSecurityNumber(),

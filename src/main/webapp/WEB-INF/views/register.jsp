@@ -30,6 +30,16 @@
     }
     </style>
     
+    <script>
+    	function check() {
+    		 document.getElementById("male").checked = true;
+    	}
+    	
+    	function uncheck() {
+   		 document.getElementById("female").checked = false;
+   		}
+    </script>
+    
 </head>
 
 <body>
@@ -99,6 +109,8 @@
 									<b>Confirm Password:</b><br/> <input type="password" name="confirmPassword" id="cfrm_pwd" style="color:#999;" /><br/>
 									<b>First Name:</b> <FONT color="red"><form:errors path="firstname" /></FONT><br/> <input type="text" name="firstname" value="${registerForm.firstname}" id="f_name" style="color:#999;" /><br/>
 									<b>Last Name:</b> <FONT color="red"><form:errors path="lastname" /></FONT><br/><input type="text" name="lastname" value="${registerForm.lastname}" id="l_name" style="color:#999;" /><br/>
+									<b>Sex: </b><br/> <input type="radio" name="sex" value="Male" id="male"/>Male 
+									<input type="radio" name="sex" value="Female" id="male"/> Female <br/>
 									<b>Individual or Merchant:</b><br/>
 									<select name="selection">
 										<option value="Individual">Individual</option>
