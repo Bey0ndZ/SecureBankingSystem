@@ -12,3 +12,4 @@ TODO:
 1. Implement External User functionalities. Use OTP or likewise (maybe)
 2. Implement Internal Users and Admin functionalities.
 3. Make the UI more appealing.
+4. Add the <sec:authorize> stuff on EVERY page, so that only permitted users are allowed to view stuff.
