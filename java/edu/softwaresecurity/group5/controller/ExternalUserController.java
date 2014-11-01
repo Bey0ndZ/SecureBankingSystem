@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
@@ -15,6 +16,7 @@ import edu.softwaresecurity.group5.service.CustomerService;
  */
 
 @Controller
+@SessionAttributes("username")
 public class ExternalUserController {
 	@Autowired
 	CustomerService custService;
