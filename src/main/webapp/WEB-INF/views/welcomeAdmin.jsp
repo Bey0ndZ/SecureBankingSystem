@@ -1,5 +1,6 @@
+<%@taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page session="true"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +13,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Welcome, customer</title>
+    <title>Welcome, Admin</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
@@ -22,18 +23,11 @@
 
     <!-- Custom Fonts -->
     <link href="${pageContext.request.contextPath}/resources/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    
-    <!-- Logout Script -->
-    <script type="text/javascript">
-		function formSubmit() {
-			document.getElementById("logoutForm").submit();
-		}
-	</script>
 
 </head>
 
 <body>
-
+	<sec:authorize access="hasRole('ROLE_ADMIN')">
     <div id="wrapper">
 
         <!-- Navigation -->
@@ -110,7 +104,7 @@
                             <a href="#">Alert Name <span class="label label-default">Alert Badge</span></a>
                         </li>
                         <li>
-                            <a href="#">Alert Name <span class="label label-primary">Alert Badge</span></a>
+							<a href="#">Alert Name <span class="label label-primary">Alert Badge</span></a>
                         </li>
                         <li>
                             <a href="#">Alert Name <span class="label label-success">Alert Badge</span></a>
@@ -131,7 +125,14 @@
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> 
+                    
+                    <!-- Accessing the session object -->
+                    <c:if test="${pageContext.request.userPrincipal.name != null }">
+                    	${pageContext.request.userPrincipal.name}
+                    </c:if>
+                    
+                    <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
@@ -156,7 +157,15 @@
 				<input type="hidden" name="${_csrf.parameterName}"
 					value="${_csrf.token}" />
 			</form>
-            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+			
+			<!-- Logout Script -->
+		    <script type="text/javascript">
+				function formSubmit() {
+					document.getElementById("logoutForm").submit();
+				}
+			</script>
+            <!-- Sidebar <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page session="true"%>Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
@@ -197,7 +206,8 @@
                         </h1>
                     </div>
                 </div>
-                <!-- /.row -->
+                <!-- /.ro<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page session="true"%>w -->
 
                 <div class="row">
                     <div class="col-lg-12">
@@ -227,6 +237,8 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+    
+    </sec:authorize>
 
 </body>
 
