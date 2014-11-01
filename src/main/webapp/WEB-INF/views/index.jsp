@@ -102,6 +102,9 @@
 				          <label>
 				          	Not a member? Click <a href="register">here</a>
 				          </label>
+				          <label>
+				          	Account Locked? Click <a href="unlockAccount">here</a>
+				          </label>
 				        </div>
 				        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 			

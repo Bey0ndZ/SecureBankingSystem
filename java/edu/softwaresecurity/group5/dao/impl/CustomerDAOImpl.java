@@ -1,17 +1,22 @@
 package edu.softwaresecurity.group5.dao.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import edu.softwaresecurity.group5.dao.CustomerDAO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.jdbc.UserRowMapper;
+import edu.softwaresecurity.group5.model.AccountAttempts;
 import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.model.CustomerInformation;
 
@@ -41,19 +46,20 @@ public class CustomerDAOImpl implements CustomerDAO {
 		JdbcTemplate jdbcTemplateForRegisterCustomer = new JdbcTemplate(
 				dataSource);
 		JdbcTemplate jdbcTemplateForUserRoles = new JdbcTemplate(dataSource);
-		
-	    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();  
-	    String hash = passwordEncoder.encode(custInfo.getPassword());  
+
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hash = passwordEncoder.encode(custInfo.getPassword());
 
 		jdbcTemplateForRegisterCustomer.update(
 				registerCustomerQuery,
 				new Object[] { custInfo.getUsername(), hash, hash,
 						custInfo.getFirstname(), custInfo.getLastname(),
 						custInfo.getSelection(), custInfo.getPhonenumber(),
-						custInfo.getEmail(), custInfo.getSocialSecurityNumber(),
+						custInfo.getEmail(),
+						custInfo.getSocialSecurityNumber(),
 						custInfo.getAddress(), custInfo.getEnabled(),
 						custInfo.getUserExpired(), custInfo.getUserLocked(),
-						custInfo.getUserDetailsExpired()});
+						custInfo.getUserDetailsExpired() });
 
 		jdbcTemplateForUserRoles.update(insertIntoUserRolesTable, new Object[] {
 				custInfo.getUsername(), "ROLE_USER" });
@@ -106,27 +112,84 @@ public class CustomerDAOImpl implements CustomerDAO {
 				new Object[] { custInfo.getFirstname(), custInfo.getLastname(),
 						custInfo.getPhonenumber(), custInfo.getEmail(),
 						custInfo.getAddress(), custInfo.getUsername() });
-		if(status==1){
+		if (status == 1) {
 			return "Updated account details Succesfully";
 		}
 
 		return "Databse not updated, please contact Branch Representative";
 	}
-	
-	public String changeAccountPassword(ChangePassword custInfo){
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();  
-	    String hash = passwordEncoder.encode(custInfo.getPassword());  
-	    String sql = "UPDATE users set password = ?,confirmpassword = ?"
+
+	public String changeAccountPassword(ChangePassword custInfo) {
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hash = passwordEncoder.encode(custInfo.getPassword());
+		String sql = "UPDATE users set password = ?,confirmpassword = ?"
 				+ " where enabled = true  and username = ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		int status = jdbcTemplate.update(sql,
-				new Object[] { custInfo.getPassword(), custInfo.getConfirmPassword(),
-						custInfo.getUsername() });
-		if(status==1){
+		int status = jdbcTemplate.update(sql, new Object[] { hash, hash,
+				custInfo.getUsername() });
+		if (status == 1) {
 			return "Updated account details Succesfully";
 		}
 
 		return "Databse not updated, please contact Branch Representative";
-	    
+
 	}
+
+	public String unlockAccount(CustomerInformationDTO custInfo) {
+
+		if (verifyAccountForLock(custInfo)) {
+			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			// this otp is hardcoded for now and will be changed later. or else
+			// everyone will have same otp. not secure.
+			String otp = "Hardcodedfornow";
+			String hash = passwordEncoder.encode(otp);
+			String sql = "UPDATE users set password = ?,confirmpassword = ?, userLocked= false"
+					+ " where enabled = true  and username = ?";
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			int status = jdbcTemplate.update(sql, new Object[] { hash, hash,
+					custInfo.getUsername() });
+			if (status == 1) {
+				return "your new password is " + hash;
+			}
+
+			return "Databse not updated, please contact Branch Representative";
+		}
+
+		return "User account for "
+				+ custInfo.getUsername()
+				+ " is not locked, please contact adminstrator if you have login issues.";
+
+	}
+
+	public boolean verifyAccountForLock(CustomerInformationDTO custInfo) {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		String username = custInfo.getUsername();
+		try {
+
+			AccountAttempts userAttempts = jdbcTemplate
+					.queryForObject(
+							"SELECT username,userLocked  FROM users WHERE username = ?",
+							new Object[] { username },
+							new RowMapper<AccountAttempts>() {
+								public AccountAttempts mapRow(ResultSet rs,
+										int rowNum) throws SQLException {
+
+									AccountAttempts user = new AccountAttempts();
+									user.setUsername(rs.getString("username"));
+									user.setLocked(rs.getInt("userLocked"));
+
+									return user;
+								}
+
+							});
+			if (userAttempts.isLocked() == 1) {
+				return false;
+			}
+			return true;
+		} catch (EmptyResultDataAccessException e) {
+			return false;
+		}
+
+	}
+
 }

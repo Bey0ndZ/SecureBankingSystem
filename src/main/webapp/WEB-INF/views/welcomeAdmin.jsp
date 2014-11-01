@@ -174,7 +174,13 @@
                      <li>
                         <a href="viewQueue"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
                     </li>
-                </ul>
+                    <li>
+                        <a href="getList"><i class="fa fa-fw fa-dashboard"></i>View All Customer</a>
+                    </li>
+                    <li>
+                        <a href="changePassword"><i class="fa fa-fw fa-dashboard"></i>Change password(self)</a>
+                    </li>
+                 </ul>
             </div>
             <!-- /.navbar-collapse -->
         </nav>

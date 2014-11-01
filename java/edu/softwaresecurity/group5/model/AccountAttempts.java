@@ -4,6 +4,16 @@ import java.util.Date;
 
 public class AccountAttempts {
 	private int id;
+	private String username;
+	private int tries;
+	private Date lastAttempt;
+	private int isLocked;
+	public int isLocked() {
+		return isLocked;
+	}
+	public void setLocked(int isLocked) {
+		this.isLocked = isLocked;
+	}
 	public int getId() {
 		return id;
 	}
@@ -28,9 +38,7 @@ public class AccountAttempts {
 	public void setLastAttempt(Date lastAttempt) {
 		this.lastAttempt = lastAttempt;
 	}
-	private String username;
-	private int tries;
-	private Date lastAttempt;
+	
 	
 	
 }

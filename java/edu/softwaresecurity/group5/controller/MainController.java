@@ -247,33 +247,51 @@ public class MainController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/addUser", method=RequestMethod.GET)
+	@RequestMapping(value = "/addUser", method = RequestMethod.GET)
 	public ModelAndView returnAddUserPage() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("addUser");
 		return modelAndView;
 	}
-	
-	@RequestMapping(value="/addUser", method=RequestMethod.POST)
-	public ModelAndView returnAddUserPage(@Valid @ModelAttribute("addUserForm") AddUserInformation addUserInfo,
-                BindingResult result) {
-         
-		ModelAndView modelAndView = new ModelAndView();         
-        AddUserValidation.validateForm(addUserInfo, result);
-         
-        if (result.hasErrors()) {
-         	modelAndView.setViewName("addUser");
-                 return modelAndView;
-         } 
-        else {        	
- 			System.out.println(addUserInfo.getUserName());
- 			
- 			
- 			//custService.insertCustomerInformation(addUserInfo);
- 			// WRITE CODE FOR ADDING THE INFORMATION INTO DATABASE HERE -----
- 			
- 			modelAndView.setViewName("addUserSuccess");
- 			return modelAndView;
-         }
+
+	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
+	public ModelAndView returnAddUserPage(
+			@Valid @ModelAttribute("addUserForm") AddUserInformation addUserInfo,
+			BindingResult result) {
+
+		ModelAndView modelAndView = new ModelAndView();
+		AddUserValidation.validateForm(addUserInfo, result);
+
+		if (result.hasErrors()) {
+			modelAndView.setViewName("addUser");
+			return modelAndView;
+		} else {
+			System.out.println(addUserInfo.getUserName());
+
+			// custService.insertCustomerInformation(addUserInfo);
+			// WRITE CODE FOR ADDING THE INFORMATION INTO DATABASE HERE -----
+
+			modelAndView.setViewName("addUserSuccess");
+			return modelAndView;
+		}
 	}
+	
+	@RequestMapping(value = "/unlockAccount", method = RequestMethod.GET)
+	public ModelAndView returnUnlockAccountPage() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("unlockAccount");
+		return modelAndView;
+	}
+	
+	// Getting the userdetails
+		@RequestMapping(value = "/unlockAccount", method = RequestMethod.POST)
+		public ModelAndView getVerfyUserForUnlock(
+				@ModelAttribute("customerDetails") CustomerInformationDTO customerDetail) {
+			ModelAndView modelAndView = new ModelAndView();
+			CustomerInformationDTO customerDetails = customerDetail;
+			String status = custService.unlockAccount(customerDetails);
+			modelAndView.addObject("status", status);
+			modelAndView.setViewName("unlockAccount");
+			return modelAndView;
+		}
 }

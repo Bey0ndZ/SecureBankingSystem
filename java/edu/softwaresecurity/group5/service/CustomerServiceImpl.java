@@ -36,4 +36,8 @@ public class CustomerServiceImpl implements CustomerService {
 		// TODO Auto-generated method stub
 		return custDAO.changeAccountPassword(cust);
 	}
+	public String unlockAccount(CustomerInformationDTO cust) {
+		// TODO Auto-generated method stub
+		return custDAO.unlockAccount(cust);
+	}
 }

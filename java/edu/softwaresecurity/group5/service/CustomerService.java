@@ -13,5 +13,6 @@ public interface CustomerService {
 	public CustomerInformationDTO getUserFromAccount(String accountNumber);  
 	public String updateAccount(CustomerInformationDTO cust);  
 	public String changeAccountPassword(ChangePassword cust);
+	public String unlockAccount(CustomerInformationDTO cust);
 }
 

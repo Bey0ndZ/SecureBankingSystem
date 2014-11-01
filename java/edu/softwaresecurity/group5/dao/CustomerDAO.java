@@ -14,4 +14,5 @@ public interface CustomerDAO {
 //	public void deleteData(String id);  
 	public CustomerInformationDTO getUserFromAccount(String accountNumber);  
 	public String changeAccountPassword(ChangePassword custInfo);  
+	public String unlockAccount(CustomerInformationDTO custInfo);
 }
