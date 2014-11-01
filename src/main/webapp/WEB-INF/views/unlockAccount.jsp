@@ -95,21 +95,7 @@
 			</div><!-- End of logo -->
 	
 			<!-- Start of top menu wrapper -->
-			<div class="topmenuwrapper">		
-				<!-- Start of topmenu -->
-				<nav class="topmenu"> 
-					<ul class="sf-menu">
-						<li><a href="addUser">Add User</a></li>  
-						<li><a href="removeUser">Remove User</a></li>
-						<li><a href="viewUser">View User</a></li>
-						<li><a href="modifyUser">Modify User</a></li>
-						<li><a href="viewQueue">View Queue</a></li>
-						<li><a href="changePassword">Change password(self)</a></li>
-						<li><a href="javascript:formSubmit()">Logout</a></li>
-					</ul>
-					
-				</nav><!-- End of topmenu -->
-	
+			<div class="topmenuwrapper">			
 				<!-- Start of header phone -->
 				<div class="header_phone">
 				Contact: (000) 000-0000
