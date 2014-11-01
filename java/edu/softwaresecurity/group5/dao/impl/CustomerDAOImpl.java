@@ -42,10 +42,14 @@ public class CustomerDAOImpl implements CustomerDAO {
 				+ "userExpired, userLocked, userDetailsExpired) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		String insertIntoUserRolesTable = "INSERT into user_roles (username, role) "
 				+ "VALUES (?,?)";
+		String insertIntoAccountsTable = "INSERT into account (username,"
+				+ "accountnumber, accountbalance, debit, credit)"
+				+ "VALUES (?,?,?,?,?)";
 
 		JdbcTemplate jdbcTemplateForRegisterCustomer = new JdbcTemplate(
 				dataSource);
 		JdbcTemplate jdbcTemplateForUserRoles = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForAccounts = new JdbcTemplate(dataSource);
 
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hash = passwordEncoder.encode(custInfo.getPassword());
@@ -64,6 +68,10 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		jdbcTemplateForUserRoles.update(insertIntoUserRolesTable, new Object[] {
 				custInfo.getUsername(), "ROLE_USER" });
+		
+		jdbcTemplateForAccounts.update(insertIntoAccountsTable,
+				new Object[] {custInfo.getUsername(), "23423423", "1000", "0",
+				"0"});
 	}
 
 	// Privileges - Add
