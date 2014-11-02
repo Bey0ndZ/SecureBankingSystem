@@ -268,10 +268,10 @@ public class MainController {
 		} else {
 			System.out.println(addUserInfo.getUserName());
 
-			// custService.insertCustomerInformation(addUserInfo);
-			// WRITE CODE FOR ADDING THE INFORMATION INTO DATABASE HERE -----
-
-			modelAndView.setViewName("addUserSuccess");
+			
+			custService.insertAddUserInformation(addUserInfo);
+			modelAndView.addObject("submitMessage", "User Added Successfully!");
+			modelAndView.setViewName("addUser");
 			return modelAndView;
 		}
 	}

@@ -19,6 +19,7 @@ import edu.softwaresecurity.group5.dao.CustomerDAO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.jdbc.UserRowMapper;
 import edu.softwaresecurity.group5.model.AccountAttempts;
+import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.model.CustomerInformation;
 
@@ -30,8 +31,58 @@ import edu.softwaresecurity.group5.model.CustomerInformation;
 public class CustomerDAOImpl implements CustomerDAO {
 	@Autowired
 	DataSource dataSource;
+	
+	public void addUser(AddUserInformation addInfo) {
+		addInfo.setEnabled(1);
+		addInfo.setUserLocked(1);
+		addInfo.setUserExpired(1);
+		addInfo.setUserDetailsExpired(1);
+		
+		String addUserQuery = "INSERT into users"
+				+ "(username, password, confirmpassword,"
+				+ "firstname,"
+				+ "lastname, sex, MerchantorIndividual, phonenumber,"
+				+ "email, SSN, address, enabled, "
+				+ "userExpired, userLocked, userDetailsExpired) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		
+		String addUserIntoUserRolesTable = "INSERT into user_roles (username, role) "
+				+ "VALUES (?,?)";
+		String addUserIntoAccountsTable = "INSERT into account (username,"
+				+ "accountnumber, accountbalance, debit, credit)"
+				+ "VALUES (?,?,?,?,?)";
+		
+		JdbcTemplate jdbcTemplateForRegisterCustomer = new JdbcTemplate(
+				dataSource);
+		JdbcTemplate jdbcTemplateForUserRoles = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForAccounts = new JdbcTemplate(dataSource);
+
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hash = passwordEncoder.encode(addInfo.getPassword());
+
+		System.out.println("Checking Selection: "+addInfo.getSelection());
+		
+		jdbcTemplateForRegisterCustomer.update(
+				addUserQuery,
+				new Object[] { addInfo.getUserName(), hash, hash,
+						addInfo.getFirstName(), addInfo.getLastName(),
+						addInfo.getSex(),
+						addInfo.getSelection(), addInfo.getContactNumber(),
+						addInfo.getEmailAddress_addUser(),
+						addInfo.getSocialSecurityNumber(),
+						addInfo.getAddress(), addInfo.getEnabled(),
+						addInfo.getUserExpired(), addInfo.getUserLocked(),
+						addInfo.getUserDetailsExpired() });
+		
+		jdbcTemplateForUserRoles.update(addUserIntoUserRolesTable, new Object[] {
+				addInfo.getUserName(), "ROLE_USER" });
+		
+		jdbcTemplateForAccounts.update(addUserIntoAccountsTable,
+				new Object[] {addInfo.getUserName(), "13131315", "1000", "0",
+				"0"});}
+
 
 	public void registerCustomer(CustomerInformation custInfo) throws NoSuchAlgorithmException {
+
 		custInfo.setEnabled(1);
 		custInfo.setUserLocked(1);
 		custInfo.setUserExpired(1);
@@ -55,7 +106,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hash = passwordEncoder.encode(custInfo.getPassword());
-
+		
+		System.out.println("Check for Registration Selection: "+custInfo.getSelection());
+		
 		jdbcTemplateForRegisterCustomer.update(
 				registerCustomerQuery,
 				new Object[] { custInfo.getUsername(), hash, hash,

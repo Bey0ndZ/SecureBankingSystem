@@ -10,6 +10,7 @@ public class AddUserInformation {
     private String firstName;
     @NotEmpty(message="Please enter your lastname.")
     private String lastName;
+    private String sex;
     @NotEmpty(message="Please enter your phonenumber.")
     @Size(min = 10, max = 10, message = "Phone Number must be of exactly 10 digits")
     private String contactNumber;
@@ -29,13 +30,30 @@ public class AddUserInformation {
     @Size(min = 10, max = 10, message = "SSN must be of exactly 10 digits")
     private String socialSecurityNumber;
     private String selection;
-    
-    
-    
-    
-    
+	private int userExpired;
+	private int userLocked;
+	private int userDetailsExpired;
     private int enabled;
     
+    
+    public int getUserExpired() {
+		return userExpired;
+	}
+	public void setUserExpired(int userExpired) {
+		this.userExpired = userExpired;
+	}
+	public int getUserLocked() {
+		return userLocked;
+	}
+	public void setUserLocked(int userLocked) {
+		this.userLocked = userLocked;
+	}
+	public int getUserDetailsExpired() {
+		return userDetailsExpired;
+	}
+	public void setUserDetailsExpired(int userDetailsExpired) {
+		this.userDetailsExpired = userDetailsExpired;
+	}
     public int getEnabled() {
         return enabled;
     }
@@ -96,6 +114,12 @@ public class AddUserInformation {
 	}
 	public void setSocialSecurityNumber(String socialSecurityNumber) {
 		this.socialSecurityNumber = socialSecurityNumber;
+	}
+	public String getSex() {
+		return sex;
+	}
+	public void setSex(String sex) {
+		this.sex = sex;
 	}
 	public String getAddress() {
         return address;
