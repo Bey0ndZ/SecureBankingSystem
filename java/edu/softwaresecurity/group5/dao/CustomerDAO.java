@@ -12,7 +12,7 @@ public interface CustomerDAO {
 
 	public void registerCustomer(CustomerInformation custInfo) throws NoSuchAlgorithmException;
 
-	public void addUser(AddUserInformation addInfo);
+	public void addUser(AddUserInformation addInfo) throws NoSuchAlgorithmException;
 	public List<CustomerInformationDTO> retrieveUserDetails(String username);
 	public List<CustomerInformationDTO> getUserList();  
 	public String updateAccount(CustomerInformationDTO custInfo);  

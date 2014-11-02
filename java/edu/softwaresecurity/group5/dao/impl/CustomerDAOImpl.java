@@ -32,7 +32,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 	@Autowired
 	DataSource dataSource;
 	
-	public void addUser(AddUserInformation addInfo) {
+	public void addUser(AddUserInformation addInfo) throws NoSuchAlgorithmException {
 		addInfo.setEnabled(1);
 		addInfo.setUserLocked(1);
 		addInfo.setUserExpired(1);
@@ -76,8 +76,13 @@ public class CustomerDAOImpl implements CustomerDAO {
 		jdbcTemplateForUserRoles.update(addUserIntoUserRolesTable, new Object[] {
 				addInfo.getUserName(), "ROLE_USER" });
 		
+		// Generating random account numbers
+		SecureRandom secure;
+		secure = SecureRandom.getInstance("SHA1PRNG");
+		String accountNumber = new Integer(secure.nextInt()).toString();
+		
 		jdbcTemplateForAccounts.update(addUserIntoAccountsTable,
-				new Object[] {addInfo.getUserName(), "13131315", "1000", "0",
+				new Object[] {addInfo.getUserName(), accountNumber, "1000", "0",
 				"0"});}
 
 

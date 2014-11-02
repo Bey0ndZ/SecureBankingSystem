@@ -1,5 +1,6 @@
 package edu.softwaresecurity.group5.controller;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -257,7 +258,7 @@ public class MainController {
 	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
 	public ModelAndView returnAddUserPage(
 			@Valid @ModelAttribute("addUserForm") AddUserInformation addUserInfo,
-			BindingResult result) {
+			BindingResult result) throws NoSuchAlgorithmException {
 
 		ModelAndView modelAndView = new ModelAndView();
 		AddUserValidation.validateForm(addUserInfo, result);

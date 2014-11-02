@@ -12,7 +12,7 @@ public interface CustomerService {
 
 	public void insertCustomerInformation(CustomerInformation custInfo) throws NoSuchAlgorithmException;
 
-	public void insertAddUserInformation(AddUserInformation addInfo);
+	public void insertAddUserInformation(AddUserInformation addInfo) throws NoSuchAlgorithmException;
 
 	public List<CustomerInformationDTO> fetchUserDetails(String usernameSearch);
 	public List<CustomerInformationDTO> getUserList();

@@ -19,7 +19,7 @@ public class CustomerServiceImpl implements CustomerService {
 		custDAO.registerCustomer(custInfo);
 	}
 	
-	public void insertAddUserInformation(AddUserInformation addInfo) {
+	public void insertAddUserInformation(AddUserInformation addInfo) throws NoSuchAlgorithmException {
 		custDAO.addUser(addInfo);
 	}
 	
