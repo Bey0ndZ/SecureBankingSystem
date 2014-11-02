@@ -11,7 +11,7 @@ import edu.softwaresecurity.group5.model.CustomerInformation;
 
 public interface CustomerService {
 
-	public void insertCustomerInformation(CustomerInformation custInfo) throws NoSuchAlgorithmException;
+	public String insertCustomerInformation(CustomerInformation custInfo) throws NoSuchAlgorithmException;
 
 	public void insertAddUserInformation(AddUserInformation addInfo) throws NoSuchAlgorithmException;
 

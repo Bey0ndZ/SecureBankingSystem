@@ -16,8 +16,8 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	CustomerDAO custDAO;
 	
-	public void insertCustomerInformation(CustomerInformation custInfo) throws NoSuchAlgorithmException {
-		custDAO.registerCustomer(custInfo);
+	public String insertCustomerInformation(CustomerInformation custInfo) throws NoSuchAlgorithmException {
+		return custDAO.registerCustomer(custInfo);
 	}
 	
 	public void insertAddUserInformation(AddUserInformation addInfo) throws NoSuchAlgorithmException {

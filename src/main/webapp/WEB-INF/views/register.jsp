@@ -104,6 +104,9 @@
                                 <div id="morris-area-chart">
                                 <form:form method="POST" action="register" modelAttribute="registerForm">
 									<i><b>New User - Sign Up!</b></i> <br/>
+									<c:if test="${not empty errorMsg}">
+										<h3> ${errorMsg} </h3>
+                                    </c:if>
 									<b>User Name:</b><FONT color="red"><form:errors path="username" /></FONT><br/> <input type="text" name="username" value="${registerForm.username}" id="username" style="color:#999;" /><br/>
 									<b>Password:</b><FONT color="red"><form:errors path="password" /></FONT> <br/><input type="password" name="password" id="password" style="color:#999;" /><br/>
 									<b>Confirm Password:</b><br/> <input type="password" name="confirmPassword" id="cfrm_pwd" style="color:#999;" /><br/>
@@ -126,6 +129,10 @@
 				          				out.print(c.createRecaptchaHtml(null, null));
 				        			%>							
 									<br/><input type="submit" style="margin-right: 5%" name="login" id="log_in" value="Register!" />
+									
+									<c:if test="${not empty successMsg}">
+										<h3> ${successMsg} <a href = "index"> Click here to LogIn!</a> </h3>
+                                    </c:if>
 								</form:form>
                                 </div>
                             </div>

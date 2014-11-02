@@ -61,12 +61,19 @@ public class RegistrationController {
 		}
 		
         if (result.hasErrors()) {
-        	modelAndView.setViewName("register");
+        	modelAndView.setViewName("register"); // This prints errors
                 return modelAndView;
         } else {        	
 			System.out.println(custInfo.getUsername());
-			custService.insertCustomerInformation(custInfo);
-			modelAndView.setViewName("index");
+			String error = custService.insertCustomerInformation(custInfo);
+			if (error.equalsIgnoreCase("UserName, Email and SSN must be unique!")) {
+				modelAndView.addObject("errorMsg", error);
+				modelAndView.setViewName("register");
+			}
+			else {
+				modelAndView.addObject("successMsg", error);
+				modelAndView.setViewName("register");
+			}
 			return modelAndView;
         }
 	}
