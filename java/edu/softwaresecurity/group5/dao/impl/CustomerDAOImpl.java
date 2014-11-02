@@ -1,5 +1,7 @@
 package edu.softwaresecurity.group5.dao.impl;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 	@Autowired
 	DataSource dataSource;
 
-	public void registerCustomer(CustomerInformation custInfo) {
+	public void registerCustomer(CustomerInformation custInfo) throws NoSuchAlgorithmException {
 		custInfo.setEnabled(1);
 		custInfo.setUserLocked(1);
 		custInfo.setUserExpired(1);
@@ -69,8 +71,14 @@ public class CustomerDAOImpl implements CustomerDAO {
 		jdbcTemplateForUserRoles.update(insertIntoUserRolesTable, new Object[] {
 				custInfo.getUsername(), "ROLE_USER" });
 		
+		// Generating random account numbers
+		SecureRandom secure;
+
+		secure = SecureRandom.getInstance("SHA1PRNG");
+		String accountNumber = new Integer(secure.nextInt()).toString();			
+	
 		jdbcTemplateForAccounts.update(insertIntoAccountsTable,
-				new Object[] {custInfo.getUsername(), "23423423", "1000", "0",
+				new Object[] {custInfo.getUsername(), accountNumber, "1000", "0",
 				"0"});
 	}
 
@@ -139,13 +147,10 @@ public class CustomerDAOImpl implements CustomerDAO {
 		if (status == 1) {
 			return "Updated account details Succesfully";
 		}
-
 		return "Databse not updated, please contact Branch Representative";
-
 	}
 
 	public String unlockAccount(CustomerInformationDTO custInfo) {
-
 		if (verifyAccountForLock(custInfo)) {
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			// this otp is hardcoded for now and will be changed later. or else
@@ -160,14 +165,11 @@ public class CustomerDAOImpl implements CustomerDAO {
 			if (status == 1) {
 				return "your new password is " + hash;
 			}
-
-			return "Databse not updated, please contact Branch Representative";
+			return "Database please contact Branch Representative";
 		}
-
 		return "User account for "
 				+ custInfo.getUsername()
 				+ " is not locked, please contact adminstrator if you have login issues.";
-
 	}
 
 	public boolean verifyAccountForLock(CustomerInformationDTO custInfo) {
@@ -198,7 +200,34 @@ public class CustomerDAOImpl implements CustomerDAO {
 		} catch (EmptyResultDataAccessException e) {
 			return false;
 		}
-
 	}
-
+	
+	// BillPayment implementation
+	public boolean billPayment(String generatedFromUsername, String account, String amount) {
+		float amountToTransfer = Float.parseFloat(amount);
+		
+		String getAccountDetailsFromUsername = "SELECT account.accountnumber from account"
+				+ " inner join users on "
+				+ "account.username=users.username "
+				+ "where account.username=?";
+		
+		String insertIntoPendingTransactions = "INSERT INTO "
+				+ "pendingtransactions(username, amount, pending, accountnumberfrom,"
+				+ "accountnumberto "
+				+ "VALUES (?,?,?,?,?)";
+		
+		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForPendingTransactions = new JdbcTemplate(dataSource);
+		
+		String getUsernameAccount = jdbcTemplateForAccountNumber.queryForObject(getAccountDetailsFromUsername,
+				new Object[] {generatedFromUsername},
+				String.class);
+		
+		int accountNumber = Integer.parseInt(getUsernameAccount);
+		
+		jdbcTemplateForPendingTransactions.update(insertIntoPendingTransactions,
+				new Object[]{generatedFromUsername, amountToTransfer, true, accountNumber,
+				account});
+		return true;
+	}
 }
