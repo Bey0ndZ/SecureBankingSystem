@@ -11,7 +11,7 @@ import edu.softwaresecurity.group5.model.CustomerInformation;
 
 public interface CustomerDAO {
 
-	public void registerCustomer(CustomerInformation custInfo) throws NoSuchAlgorithmException;
+	public String registerCustomer(CustomerInformation custInfo) throws NoSuchAlgorithmException;
 
 	public void addUser(AddUserInformation addInfo) throws NoSuchAlgorithmException;
 	public List<CustomerInformationDTO> retrieveUserDetails(String username);

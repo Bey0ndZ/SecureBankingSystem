@@ -23,20 +23,20 @@ public class RegistrationValidation {
 	  int phNum = 0;
 	  
 	  CustomerInformation cinfo = (CustomerInformation) info;
-	  ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username",
-        "NotEmpty.CustomerInformation.username",
-        "User Name must not be Empty.");
+//	  ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username",
+//        "NotEmpty.CustomerInformation.username",
+//        "");
     
 	  ValidationUtils.rejectIfEmptyOrWhitespace(errors, "socialSecurityNumber",
 		"NotEmpty.CustomerInformation.socialSecurityNumber",
 		"SSN must not be Empty.");
 	  
 	  String userName = cinfo.getUsername();
-	  if ((userName.length()) > 10) {
-      errors.rejectValue("username",
-          "lengthOfUser.CustomerInformation.username",
-          "User Name must not more than 10 characters.");
-      }
+//	  if ((userName.length()) > 10 || userName.length()==0) {
+//      errors.rejectValue("username",
+//          "lengthOfUser.CustomerInformation.username",
+//          "Invalid User Name! Please Enter Again!");
+//      }
 	  
 	  String firstName = cinfo.getFirstname();
 	  if ((firstName.length()) > 10) {
@@ -85,57 +85,53 @@ public class RegistrationValidation {
 	  }
 	  
 	  
+	  String pass = cinfo.getPassword();
+//	  if(pass.length()<6) { 
+//		  errors.rejectValue("password",
+//	          "matchingPassword.CustomerInformation.password",
+//	          "Password too small");
+//		  }
+//	  
+//	  if(pass.length()>15) { 
+//		  errors.rejectValue("password",
+//	          "matchingPassword.CustomerInformation.password",
+//	          "Password too big");
+//	  }
+	  for (char c: pass.toCharArray()) {
+		  if (Character.isDigit(c)) {
+			  number ++;
+		  }
+	  }
+//	  if(number<=0) {
+//		  errors.rejectValue("password",
+//	          "matchingPassword.CustomerInformation.password",
+//	          "Password has no digit"); 
+//	  }
+	  for (char c: pass.toCharArray()) {
+		  if (Character.isUpperCase(c)) {
+			  count++;
+		  }
+	  }
+//	  if(count <= 0) {
+//		  errors.rejectValue("password",
+//		      "matchingPassword.CustomerInformation.password",
+//		      "Password has no capital letter");
+//	  }
+	  
+	  Pattern p = Pattern.compile("[!@#$%^&*+_.-]");
+	  Matcher match = p.matcher(pass.subSequence(0, pass.length()));
+	  
+	  if (pass.length()<6 || pass.length()>15 ||
+				 number<=0 || count<=0 || match.find()==false || userName.length() > 10 || userName.length()==0) {
+		  errors.rejectValue("password",
+			  "matchingPassword.CustomerInformation.password",
+			  "User Name or Password is invalid! Please try entering again!");
+	  }
 	  
 	  if (!(cinfo.getPassword()).equals(cinfo.getConfirmPassword())) {
       errors.rejectValue("password",
           "matchingPassword.CustomerInformation.password",
           "Password and Confirm Password Not match.");
       }
-	  
-	  String pass = cinfo.getPassword();
-	  if(pass.length()<6) { 
-		  errors.rejectValue("password",
-	          "matchingPassword.CustomerInformation.password",
-	          "Password too small");
-		  }
-	  
-	  if(pass.length()>15) { 
-		  errors.rejectValue("password",
-	          "matchingPassword.CustomerInformation.password",
-	          "Password too big");
-	  }
-	  
-	  //-------------------------------------------------------------
-	  for (char c: pass.toCharArray()) {
-		  if (Character.isDigit(c)) {
-			  number ++;
-		  }
-	  }
-	  if(number<=0) {
-		  errors.rejectValue("password",
-	          "matchingPassword.CustomerInformation.password",
-	          "Password has no digit"); 
-	  }
-	 //-------------------------------------------------------------
-	 
-	  
-	  for (char c: pass.toCharArray()) {
-		  if (Character.isUpperCase(c)) {
-			  count++;
-		  }
-	  }
-	  if(count <= 0) {
-		  errors.rejectValue("password",
-		      "matchingPassword.CustomerInformation.password",
-		      "Password has no capital letter");
-	  }
-	  
-	  Pattern p = Pattern.compile("[!@#$%^&*+_.-]");
-	  Matcher match = p.matcher(pass.subSequence(0, pass.length()));
-	  if (match.find() == false) {
-		  errors.rejectValue("password",
-			  "matchingPassword.CustomerInformation.password",
-			  "Password has no special character");
-	  }
    } 
 }

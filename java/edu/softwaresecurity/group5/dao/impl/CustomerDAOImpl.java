@@ -5,6 +5,7 @@ import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -88,8 +89,37 @@ public class CustomerDAOImpl implements CustomerDAO {
 				"0"});}
 
 
-	public void registerCustomer(CustomerInformation custInfo) throws NoSuchAlgorithmException {
-
+	public String registerCustomer(CustomerInformation custInfo) throws NoSuchAlgorithmException {
+		
+		
+//		List<CustomerInformationDTO> userList = new ArrayList<CustomerInformationDTO>();
+//
+//		String sql = "SELECT email from users";
+//
+//		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+//		userList = jdbcTemplate.query(sql, new UserRowMapper());
+//		
+//		System.out.println("CHECK: "+userList);
+		
+		
+		
+//		int sameUser, sameEmail, sameSSN;
+//		
+//		String sqlSameUser = "SELECT users.username from users where users.username=?";
+//		String sqlSameEmail = "SELECT users.email from users where users.email=?";
+//		String sqlSameSSN = "SELECT users.SSN from users where users.SSN=?";
+//		
+//		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+//		
+//		sameUser = jdbcTemplate.queryForObject(sqlSameUser,new Object[] {custInfo.getUsername()}, Integer.class);
+//		System.out.println("CHECK: "+sameUser);
+//		
+//		sameEmail = jdbcTemplate.queryForObject(sqlSameEmail,new Object[] {custInfo.getEmail()}, Integer.class);
+//		System.out.println("CHECK1: "+sameEmail);
+//		
+//		sameSSN = jdbcTemplate.queryForObject(sqlSameSSN,new Object[] {custInfo.getSocialSecurityNumber()}, Integer.class);
+//		System.out.println("CHECK2: "+sameSSN);
+		
 		custInfo.setEnabled(1);
 		custInfo.setUserLocked(1);
 		custInfo.setUserExpired(1);
@@ -140,6 +170,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 		jdbcTemplateForAccounts.update(insertIntoAccountsTable,
 				new Object[] {custInfo.getUsername(), accountNumber, "1000", "0",
 				"0"});
+		
+		return "";
 	}
 
 	// Privileges - Add

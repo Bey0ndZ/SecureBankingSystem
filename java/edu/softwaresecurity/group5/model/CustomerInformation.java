@@ -6,10 +6,10 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class CustomerInformation {
-	@NotEmpty(message="Please enter your preferred username.")
+	@NotEmpty(message="")
 	private String username;
-	@NotEmpty(message = "Please enter your password.")
-    @Size(min = 6, max = 15, message = "Your password must between 6 and 15 characters")
+	@NotEmpty(message = "")
+    @Size(min = 6, max = 15, message = "")
 	private String password;
 	@NotEmpty(message = "Please enter your password again to confirm.")
     @Size(min = 6, max = 15, message = "Your password must between 6 and 15 characters")
