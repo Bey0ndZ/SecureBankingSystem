@@ -3,6 +3,7 @@ package edu.softwaresecurity.group5.service;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
@@ -22,5 +23,6 @@ public interface CustomerService {
 	public String unlockAccount(CustomerInformationDTO cust);
 	public boolean processBillPay(String loggedInUser, String accountNumber,
 			String amountToBeTransferred);
+	public List<BillPayDTO> returnBillPaymentDetails(String username);
 }
 

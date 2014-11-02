@@ -16,7 +16,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import edu.softwaresecurity.group5.dao.CustomerDAO;
+import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.jdbc.BillPayMapper;
 import edu.softwaresecurity.group5.jdbc.UserRowMapper;
 import edu.softwaresecurity.group5.model.AccountAttempts;
 import edu.softwaresecurity.group5.model.AddUserInformation;
@@ -260,7 +262,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 		}
 	}
 	
-	// BillPayment implementation
+	// BillPayment 
+	// Merchant initiates the request
 	public boolean billPayment(String generatedFromUsername, String account, String amount) {
 		float amountToTransfer = Float.parseFloat(amount);
 		
@@ -272,8 +275,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 		
 		String insertIntoPendingTransactions = "INSERT INTO "
 				+ "pendingtransactions(username, amount, pending, accountnumberfrom,"
-				+ "accountnumberto) "
-				+ "VALUES (?,?,?,?,?)";
+				+ "accountnumberto, billpay) "
+				+ "VALUES (?,?,?,?,?,?)";
 		
 		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
 		JdbcTemplate jdbcTemplateForPendingTransactions = new JdbcTemplate(dataSource);
@@ -286,8 +289,30 @@ public class CustomerDAOImpl implements CustomerDAO {
 		int accountNumberFrom = Integer.parseInt(account);
 		
 		jdbcTemplateForPendingTransactions.update(insertIntoPendingTransactions,
-				new Object[]{generatedFromUsername, amountToTransfer, true, accountNumber,
-				accountNumberFrom});
+				new Object[]{generatedFromUsername, amountToTransfer, false, accountNumber,
+				accountNumberFrom, true});
 		return true;
 	}
+
+	// Customer gets the request
+	public List<BillPayDTO> getBillPayRequestForCustomer(String customerUsername) {
+		List<BillPayDTO> billPayDetails = new ArrayList<BillPayDTO>();
+		
+		if (customerUsername != null) {
+			String getBillPayDetailsQuery = "SELECT pendingtransactions.id,"
+					+ "pendingtransactions.username, pendingtransactions.amount,"
+					+ "pendingtransactions.accountnumberfrom from pendingtransactions "
+					+ "inner join account on pendingtransactions.accountnumberto=account.accountnumber"
+					+ " where account.username=?";
+			JdbcTemplate jdbcTemplateForBillPayDetails = new JdbcTemplate(dataSource);
+			billPayDetails = jdbcTemplateForBillPayDetails.query(getBillPayDetailsQuery, new Object[]{customerUsername}, new BillPayMapper());
+			
+			return billPayDetails;
+		} else {
+			return null;
+		}	
+	}
+	
+	
+	
 }

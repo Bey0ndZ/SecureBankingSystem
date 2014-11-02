@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import edu.softwaresecurity.group5.dao.CustomerDAO;
+import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
@@ -50,5 +51,9 @@ public class CustomerServiceImpl implements CustomerService {
 	public boolean processBillPay(String loggedInUser, String accountNumber,
 			String amountToBeTransferred) {
 		return custDAO.billPayment(loggedInUser, accountNumber, amountToBeTransferred);
+	}
+
+	public List<BillPayDTO> returnBillPaymentDetails(String username) {
+		return custDAO.getBillPayRequestForCustomer(username);
 	}
 }

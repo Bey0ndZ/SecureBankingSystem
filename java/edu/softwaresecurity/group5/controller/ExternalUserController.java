@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.service.CustomerService;
 
@@ -34,6 +35,7 @@ public class ExternalUserController {
 	public ModelAndView returnCustomerPage(HttpServletRequest session) {
 		ModelAndView modelAndView = new ModelAndView();
 		List<CustomerInformationDTO> custInfoFromDTO = new ArrayList<CustomerInformationDTO>();
+		List<BillPayDTO> billPayFromDTO = new ArrayList<BillPayDTO>();
 		
 		// check if user is login
 		Authentication auth = SecurityContextHolder.getContext()
@@ -46,9 +48,13 @@ public class ExternalUserController {
 			
 			// Call the DAOImpl layer
 			custInfoFromDTO = custService.fetchUserDetails(loggedInUser);
+			billPayFromDTO = custService.returnBillPaymentDetails(loggedInUser);
+			
+			System.out.println(billPayFromDTO);
 			
 			// Add it to the model
 			modelAndView.addObject("userInformation", custInfoFromDTO);
+			modelAndView.addObject("billPayInformation", billPayFromDTO);
 		}
 		modelAndView.setViewName("accountSummary");
 		return modelAndView;

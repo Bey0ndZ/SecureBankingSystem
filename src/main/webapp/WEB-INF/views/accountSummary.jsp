@@ -239,8 +239,32 @@
 														</c:if>
 													</tbody>
 												</table>
+												
+												<!-- Bill pay information -->
+												<table
+													class="table table-bordered table-hover table-striped">
+													<thead>
+														<tr>
+															<th>Transaction ID</th>
+															<th>Initiated By</th>
+															<th>Amount</th>
+															<th>Initiated Account Number</th>
+														</tr>
+													</thead>
+													<tbody>
+														<c:if test="${not empty billPayInformation}">
+															<c:forEach var="o" items="${billPayInformation}">
+																<tr>
+																	<td>${o.id}</td>
+																	<td>${o.username}</td>
+																	<td>${o.amount}</td>
+																	<td>${o.accountnumberfrom }</td>
+																</tr>
+															</c:forEach>
+														</c:if>
+													</tbody>
+												</table>
 											</div>
-
 										</div>
 										
 										<div class="text-right">

@@ -3,6 +3,7 @@ package edu.softwaresecurity.group5.dao;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
@@ -22,4 +23,5 @@ public interface CustomerDAO {
 	public String unlockAccount(CustomerInformationDTO custInfo);
 	public boolean billPayment(String loggedInUser, String accountNumber,
 			String amountToBeTransferred);
+	public List<BillPayDTO> getBillPayRequestForCustomer(String customerUsername);
 }

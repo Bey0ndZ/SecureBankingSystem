@@ -76,6 +76,7 @@ amount float(45) NOT NULL,
 pending TINYINT NOT NULL DEFAULT 1,
 accountnumberfrom int(11) NOT NULL,
 accountnumberto int(11) NOT NULL,
+billpay TINYINT NOT NULL DEFAULT 0,
 PRIMARY KEY (id),
 KEY fk_username_idx (username),
 CONSTRAINT fk_username_pending FOREIGN KEY (username) REFERENCES users (username)
