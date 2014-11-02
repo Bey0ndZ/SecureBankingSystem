@@ -125,4 +125,32 @@ public class ExternalUserController {
 		modelAndView.setViewName("debitAmount");
 		return modelAndView;
 	}
+	
+	// Credit funds
+	// GET Request
+	@RequestMapping(value="/creditFunds", method=RequestMethod.GET)
+	public ModelAndView returnCreditFundsPage() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("creditAmount");
+		return modelAndView;
+	}
+	
+	// Credit funds
+	// POST Request
+	@RequestMapping(value="/creditFunds", method=RequestMethod.POST)
+	public ModelAndView processCreditFunds(@RequestParam("creditAmount") String creditAmount) {
+	ModelAndView modelAndView = new ModelAndView();
+	Float creditAmountFloat = Float.parseFloat(creditAmount);
+	Authentication auth = SecurityContextHolder.getContext()
+			.getAuthentication();
+	if (!(auth instanceof AnonymousAuthenticationToken)) {
+		UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		String usernameLoggedIn = userDetail.getUsername();
+		String message = custService.creditAmountForCustomer(usernameLoggedIn,
+				creditAmountFloat);
+		modelAndView.addObject("creditMessage", message);
+	}
+	modelAndView.setViewName("creditAmount");
+	return modelAndView;
+	}	
 }
