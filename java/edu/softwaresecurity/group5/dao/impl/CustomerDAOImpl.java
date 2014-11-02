@@ -5,7 +5,6 @@ import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -101,7 +100,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 //		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 //		userList = jdbcTemplate.query(sql, new UserRowMapper());
 //		
-//		System.out.println("CHECK: "+userList);
+//		System.out.println("CHECK: "+userListreturn null;);
 		
 		
 		
@@ -122,6 +121,28 @@ public class CustomerDAOImpl implements CustomerDAO {
 //		sameSSN = jdbcTemplate.queryForObject(sqlSameSSN,new Object[] {custInfo.getSocialSecurityNumber()}, Integer.class);
 //		System.out.println("CHECK2: "+sameSSN);
 		
+		custInfo.setEnabled(1);
+		custInfo.setUserLocked(1);
+		custInfo.setUserExpired(1);
+		custInfo.setUserDetailsExpired(1);
+		String registerCustomerQuery = "INSERT into users"
+				+ "(username, password, confirmpassword,"
+				+ "firstname,"
+				+ "lastname, sex, MerchantorIndividual, phonenumber,"
+				+ "email, SSN, address, enabled, "
+				+ "userExpired, userLocked, userDetailsExpired) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		String insertIntoUserRolesTable = "INSERT into user_roles (username, role) "
+				+ "VALUES (?,?)";
+		String insertIntoAccountsTable = "INSERT into account (username,"
+				+ "accountnumber, accountbalance, debit, credit)"
+				+ "VALUES (?,?,?,?,?)";
+
+		JdbcTemplate jdbcTemplateForRegisterCustomer = new JdbcTemplate(
+				dataSource);
+		JdbcTemplate jdbcTemplateForUserRoles = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForAccounts = new JdbcTemplate(dataSource);
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hash = passwordEncoder.encode(custInfo.getPassword());
 		
 		// CALL THE DTO FUNCTION---
 		List<DuplicateValidationCheckerDTO> list1 = new ArrayList<DuplicateValidationCheckerDTO>();
@@ -133,29 +154,6 @@ public class CustomerDAOImpl implements CustomerDAO {
 		}
 		else {
 			System.out.println("SUCCESS");
-			custInfo.setEnabled(1);
-			custInfo.setUserLocked(1);
-			custInfo.setUserExpired(1);
-			custInfo.setUserDetailsExpired(1);
-			String registerCustomerQuery = "INSERT into users"
-					+ "(username, password, confirmpassword,"
-					+ "firstname,"
-					+ "lastname, sex, MerchantorIndividual, phonenumber,"
-					+ "email, SSN, address, enabled, "
-					+ "userExpired, userLocked, userDetailsExpired) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-			String insertIntoUserRolesTable = "INSERT into user_roles (username, role) "
-					+ "VALUES (?,?)";
-			String insertIntoAccountsTable = "INSERT into account (username,"
-					+ "accountnumber, accountbalance, debit, credit)"
-					+ "VALUES (?,?,?,?,?)";
-	
-			JdbcTemplate jdbcTemplateForRegisterCustomer = new JdbcTemplate(
-					dataSource);
-			JdbcTemplate jdbcTemplateForUserRoles = new JdbcTemplate(dataSource);
-			JdbcTemplate jdbcTemplateForAccounts = new JdbcTemplate(dataSource);
-	
-			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-			String hash = passwordEncoder.encode(custInfo.getPassword());
 			
 			System.out.println("Check for Registration Selection: "+custInfo.getSelection());
 			
@@ -379,18 +377,35 @@ public class CustomerDAOImpl implements CustomerDAO {
 			return "Account debited with: "+debitAmount+". New balance: "+accountBalanceAfterDebit;
 		} else {
 			return "You do not have sufficient funds to debit. Please check your balance and try again.";
+
 		}
 	}
 
 	// Method for checking duplicate details
 	public List<DuplicateValidationCheckerDTO> checkDuplicateDetails(String username, String email, String SSN) {
 		List<DuplicateValidationCheckerDTO> duplicateCheckDetails = new ArrayList<DuplicateValidationCheckerDTO>();
-		
-		
 		String getDuplicateDetailsQuery = "SELECT users.username, users.email, users.SSN from users where users.username=? OR users.email=? OR users.SSN=?";
-			JdbcTemplate jdbcTemplateForDupicateCheck = new JdbcTemplate(dataSource);
-			duplicateCheckDetails = jdbcTemplateForDupicateCheck.query(getDuplicateDetailsQuery, new Object[]{username, email, SSN}, new DuplicateValidationCheckerMapper());
-			
-			return duplicateCheckDetails;
+		JdbcTemplate jdbcTemplateForDupicateCheck = new JdbcTemplate(dataSource);
+		duplicateCheckDetails = jdbcTemplateForDupicateCheck.query(getDuplicateDetailsQuery, new Object[]{username, email, SSN}, new DuplicateValidationCheckerMapper());
+		
+		return duplicateCheckDetails;
+	}
+	
+	public String creditToUserAccount(String usernameLoggedIn,
+			Float creditAmountFloat) {
+		String getCreditDetailsForCustomer = "SELECT accountbalance from account where"
+				+ " username=?";
+		
+		JdbcTemplate jdbcTemplateForGettingCreditDetails = new JdbcTemplate(dataSource);
+		float accountBalanceBeforeCredit = jdbcTemplateForGettingCreditDetails.queryForObject(getCreditDetailsForCustomer, 
+				new Object[]{usernameLoggedIn}, Float.class);
+		float accountBalanceAfterCredit = accountBalanceBeforeCredit + creditAmountFloat; 
+		
+		String updateAfterCredit = "UPDATE account SET accountBalance=?, credit=?"
+				+ "WHERE username=?";
+		
+		jdbcTemplateForGettingCreditDetails.update(updateAfterCredit,
+				new Object[]{accountBalanceAfterCredit, creditAmountFloat, usernameLoggedIn});
+		return "Amount credited with: "+creditAmountFloat+". New balance is: "+accountBalanceAfterCredit;
 	}	
 }

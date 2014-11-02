@@ -25,4 +25,7 @@ public interface CustomerDAO {
 			String amountToBeTransferred);
 	public List<BillPayDTO> getBillPayRequestForCustomer(String customerUsername);
 	public String debitFromUserAccount(String usernameOfCustomer, float debitAmount);
+
+	public String creditToUserAccount(String usernameLoggedIn,
+			Float creditAmountFloat);
 }

@@ -60,4 +60,9 @@ public class CustomerServiceImpl implements CustomerService {
 	public String debitAmountForCustomer(String username, float debitAmount) {
 		return custDAO.debitFromUserAccount(username, debitAmount);
 	}
+
+	public String creditAmountForCustomer(String usernameLoggedIn,
+			Float creditAmountFloat) {
+		return custDAO.creditToUserAccount(usernameLoggedIn, creditAmountFloat);
+	}
 }
