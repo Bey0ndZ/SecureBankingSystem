@@ -134,7 +134,7 @@
 			<div class="contentright" style="width: 100%">
 			<form:form method="post" action="transferMoney" modelAttribute="accountNumber">	
 			<i><b>Transfer Money at Bank of G5!</b></i>				
-					<b>Account Number :</b> <br/> <input type="text" name="verifyUser" value="${accountNumber.verifyUser}" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
+					<b>Account Number :</b> <br/> <input type="text" name="verifyUser" value="${param.verifyUser}" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
 					<a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/> <br/> <br/>
 				</form:form>
 				<c:if test="${not empty customerDetails}">
