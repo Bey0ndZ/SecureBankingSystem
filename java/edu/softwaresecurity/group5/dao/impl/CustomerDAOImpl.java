@@ -359,7 +359,6 @@ public class CustomerDAOImpl implements CustomerDAO {
 		}	
 	}
 	
-<<<<<<< Updated upstream
 	// Debit funds from user account
 	public String debitFromUserAccount(String usernameOfCustomer, float debitAmount) {
 		String getDebitDetailsForCustomer = "SELECT accountbalance from account where"
@@ -381,11 +380,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 		} else {
 			return "You do not have sufficient funds to debit. Please check your balance and try again.";
 		}
-		
-		
-		
 	}
-=======
+
 	// Method for checking duplicate details
 	public List<DuplicateValidationCheckerDTO> checkDuplicateDetails(String username, String email, String SSN) {
 		List<DuplicateValidationCheckerDTO> duplicateCheckDetails = new ArrayList<DuplicateValidationCheckerDTO>();
@@ -396,9 +392,5 @@ public class CustomerDAOImpl implements CustomerDAO {
 			duplicateCheckDetails = jdbcTemplateForDupicateCheck.query(getDuplicateDetailsQuery, new Object[]{username, email, SSN}, new DuplicateValidationCheckerMapper());
 			
 			return duplicateCheckDetails;
-		
-	}
-	
->>>>>>> Stashed changes
-	
+	}	
 }
