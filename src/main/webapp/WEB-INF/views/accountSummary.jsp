@@ -161,7 +161,7 @@
 					<ul class="nav navbar-nav side-nav">
 						<li class="active"><a href="index.html"><i
 								class="fa fa-fw fa-dashboard"></i> Account</a></li>
-						<li><a href="charts.html"><i
+						<li><a href="processBillPayment"><i
 								class="fa fa-fw fa-bar-chart-o"></i> Bill Pay</a></li>
 						<li><a href="javascript:;" data-toggle="collapse"
 							data-target="#demo1"><i class="fa fa-fw fa-arrows-v"></i>

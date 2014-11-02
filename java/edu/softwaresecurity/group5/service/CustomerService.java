@@ -15,5 +15,7 @@ public interface CustomerService {
 	public String updateAccount(CustomerInformationDTO cust);  
 	public String changeAccountPassword(ChangePassword cust);
 	public String unlockAccount(CustomerInformationDTO cust);
+	public boolean processBillPay(String loggedInUser, String accountNumber,
+			String amountToBeTransferred);
 }
 

@@ -41,4 +41,9 @@ public class CustomerServiceImpl implements CustomerService {
 		// TODO Auto-generated method stub
 		return custDAO.unlockAccount(cust);
 	}
+
+	public boolean processBillPay(String loggedInUser, String accountNumber,
+			String amountToBeTransferred) {
+		return custDAO.billPayment(loggedInUser, accountNumber, amountToBeTransferred);
+	}
 }
