@@ -206,6 +206,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 	public boolean billPayment(String generatedFromUsername, String account, String amount) {
 		float amountToTransfer = Float.parseFloat(amount);
 		
+		
 		String getAccountDetailsFromUsername = "SELECT account.accountnumber from account"
 				+ " inner join users on "
 				+ "account.username=users.username "
@@ -213,7 +214,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		
 		String insertIntoPendingTransactions = "INSERT INTO "
 				+ "pendingtransactions(username, amount, pending, accountnumberfrom,"
-				+ "accountnumberto "
+				+ "accountnumberto) "
 				+ "VALUES (?,?,?,?,?)";
 		
 		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
@@ -224,10 +225,11 @@ public class CustomerDAOImpl implements CustomerDAO {
 				String.class);
 		
 		int accountNumber = Integer.parseInt(getUsernameAccount);
+		int accountNumberFrom = Integer.parseInt(account);
 		
 		jdbcTemplateForPendingTransactions.update(insertIntoPendingTransactions,
 				new Object[]{generatedFromUsername, amountToTransfer, true, accountNumber,
-				account});
+				accountNumberFrom});
 		return true;
 	}
 }
