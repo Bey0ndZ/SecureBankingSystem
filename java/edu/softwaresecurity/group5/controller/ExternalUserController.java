@@ -87,4 +87,42 @@ public class ExternalUserController {
 		modelAndView.setViewName("transferMoney");
 		return modelAndView;
 	}
+	
+	// Debit funds
+	// GET Requests
+	@RequestMapping(value="/debitFunds", method=RequestMethod.GET)
+	public ModelAndView getDebitFunds() {
+		ModelAndView modelAndView = new ModelAndView();
+		List<CustomerInformationDTO> custInfoFromDTO = new ArrayList<CustomerInformationDTO>();
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			String usernameLoggedIn = userDetail.getUsername();	
+			custInfoFromDTO = custService.fetchUserDetails(usernameLoggedIn);
+			System.out.println(custInfoFromDTO);
+			modelAndView.addObject("balanceInformation", custInfoFromDTO);
+		}
+		modelAndView.setViewName("debitAmount");
+		return modelAndView;
+	}
+	
+	// Debit funds
+	// POST requests
+	@RequestMapping(value="/debitFunds", method=RequestMethod.POST)
+	public ModelAndView processDebitFunds(@RequestParam("debitAmount") String debitAmount) {
+		ModelAndView modelAndView = new ModelAndView();
+		Float debitAmountFloat = Float.parseFloat(debitAmount);
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			String usernameLoggedIn = userDetail.getUsername();
+			String message = custService.debitAmountForCustomer(usernameLoggedIn
+					, debitAmountFloat);
+			modelAndView.addObject("debitMessage", message);
+		}
+		modelAndView.setViewName("debitAmount");
+		return modelAndView;
+	}
 }

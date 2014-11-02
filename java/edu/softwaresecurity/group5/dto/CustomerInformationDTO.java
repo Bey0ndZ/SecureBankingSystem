@@ -11,6 +11,8 @@ public class CustomerInformationDTO {
 	private String email;
 	private String address;
 	private int accountNumber;
+	private float accountBalance;
+	
 	public int getAccountNumber() {
 		return accountNumber;
 	}
@@ -106,5 +108,17 @@ public class CustomerInformationDTO {
 	 */
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	/**
+	 * @return the accountBalance
+	 */
+	public float getAccountBalance() {
+		return accountBalance;
+	}
+	/**
+	 * @param accountBalance the accountBalance to set
+	 */
+	public void setAccountBalance(float accountBalance) {
+		this.accountBalance = accountBalance;
 	}
 }

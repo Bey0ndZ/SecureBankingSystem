@@ -56,4 +56,8 @@ public class CustomerServiceImpl implements CustomerService {
 	public List<BillPayDTO> returnBillPaymentDetails(String username) {
 		return custDAO.getBillPayRequestForCustomer(username);
 	}
+
+	public String debitAmountForCustomer(String username, float debitAmount) {
+		return custDAO.debitFromUserAccount(username, debitAmount);
+	}
 }

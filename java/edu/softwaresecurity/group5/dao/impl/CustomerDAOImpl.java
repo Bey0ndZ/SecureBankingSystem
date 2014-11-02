@@ -179,7 +179,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		List<CustomerInformationDTO> customerInformationToDisplay = new ArrayList<CustomerInformationDTO>();
 		String retrieveDetailsQuery = "SELECT users.username, users.firstname, users.lastname, users.sex, "
 				+ "users.MerchantorIndividual, users.phonenumber, users.email, "
-				+ "users.address, account.accountnumber from users inner join account on users.username = account.username where users.enabled = true and users.username=?";
+				+ "users.address, account.accountnumber, account.accountbalance from users inner join account on users.username = account.username where users.enabled = true and users.username=?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		customerInformationToDisplay = jdbcTemplate.query(retrieveDetailsQuery,
 				new Object[] { username }, new UserRowMapper());
@@ -345,6 +345,30 @@ public class CustomerDAOImpl implements CustomerDAO {
 		}	
 	}
 	
-	
+	// Debit funds from user account
+	public String debitFromUserAccount(String usernameOfCustomer, float debitAmount) {
+		String getDebitDetailsForCustomer = "SELECT accountbalance from account where"
+				+ " username=?";
+		JdbcTemplate jdbcTemplateForGettingDebitDetails = new JdbcTemplate(dataSource);
+		float accountBalanceBeforeDebit = jdbcTemplateForGettingDebitDetails.queryForObject(getDebitDetailsForCustomer, 
+				new Object[]{usernameOfCustomer}, Float.class);
+		
+		if (accountBalanceBeforeDebit >= debitAmount) {
+			float accountBalanceAfterDebit = accountBalanceBeforeDebit - debitAmount;
+			
+			String updateAfterDebit = "UPDATE account SET accountBalance=?, debit=?"
+					+ "WHERE username=?";
+			
+			jdbcTemplateForGettingDebitDetails.update(updateAfterDebit,
+					new Object[]{accountBalanceAfterDebit, debitAmount, usernameOfCustomer});
+			
+			return "Account debited with: "+debitAmount+". New balance: "+accountBalanceAfterDebit;
+		} else {
+			return "You do not have sufficient funds to debit. Please check your balance and try again.";
+		}
+		
+		
+		
+	}
 	
 }

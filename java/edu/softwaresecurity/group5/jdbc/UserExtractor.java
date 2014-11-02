@@ -24,7 +24,7 @@ public class UserExtractor implements ResultSetExtractor<CustomerInformationDTO>
 	  custInfoDTO.setEmail(resultSet.getString(7));
 	  custInfoDTO.setAddress(resultSet.getString(8));
 	  custInfoDTO.setAccountNumber(resultSet.getInt(9));
-	  
+	  custInfoDTO.setAccountBalance(resultSet.getFloat(10));
 	  
 	  return custInfoDTO;
 	 }

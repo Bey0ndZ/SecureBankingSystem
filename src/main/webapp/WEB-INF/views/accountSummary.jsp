@@ -174,8 +174,8 @@
 							data-target="#demo2"><i class="fa fa-fw fa-arrows-v"></i>
 								Debit or Credit Funds <i class="fa fa-fw fa-caret-down"></i></a>
 							<ul id="demo2" class="collapse">
-								<li><a href="#">Debit</a></li>
-								<li><a href="#">Credit</a></li>
+								<li><a href="debitFunds">Debit</a></li>
+								<li><a href="creditFunds">Credit</a></li>
 							</ul></li>
 					</ul>
 				</div>
@@ -219,6 +219,7 @@
 															<th>Email</th>
 															<th>Address</th>
 															<th>Accountnumber</th>
+															<th>Accountbalance</th>
 														</tr>
 													</thead>
 													<tbody>
@@ -234,6 +235,7 @@
 																	<td>${o.email }</td>
 																	<td>${o.address }</td>
 																	<td>${o.accountNumber }</td>
+																	<td>${o.accountBalance }</td>
 																</tr>
 															</c:forEach>
 														</c:if>

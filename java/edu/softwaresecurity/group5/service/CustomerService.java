@@ -24,5 +24,6 @@ public interface CustomerService {
 	public boolean processBillPay(String loggedInUser, String accountNumber,
 			String amountToBeTransferred);
 	public List<BillPayDTO> returnBillPaymentDetails(String username);
+	public String debitAmountForCustomer(String username, float debitAmount);
 }
 
