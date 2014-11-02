@@ -1,5 +1,7 @@
 package edu.softwaresecurity.group5.controller;
 
+import java.security.NoSuchAlgorithmException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -36,7 +38,7 @@ public class RegistrationController {
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public ModelAndView registerCustomer(@Valid @ModelAttribute("registerForm") CustomerInformation custInfo,
-		   BindingResult result, HttpServletRequest request) {
+		   BindingResult result, HttpServletRequest request) throws NoSuchAlgorithmException {
 		ModelAndView modelAndView = new ModelAndView();
 		
 		RegistrationValidation.validateForm(custInfo, result);

@@ -1,5 +1,6 @@
 package edu.softwaresecurity.group5.service;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	CustomerDAO custDAO;
 	
-	public void insertCustomerInformation(CustomerInformation custInfo) {
+	public void insertCustomerInformation(CustomerInformation custInfo) throws NoSuchAlgorithmException {
 		custDAO.registerCustomer(custInfo);
 	}
 	

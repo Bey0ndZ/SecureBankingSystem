@@ -1,5 +1,6 @@
 package edu.softwaresecurity.group5.dao;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
@@ -7,7 +8,7 @@ import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.model.CustomerInformation;
 
 public interface CustomerDAO {
-	public void registerCustomer(CustomerInformation custInfo);
+	public void registerCustomer(CustomerInformation custInfo) throws NoSuchAlgorithmException;
 	public List<CustomerInformationDTO> retrieveUserDetails(String username);
 	public List<CustomerInformationDTO> getUserList();  
 	public String updateAccount(CustomerInformationDTO custInfo);  
