@@ -10,6 +10,8 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,6 +24,7 @@ import edu.softwaresecurity.group5.dto.DuplicateValidationCheckerDTO;
 import edu.softwaresecurity.group5.jdbc.BillPayMapper;
 import edu.softwaresecurity.group5.jdbc.DuplicateValidationCheckerMapper;
 import edu.softwaresecurity.group5.jdbc.UserRowMapper;
+import edu.softwaresecurity.group5.mail.EmailService;
 import edu.softwaresecurity.group5.model.AccountAttempts;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
@@ -234,17 +237,30 @@ public class CustomerDAOImpl implements CustomerDAO {
 	public String unlockAccount(CustomerInformationDTO custInfo) {
 		if (verifyAccountForLock(custInfo)) {
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			String retrieveDetailsQuery = "SELECT email from users where enabled = true and username=?";
+			List<String> email = jdbcTemplate.query(retrieveDetailsQuery,new Object[] { custInfo.getUsername()}, new RowMapper<String>(){
+				public String mapRow(ResultSet rs,
+						int rowNum) throws SQLException {
+
+					String mail;
+					mail =rs.getString("email");
+					return mail;
+				}
+			});
+			
 			// this otp is hardcoded for now and will be changed later. or else
 			// everyone will have same otp. not secure.
 			String otp = "Hardcodedfornow";
 			String hash = passwordEncoder.encode(otp);
 			String sql = "UPDATE users set password = ?,confirmpassword = ?, userLocked= false"
 					+ " where enabled = true  and username = ?";
-			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			
 			int status = jdbcTemplate.update(sql, new Object[] { hash, hash,
 					custInfo.getUsername() });
 			if (status == 1) {
-				return "your new password is " + hash;
+				sendEmail(email.get(0), "Your password is changed", "Please login and change the password, you temp password is  : "+hash);
+				return "your new password is emailed to you at : " + hash +" " +email.get(0);
 			}
 			return "Database please contact Branch Representative";
 		}
@@ -252,6 +268,15 @@ public class CustomerDAOImpl implements CustomerDAO {
 				+ custInfo.getUsername()
 				+ " is not locked, please contact adminstrator if you have login issues.";
 	}
+	
+	public void sendEmail(String to, String subject, String msg){
+		ApplicationContext context = new FileSystemXmlApplicationContext(
+				"/src/main/webapp/resources/Spring-Mail.xml");
+		EmailService mm = (EmailService) context.getBean("email");
+		mm.sendMail("group05.sbs@gmail.com", to,
+				subject, msg);
+	}
+
 
 	public boolean verifyAccountForLock(CustomerInformationDTO custInfo) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
