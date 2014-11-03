@@ -2,6 +2,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ page import="net.tanesha.recaptcha.ReCaptcha" %>
 <%@ page import="net.tanesha.recaptcha.ReCaptchaFactory" %>
+<%@ taglib
+    prefix="c"
+    uri="http://java.sun.com/jsp/jstl/core" 
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -107,31 +111,31 @@
 									<c:if test="${not empty errorMsg}">
 										<h3> ${errorMsg} </h3>
                                     </c:if>
-									<b>User Name:</b><FONT color="red"><form:errors path="username" /></FONT><br/> <input type="text" name="username" value="${registerForm.username}" id="username" style="color:#999;" /><br/>
-									<b>Password:</b><FONT color="red"><form:errors path="password" /></FONT> <br/><input type="password" name="password" id="password" style="color:#999;" /><br/>
-									<b>Confirm Password:</b><br/> <input type="password" name="confirmPassword" id="cfrm_pwd" style="color:#999;" /><br/>
-									<b>First Name:</b> <FONT color="red"><form:errors path="firstname" /></FONT><br/> <input type="text" name="firstname" value="${registerForm.firstname}" id="f_name" style="color:#999;" /><br/>
-									<b>Last Name:</b> <FONT color="red"><form:errors path="lastname" /></FONT><br/><input type="text" name="lastname" value="${registerForm.lastname}" id="l_name" style="color:#999;" /><br/>
-									<b>Sex: </b><br/> <input type="radio" name="sex" value="Male" id="male"/>Male 
-									<input type="radio" name="sex" value="Female" id="male"/> Female <br/>
+									<b>User Name:</b><FONT color="red"><form:errors path="username" /></FONT><br/> <input type="text" name="username" id="username" style="color:#999;" /><br/> <br/>
+									<b>Password:</b> <FONT color="red"><form:errors path="password" /></FONT><br/><input type="password" name="password" id="password" style="color:#999;" /><br/> <br/>
+									<b>Confirm Password:</b><br/> <input type="password" name="confirmPassword" id="cfrm_pwd" style="color:#999;" /><br/><br/>
+									<b>First Name:</b>  <FONT color="red"><form:errors path="firstname" /></FONT><br/> <input type="text" name="firstname" id="f_name" style="color:#999;" /><br/><br/>
+									<b>Last Name:</b>  <FONT color="red"><form:errors path="lastname" /></FONT><br/><input type="text" name="lastname" id="l_name" style="color:#999;" /><br/><br/>
+									<b>Sex: </b><br/> <input type="radio" name="sex" value="Male" id="male"/> Male <br/>
+									<input type="radio" name="sex" value="Female" id="male"/> Female <br/><br/>
 									<b>Individual or Merchant:</b><br/>
 									<select name="selection">
 										<option value="Individual">Individual</option>
 										<option value="Merchant">Merchant</option>
-									</select><br/>
-									<b>Phone Number:</b> <FONT color="red"> <form:errors path="phonenumber" /> </FONT><br/><input type="text" name="phonenumber" value="${registerForm.phonenumber}" id="contact" style="color:#999;" /><br/>
-									<b>Email Address:</b><br/><input type="email" name="email" id="email" style="color:#999;" /><br/>
-									<b>Social Security Number:</b> <FONT color="red"><form:errors path="socialSecurityNumber" /> </FONT><br/><input type="text" name="socialSecurityNumber" value="${registerForm.socialSecurityNumber}" id="socialSecurityNumber" style="color:#999;" /><br/>
-									<b>Address:</b> <FONT color="red"><form:errors path="address" /></FONT><br/> <input type="text" name="address" value="${registerForm.address}" id="add" style="color:#999;" /><br/><br/>
+									</select><br/><br/>
+									<b>Phone Number:</b> <FONT color="red"> <form:errors path="phonenumber" /> </FONT><br/><input type="text" name="phonenumber" id="contact" style="color:#999;" /><br/><br/>
+									<b>Email Address:</b> <br/><input type="email" name="email" id="email" style="color:#999;" /><br/><br/>
+									<b>Social Security Number:</b> <FONT color="red"><form:errors path="socialSecurityNumber" /> </FONT><br/><input type="text" name="socialSecurityNumber" id="socialSecurityNumber" style="color:#999;" /><br/><br/>
+									<b>Address:</b><FONT color="red"> <form:errors path="address" /></FONT><br/><input type="text" name="address" id="add" style="color:#999;" /><br/><br/>
 									<b>Captcha:</b><br/>	
 									<%
 				          				ReCaptcha c = ReCaptchaFactory.newReCaptcha("6LelnPwSAAAAAEdizJnYFeutV2At7VHSkC9PYxZX", "6LelnPwSAAAAAEIVuVPz5_wWsq3skomEaVJ_5eZH", false);
 				          				out.print(c.createRecaptchaHtml(null, null));
 				        			%>							
-									<br/><input type="submit" style="margin-right: 5%" name="login" id="log_in" value="Register!" />
+									<br/><h4><input type="submit" style="margin-right: 5%" name="login" id="log_in" value="Register" /></h4>
 									
 									<c:if test="${not empty successMsg}">
-										<h3> ${successMsg} <a href = "index"> Click here to LogIn!</a> </h3>
+										<h4> ${successMsg} <a href = "index"> Click here to LogIn!</a> </h4>
                                     </c:if>
 								</form:form>
                                 </div>

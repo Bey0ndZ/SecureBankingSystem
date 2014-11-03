@@ -20,8 +20,8 @@ public class CustomerServiceImpl implements CustomerService {
 		return custDAO.registerCustomer(custInfo);
 	}
 	
-	public void insertAddUserInformation(AddUserInformation addInfo) throws NoSuchAlgorithmException {
-		custDAO.addUser(addInfo);
+	public String insertAddUserInformation(AddUserInformation addInfo) throws NoSuchAlgorithmException {
+		return custDAO.addUser(addInfo);
 	}
 	
 	public List<CustomerInformationDTO> fetchUserDetails(String usernameSearch) {

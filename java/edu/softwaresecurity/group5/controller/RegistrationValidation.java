@@ -31,6 +31,10 @@ public class RegistrationValidation {
 		"NotEmpty.CustomerInformation.socialSecurityNumber",
 		"SSN must not be Empty.");
 	  
+	  ValidationUtils.rejectIfEmptyOrWhitespace(errors, "phonenumber",
+				"NotEmpty.CustomerInformation.phonenumber",
+				"Contact must not be Empty.");
+	  
 	  String userName = cinfo.getUsername();
 //	  if ((userName.length()) > 10 || userName.length()==0) {
 //      errors.rejectValue("username",
@@ -69,7 +73,7 @@ public class RegistrationValidation {
 	  if(ssnNum != 10) {
 		  errors.rejectValue("socialSecurityNumber", 
 				  "lengthOfSocialSecurityNumber.CustomerInformation.socialSecurityNumber",
-				  "SSN must have all numericals.");
+				  "SSN must contain exactly 10 digits.");
 	  }
 	  
 	  
@@ -81,7 +85,7 @@ public class RegistrationValidation {
 	  }
 	  if(phNum != 10) {
 		  errors.rejectValue("phonenumber", "lengthOfPhoneNumber.CustomerInformation.phonenumber",
-				  "Phone number must be all numbers.");
+				  "Phone number must contain exactly 10 digits.");
 	  }
 	  
 	  
@@ -123,8 +127,8 @@ public class RegistrationValidation {
 	  
 	  if (pass.length()<6 || pass.length()>15 ||
 				 number<=0 || count<=0 || match.find()==false || userName.length() > 10 || userName.length()==0) {
-		  errors.rejectValue("password",
-			  "matchingPassword.CustomerInformation.password",
+		  errors.rejectValue("username",
+			  "matchingPassword.CustomerInformation.username",
 			  "User Name or Password is invalid! Please try entering again!");
 	  }
 	  

@@ -9,10 +9,8 @@ public class CustomerInformation {
 	@NotEmpty(message="")
 	private String username;
 	@NotEmpty(message = "")
-    @Size(min = 6, max = 15, message = "")
 	private String password;
 	@NotEmpty(message = "Please enter your password again to confirm.")
-    @Size(min = 6, max = 15, message = "Your password must between 6 and 15 characters")
 	private String confirmPassword;
 	@NotEmpty(message="Please enter your firstname.")
 	private String firstname;
@@ -20,13 +18,12 @@ public class CustomerInformation {
 	private String lastname;
 	private String sex;
 	private String selection;
-	@NotEmpty(message="Please enter your phonenumber.")
-	@Size(min = 10, max = 10, message = "Phone Number must be of exactly 10 digits")
+	@NotEmpty(message="")
 	private String phonenumber;
 	@Email(message="Your email is invalid.")
 	@NotEmpty(message="Please enter your email.")
 	private String email;
-	@Size(min = 10, max = 10, message = "SSN must be of exactly 10 digits")
+	@Size(min = 10, max = 10, message = "")
 	private String socialSecurityNumber;
 	@NotEmpty(message="Please enter your address.")
 	private String address;

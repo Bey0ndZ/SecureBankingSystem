@@ -11,23 +11,20 @@ public class AddUserInformation {
     @NotEmpty(message="Please enter your lastname.")
     private String lastName;
     private String sex;
-    @NotEmpty(message="Please enter your phonenumber.")
-    @Size(min = 10, max = 10, message = "Phone Number must be of exactly 10 digits")
+    @NotEmpty(message="")
     private String contactNumber;
     @NotEmpty(message="Please enter your address.")
     private String address;
     @Email(message="Your email is invalid.")
     @NotEmpty(message="Please enter your email.")
     private String emailAddress_addUser;
-    @NotEmpty(message="Please enter your preferred username.")
+    @NotEmpty(message="")
     private String userName;
-    @NotEmpty(message = "Please enter your password.")
-    @Size(min = 6, max = 15, message = "Your password must between 6 and 15 characters")
+    @NotEmpty(message = "")
     private String password;
     @NotEmpty(message = "Please enter your password again to confirm.")
-    @Size(min = 6, max = 15, message = "Your password must between 6 and 15 characters")
     private String confirmPassword;
-    @Size(min = 10, max = 10, message = "SSN must be of exactly 10 digits")
+    @Size(min = 10, max = 10, message = "")
     private String socialSecurityNumber;
     private String selection;
 	private int userExpired;

@@ -32,11 +32,12 @@ import edu.softwaresecurity.group5.model.CustomerInformation;
  Cleans up resources by releasing DB connection
  Better error detection 
  */
+
 public class CustomerDAOImpl implements CustomerDAO {
 	@Autowired
 	DataSource dataSource;
 	
-	public void addUser(AddUserInformation addInfo) throws NoSuchAlgorithmException {
+	public String addUser(AddUserInformation addInfo) throws NoSuchAlgorithmException {
 		addInfo.setEnabled(1);
 		addInfo.setUserLocked(1);
 		addInfo.setUserExpired(1);
@@ -63,63 +64,44 @@ public class CustomerDAOImpl implements CustomerDAO {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hash = passwordEncoder.encode(addInfo.getPassword());
 
-		System.out.println("Checking Selection: "+addInfo.getSelection());
+		// CALL THE DTO FUNCTION---
+		List<DuplicateValidationCheckerDTO> list1 = new ArrayList<DuplicateValidationCheckerDTO>();
+		list1 = checkDuplicateDetails(addInfo.getUserName(), addInfo.getEmailAddress_addUser(), addInfo.getSocialSecurityNumber());
 		
-		jdbcTemplateForRegisterCustomer.update(
-				addUserQuery,
-				new Object[] { addInfo.getUserName(), hash, hash,
-						addInfo.getFirstName(), addInfo.getLastName(),
-						addInfo.getSex(),
-						addInfo.getSelection(), addInfo.getContactNumber(),
-						addInfo.getEmailAddress_addUser(),
-						addInfo.getSocialSecurityNumber(),
-						addInfo.getAddress(), addInfo.getEnabled(),
-						addInfo.getUserExpired(), addInfo.getUserLocked(),
-						addInfo.getUserDetailsExpired() });
+		if(list1.size()!=0) {
+			return "UserName, Email and SSN must be unique!";
+		}
+		else {
 		
-		jdbcTemplateForUserRoles.update(addUserIntoUserRolesTable, new Object[] {
-				addInfo.getUserName(), "ROLE_USER" });
-		
-		// Generating random account numbers
-		SecureRandom secure;
-		secure = SecureRandom.getInstance("SHA1PRNG");
-		String accountNumber = new Integer(secure.nextInt()).toString();
-		
-		jdbcTemplateForAccounts.update(addUserIntoAccountsTable,
-				new Object[] {addInfo.getUserName(), accountNumber, "1000", "0",
-				"0"});}
+			jdbcTemplateForRegisterCustomer.update(
+					addUserQuery,
+					new Object[] { addInfo.getUserName(), hash, hash,
+							addInfo.getFirstName(), addInfo.getLastName(),
+							addInfo.getSex(),
+							addInfo.getSelection(), addInfo.getContactNumber(),
+							addInfo.getEmailAddress_addUser(),
+							addInfo.getSocialSecurityNumber(),
+							addInfo.getAddress(), addInfo.getEnabled(),
+							addInfo.getUserExpired(), addInfo.getUserLocked(),
+							addInfo.getUserDetailsExpired() });
+			
+			jdbcTemplateForUserRoles.update(addUserIntoUserRolesTable, new Object[] {
+					addInfo.getUserName(), "ROLE_USER" });
+			
+			// Generating random account numbers
+			SecureRandom secure;
+			secure = SecureRandom.getInstance("SHA1PRNG");
+			String accountNumber = new Integer(secure.nextInt()).toString();
+			
+			jdbcTemplateForAccounts.update(addUserIntoAccountsTable,
+					new Object[] {addInfo.getUserName(), accountNumber, "1000", "0",
+					"0"});
+			return "User Added Successfully!!";
+		}
+	}
 
 
 	public String registerCustomer(CustomerInformation custInfo) throws NoSuchAlgorithmException {
-		
-		
-//		List<CustomerInformationDTO> userList = new ArrayList<CustomerInformationDTO>();
-//
-//		String sql = "SELECT email from users";
-//
-//		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-//		userList = jdbcTemplate.query(sql, new UserRowMapper());
-//		
-//		System.out.println("CHECK: "+userListreturn null;);
-		
-		
-		
-//		int sameUser, sameEmail, sameSSN;
-//		
-//		String sqlSameUser = "SELECT users.username from users where users.username=?";
-//		String sqlSameEmail = "SELECT users.email from users where users.email=?";
-//		String sqlSameSSN = "SELECT users.SSN from users where users.SSN=?";
-//		
-//		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-//		
-//		sameUser = jdbcTemplate.queryForObject(sqlSameUser,new Object[] {custInfo.getUsername()}, Integer.class);
-//		System.out.println("CHECK: "+sameUser);
-//		
-//		sameEmail = jdbcTemplate.queryForObject(sqlSameEmail,new Object[] {custInfo.getEmail()}, Integer.class);
-//		System.out.println("CHECK1: "+sameEmail);
-//		
-//		sameSSN = jdbcTemplate.queryForObject(sqlSameSSN,new Object[] {custInfo.getSocialSecurityNumber()}, Integer.class);
-//		System.out.println("CHECK2: "+sameSSN);
 		
 		custInfo.setEnabled(1);
 		custInfo.setUserLocked(1);
@@ -149,14 +131,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 		list1 = checkDuplicateDetails(custInfo.getUsername(), custInfo.getEmail(), custInfo.getSocialSecurityNumber());
 		
 		if(list1.size()!=0) {
-			System.out.println("FAIL");
 			return "UserName, Email and SSN must be unique!";
 		}
 		else {
-			System.out.println("SUCCESS");
-			
-			System.out.println("Check for Registration Selection: "+custInfo.getSelection());
-			
 			jdbcTemplateForRegisterCustomer.update(
 					registerCustomerQuery,
 					new Object[] { custInfo.getUsername(), hash, hash,

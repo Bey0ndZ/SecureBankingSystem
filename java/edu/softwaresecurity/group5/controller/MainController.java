@@ -267,12 +267,15 @@ public class MainController {
 			modelAndView.setViewName("addUser");
 			return modelAndView;
 		} else {
-			System.out.println(addUserInfo.getUserName());
-
-			
-			custService.insertAddUserInformation(addUserInfo);
-			modelAndView.addObject("submitMessage", "User Added Successfully!");
-			modelAndView.setViewName("addUser");
+			String error = custService.insertAddUserInformation(addUserInfo);
+			if (error.equalsIgnoreCase("UserName, Email and SSN must be unique!")) {
+				modelAndView.addObject("errorMsg", error);
+				modelAndView.setViewName("addUser");
+			}
+			else {
+				modelAndView.addObject("successMsg", error);
+				modelAndView.setViewName("addUser");
+			}
 			return modelAndView;
 		}
 	}

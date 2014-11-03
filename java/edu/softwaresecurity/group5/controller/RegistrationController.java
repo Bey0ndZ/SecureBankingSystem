@@ -64,7 +64,6 @@ public class RegistrationController {
         	modelAndView.setViewName("register"); // This prints errors
                 return modelAndView;
         } else {        	
-			System.out.println(custInfo.getUsername());
 			String error = custService.insertCustomerInformation(custInfo);
 			if (error.equalsIgnoreCase("UserName, Email and SSN must be unique!")) {
 				modelAndView.addObject("errorMsg", error);
