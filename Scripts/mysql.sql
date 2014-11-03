@@ -92,3 +92,20 @@ CREATE TABLE user_attempts (
   lastModified datetime NOT NULL,
   PRIMARY KEY (id)
 );
+
+CREATE  TABLE modificationrequests (
+username VARCHAR(45) NOT NULL,
+firstname VARCHAR(45) NOT NULL, 
+lastname VARCHAR(45) NOT NULL, 
+sex VARCHAR(10) NOT NULL,  
+MerchantorIndividual VARCHAR(45) NOT NULL,  
+phonenumber VARCHAR(45) NOT NULL,  
+email VARCHAR(45) NOT NULL, 
+address VARCHAR(45) NOT NULL, 
+requestcompleted TINYINT NOT NULL, 
+PRIMARY KEY (id));
+
+CREATE TABLE deleteaccount (
+username VARCHAR(45) NOT NULL,
+deleteaccount TINYINT NOT NULL,
+PRIMARY KEY(username));
