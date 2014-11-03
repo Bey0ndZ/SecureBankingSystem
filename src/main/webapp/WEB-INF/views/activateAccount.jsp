@@ -1,5 +1,5 @@
 <%@taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
+    uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
@@ -18,81 +18,80 @@
 
 <!-- Bootstrap Core CSS -->
 <link
-	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
-	rel="stylesheet">
+    href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
+    rel="stylesheet">
 
 <!-- Custom CSS -->
 <link
-	href="${pageContext.request.contextPath}/resources/css/sb-admin.css"
-	rel="stylesheet">
+    href="${pageContext.request.contextPath}/resources/css/sb-admin.css"
+    rel="stylesheet">
 
 <!-- Custom Fonts -->
 <link
-	href="${pageContext.request.contextPath}/resources/font-awesome-4.1.0/css/font-awesome.min.css"
-	rel="stylesheet" type="text/css">
+    href="${pageContext.request.contextPath}/resources/font-awesome-4.1.0/css/font-awesome.min.css"
+    rel="stylesheet" type="text/css">
 
 </head>
 
 <body>
 
-	<div id="wrapper">
+    <div id="wrapper">
 
-		<!-- Navigation -->
-		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-			<!-- Brand and toggle get grouped for better mobile display -->
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target=".navbar-ex1-collapse">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="index"><font COLOR=RED> </font></a>
-			</div>
-
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span> <span
+                        class="icon-bar"></span> <span class="icon-bar"></span> <span
+                        class="icon-bar"></span>
+                </button>
+            </div>
 
 
 
-		</nav>
 
-		<div id="page-wrapper">
+        </nav>
 
-			<div class="container-fluid">
+        <div id="page-wrapper">
 
-				<!-- Page Heading -->
-				<div class="row">
-					<div class="col-lg-12">
-						<h1 class="page-header">General Information</h1>
-						<h2>Movie Name : ${account}</h2>	
-					</div>
-				</div>
-				<c:if test="${not empty status}">
-					<b>"${status}"</b>
-				</c:if>
+            <div class="container-fluid">
 
-									<form:form method="post" action="activateAccount" modelAttribute="usernameSearch">                  
-	                    				<b>User Name :</b> <br/> <input type="text" name="username" id="accountNumber_RemoveUser" value ="${account}" style="color:#999;" /><br/> <br/>
-					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Activate" /></a> <br/> <br/>
-					                    <c:if test="${not empty errorMsg}">
-											<h4> ${errorMsg} </h4>
-	                                    </c:if> <br/> <br/>
-					                </form:form>
-			</div>
-			<!-- /.container-fluid -->
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">User Account Activation -</h1>
+                        <h3> Hello! ${account}</h3> <br/>  
+                    </div>
+                </div>
+                <c:if test="${not empty status}">
+                    <b>"${status}"</b>
+                </c:if>
 
-		</div>
-		<!-- /#page-wrapper -->
+                <form:form method="post" action="activateAccount" modelAttribute="usernameSearch">                  
+                    <b>User Name :</b> <br/> <input type="text" name="username" id="accountNumber_RemoveUser" value ="${account}" style="color:#999;" /><br/> <br/>
+                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Activate Account" /></a> <br/> <br/>
+                    <c:if test="${not empty errorMsg}">
+                        <h4> ${errorMsg} </h4>
+                    </c:if> <br/> <br/>
+                </form:form>
+            </div>
+            <!-- /.container-fluid -->
 
-	</div>
-	<!-- /#wrapper -->
+        </div>
+        <!-- /#page-wrapper -->
 
-	<!-- jQuery Version 1.11.0 -->
-	<script
-		src="${pageContext.request.contextPath}/resources/js/jquery-1.11.0.js"></script>
+    </div>
+    <!-- /#wrapper -->
 
-	<!-- Bootstrap Core JavaScript -->
-	<script
-		src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+    <!-- jQuery Version 1.11.0 -->
+    <script
+        src="${pageContext.request.contextPath}/resources/js/jquery-1.11.0.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script
+        src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 
 
 
