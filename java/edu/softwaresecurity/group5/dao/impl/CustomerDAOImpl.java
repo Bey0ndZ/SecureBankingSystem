@@ -163,7 +163,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			jdbcTemplateForAccounts.update(insertIntoAccountsTable,
 					new Object[] {custInfo.getUsername(), accountNumber, "1000", "0",
 					"0"});
-			sendEmail(custInfo.getEmail(), custInfo.getFirstname() +" Activate Your Account", "Hi "+custInfo.getFirstname()+" Please click the link http://localhost:8080/SecureBankingSystem/activateAccount to activate your account");
+			sendEmail(custInfo.getEmail(), custInfo.getFirstname() +" Activate Your Account", "Hi "+custInfo.getFirstname()+" Please click the link http://localhost:8080/SecureBankingSystem/activateAccount/"+custInfo.getUsername()+" to activate your account");
 			return "Registration Successful!! Activation link has been sent at "+custInfo.getEmail();
 		}
 	}
