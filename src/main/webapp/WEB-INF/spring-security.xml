@@ -15,6 +15,7 @@
 		<intercept-url pattern="/viewUser*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
 		<intercept-url pattern="/getList*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
 		<intercept-url pattern="/modifyUser*" access="hasAnyRole('ROLE_USER', 'ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
+        <intercept-url pattern="/viewQueue*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
 
 
 		<!-- These are permitAll -->

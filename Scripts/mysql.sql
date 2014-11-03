@@ -94,6 +94,7 @@ CREATE TABLE user_attempts (
 );
 
 CREATE  TABLE modificationrequests (
+id INT(11) NOT NULL AUTO_INCREMENT,
 username VARCHAR(45) NOT NULL,
 firstname VARCHAR(45) NOT NULL, 
 lastname VARCHAR(45) NOT NULL, 

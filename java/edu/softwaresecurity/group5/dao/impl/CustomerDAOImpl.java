@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -284,8 +284,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 	
 	public void sendEmail(String to, String subject, String msg){
-		ApplicationContext context = new FileSystemXmlApplicationContext(
-				"/src/main/webapp/resources/Spring-Mail.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext(
+				"Spring-Mail.xml");
 		EmailService mm = (EmailService) context.getBean("email");
 		mm.sendMail("group05.sbs@gmail.com", to,
 				subject, msg);
