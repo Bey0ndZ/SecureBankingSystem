@@ -28,7 +28,7 @@ CREATE  TABLE users (
   PRIMARY KEY (username));
   
   INSERT INTO users 
-  VALUES ('admin', '$2a$10$ocmyR6rP7eo1qRsV1rpvO.Mlh1QqtabUvD3sBhTlHobRKij/ZxZ1e', '$2a$10$ocmyR6rP7eo1qRsV1rpvO.Mlh1QqtabUvD3sBhTlHobRKij/ZxZ1e', 'admin', 'admin', 'male','Merchant', '4808452326',
+  VALUES ('admin', '$2a$10$aUUBBHgMXlx.UrQLuIlK4.YX2R0hMU10tWdtF0d.Z3Dn5bHVJLrx.', '$2a$10$aUUBBHgMXlx.UrQLuIlK4.YX2R0hMU10tWdtF0d.Z3Dn5bHVJLrx.', 'admin', 'admin', 'male','Merchant', '4808452326',
   'skulkar9@asu.edu', 'ssn', 'address', true,true,true,true);
   INSERT INTO users 
   VALUES ('shivam', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam','male', 'Merchant', '4804804801',

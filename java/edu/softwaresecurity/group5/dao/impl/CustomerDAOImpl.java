@@ -185,7 +185,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		String sql = "SELECT users.username, users.firstname, users.lastname, users.sex, "
 				+ "users.MerchantorIndividual, users.phonenumber, users.email, "
-				+ "users.address, account.accountnumber from users inner join account on users.username = account.username where users.enabled = true";
+				+ "users.address, account.accountnumber, account.accountbalance from users inner join account on users.username = account.username where users.enabled = true";
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		userList = jdbcTemplate.query(sql, new UserRowMapper());
@@ -196,7 +196,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		List<CustomerInformationDTO> customerInformationToDisplay = new ArrayList<CustomerInformationDTO>();
 		String retrieveDetailsQuery = "SELECT users.username, users.firstname, users.lastname, users.sex, "
 				+ "users.MerchantorIndividual, users.phonenumber, users.email, "
-				+ "users.address, account.accountnumber from users inner join account on users.username = account.username where enabled = true and accountnumber=?";
+				+ "users.address, account.accountnumber, account.accountbalance from users inner join account on users.username = account.username where enabled = true and accountnumber=?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		customerInformationToDisplay = jdbcTemplate.query(retrieveDetailsQuery,
 				new Object[] { accountNumber }, new UserRowMapper());
