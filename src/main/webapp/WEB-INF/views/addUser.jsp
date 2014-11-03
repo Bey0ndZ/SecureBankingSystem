@@ -123,6 +123,16 @@
             
                             <div class="panel-body">
                                 <div id="morris-area-chart">
+                                <h3><b> Requirements for adding new user - </b></h3>
+                                <h4> 1. User name should not be empty and it should be less then 10 characters.</h4>
+                                <h4> 2. Password must contain at least one capital character, one small character, one digit and one special character.</h4>
+                                <h4> 3. Allowed special characters for password are ! @ # $ % ^ & * +  _ . , -</h4>
+                                <h4> 4. Password must be between 6 to 15 characters. Password and confirm password should be same.</h4>
+                                <h4> 5. First and last name should not exceed 10 characters and they should not be empty.</h4>
+                                <h4> 6. Phone number should not be empty. It should be exactly 10 digits, no characters allowed. Example: 1234567890 </h4>
+                                <h4> 7. Social Security Number should not be empty. It should be exactly 10 digits, no characters allowed. Example: 1234567890</h4>
+                                <h4> 8. Address should not be empty. It should not exceed 50 characters.</h4>
+                                <br/> <br/>
                                 <form:form method="POST" action="addUser" modelAttribute="addUserForm">					
 									<c:if test="${not empty errorMsg}">
 										<h3> ${errorMsg} </h3>

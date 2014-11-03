@@ -122,7 +122,7 @@ public class RegistrationValidation {
 //		      "Password has no capital letter");
 //	  }
 	  
-	  Pattern p = Pattern.compile("[!@#$%^&*+_.-]");
+	  Pattern p = Pattern.compile("[!@#$%^&*+_.,-]");
 	  Matcher match = p.matcher(pass.subSequence(0, pass.length()));
 	  
 	  if (pass.length()<6 || pass.length()>15 ||
