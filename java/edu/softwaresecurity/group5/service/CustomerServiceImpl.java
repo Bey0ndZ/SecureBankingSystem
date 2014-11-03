@@ -75,4 +75,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public String deleteAccount(String username, boolean deleteAccount) {
 		return custDAO.removeAccountRequest(username, deleteAccount);
 	}
+	public boolean activateAccount(String username){
+		return custDAO.activateAccountRequest(username);
+	}
 }

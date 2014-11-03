@@ -108,7 +108,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 	public String registerCustomer(CustomerInformation custInfo) throws NoSuchAlgorithmException {
 		
-		custInfo.setEnabled(1);
+		custInfo.setEnabled(0);
 		custInfo.setUserLocked(1);
 		custInfo.setUserExpired(1);
 		custInfo.setUserDetailsExpired(1);
@@ -163,8 +163,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 			jdbcTemplateForAccounts.update(insertIntoAccountsTable,
 					new Object[] {custInfo.getUsername(), accountNumber, "1000", "0",
 					"0"});
-		
-			return "Registration Successful!!";
+			sendEmail(custInfo.getEmail(), custInfo.getFirstname() +" Activate Your Account", "Hi "+custInfo.getFirstname()+" Please click the link http://localhost:8080/SecureBankingSystem/activateAccount to activate your account");
+			return "Registration Successful!! Activation link has been sent at "+custInfo.getEmail();
 		}
 	}
 
@@ -454,4 +454,15 @@ public class CustomerDAOImpl implements CustomerDAO {
 			return "You have selected No. Your account request has not been submitted for internal review.";
 		}
 	}	
+	public boolean activateAccountRequest(String username) {
+
+		String sql = "UPDATE users set enabled = true where username = ?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		int status = jdbcTemplate.update(sql, new Object[] { username });
+		if (status == 1) {
+			return true;
+		}
+		return false;
+		
+	}
 }

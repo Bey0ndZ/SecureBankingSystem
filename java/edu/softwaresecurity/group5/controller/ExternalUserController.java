@@ -13,7 +13,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -334,4 +336,41 @@ public class ExternalUserController {
 		}
 		return modelAndView;
 	}
+	
+	// Activate Account from email Address.
+		@RequestMapping(value = "/activateAccount/activateAccount", method = RequestMethod.POST)
+		public ModelAndView activateRequest(
+				@RequestParam("username") String usernameSearch) {
+			ModelAndView modelAndView = new ModelAndView();
+			
+			Document userInput = Jsoup.parse(usernameSearch);
+			String userName = userInput.text();
+			
+			if(userName.length()==0 || userName.length()>15) {
+				modelAndView.addObject("status", "Please Do not modify the url!");
+				modelAndView.setViewName("activateAccount");
+			}
+			else{
+				boolean status = custService.activateAccount(userName);
+				if(!status) {
+					modelAndView.addObject("status", "Your Account is already Active!!!");
+					modelAndView.setViewName("activateAccount");
+				}
+				else {
+					modelAndView.addObject("status", "Your Account is Activated, Please login to Access");
+					modelAndView.setViewName("activateAccount");
+				}
+			}
+			return modelAndView;
+		}
+		// Activate Account from email Address.
+				@RequestMapping(value = "/activateAccount/{account}", method = RequestMethod.GET)
+				public ModelAndView activate(@PathVariable String account, ModelMap model){
+						ModelAndView modelAndView = new ModelAndView();
+						model.addAttribute("account", account);
+						modelAndView.setViewName("activateAccount");
+						return modelAndView;
+				}
+				
+				
 }
