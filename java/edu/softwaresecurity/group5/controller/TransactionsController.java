@@ -30,6 +30,7 @@ public class TransactionsController {
 	String accountNumber, @RequestParam("amountToBeTransferred") String amountToBeTransferred) {
 		ModelAndView modelAndView = new ModelAndView();
 		
+		if (!(accountNumber.isEmpty() || amountToBeTransferred.isEmpty())) {
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
@@ -44,6 +45,12 @@ public class TransactionsController {
 		}
 		
 		
+	} else {
+		modelAndView.setViewName("permission-denied");
+	}
+	} else {
+		modelAndView.addObject("submitMessage", "Do not leave either of the text-boxes empty");
+		modelAndView.setViewName("billPay");
 	}
 	modelAndView.setViewName("billPay");
 	return modelAndView;

@@ -38,7 +38,7 @@ public class ExternalUserController {
 		ModelAndView modelAndView = new ModelAndView();
 		List<CustomerInformationDTO> custInfoFromDTO = new ArrayList<CustomerInformationDTO>();
 		List<BillPayDTO> billPayFromDTO = new ArrayList<BillPayDTO>();
-		
+
 		// check if user is login
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
@@ -47,21 +47,21 @@ public class ExternalUserController {
 			String loggedInUser = userDetail.getUsername();
 			modelAndView.addObject("username", loggedInUser);
 			System.out.println(loggedInUser);
-			
+
 			// Call the DAOImpl layer
 			custInfoFromDTO = custService.fetchUserDetails(loggedInUser);
 			billPayFromDTO = custService.returnBillPaymentDetails(loggedInUser);
-			
+
 			System.out.println(billPayFromDTO);
-			
+
 			// Add it to the model
 			modelAndView.addObject("userInformation", custInfoFromDTO);
 			modelAndView.addObject("billPayInformation", billPayFromDTO);
-			
+
 			modelAndView.setViewName("accountSummary");
 		} else {
 			modelAndView.setViewName("permission-denied");
-		}	
+		}
 		return modelAndView;
 	}
 
@@ -92,10 +92,10 @@ public class ExternalUserController {
 		modelAndView.setViewName("transferMoney");
 		return modelAndView;
 	}
-	
+
 	// Debit funds
 	// GET Requests
-	@RequestMapping(value="/debitFunds", method=RequestMethod.GET)
+	@RequestMapping(value = "/debitFunds", method = RequestMethod.GET)
 	public ModelAndView getDebitFunds() {
 		ModelAndView modelAndView = new ModelAndView();
 		List<CustomerInformationDTO> custInfoFromDTO = new ArrayList<CustomerInformationDTO>();
@@ -103,75 +103,90 @@ public class ExternalUserController {
 				.getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			String usernameLoggedIn = userDetail.getUsername();	
+			String usernameLoggedIn = userDetail.getUsername();
 			custInfoFromDTO = custService.fetchUserDetails(usernameLoggedIn);
 			System.out.println(custInfoFromDTO);
 			modelAndView.addObject("balanceInformation", custInfoFromDTO);
-			
+
 			modelAndView.setViewName("debitAmount");
 		} else {
 			modelAndView.setViewName("permission-denied");
 		}
 		return modelAndView;
 	}
-	
+
 	// Debit funds
 	// POST requests
-	@RequestMapping(value="/debitFunds", method=RequestMethod.POST)
-	public ModelAndView processDebitFunds(@RequestParam("debitAmount") String debitAmount) {
+	@RequestMapping(value = "/debitFunds", method = RequestMethod.POST)
+	public ModelAndView processDebitFunds(
+			@RequestParam("debitAmount") String debitAmount) {
 		ModelAndView modelAndView = new ModelAndView();
-		Float debitAmountFloat = Float.parseFloat(debitAmount);
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-		if (!(auth instanceof AnonymousAuthenticationToken)) {
-			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			String usernameLoggedIn = userDetail.getUsername();
-			String message = custService.debitAmountForCustomer(usernameLoggedIn
-					, debitAmountFloat);
-			modelAndView.addObject("debitMessage", message);
-			modelAndView.setViewName("debitAmount");
+		if (!debitAmount.isEmpty()) {
+			Float debitAmountFloat = Float.parseFloat(debitAmount);
+			Authentication auth = SecurityContextHolder.getContext()
+					.getAuthentication();
+			if (!(auth instanceof AnonymousAuthenticationToken)) {
+				UserDetails userDetail = (UserDetails) auth.getPrincipal();
+				String usernameLoggedIn = userDetail.getUsername();
+				String message = custService.debitAmountForCustomer(
+						usernameLoggedIn, debitAmountFloat);
+				modelAndView.addObject("debitMessage", message);
+				modelAndView.setViewName("debitAmount");
+			} else {
+				modelAndView.setViewName("permission-denied");
+			}
 		} else {
-			modelAndView.setViewName("permission-denied");
+			// debitAmount is empty
+			modelAndView.addObject("debitMessage",
+					"Do not leave the text-box empty!");
+			modelAndView.setViewName("debitAmount");
 		}
 		return modelAndView;
 	}
-	
+
 	// Credit funds
 	// GET Request
-	@RequestMapping(value="/creditFunds", method=RequestMethod.GET)
+	@RequestMapping(value = "/creditFunds", method = RequestMethod.GET)
 	public ModelAndView returnCreditFundsPage() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("creditAmount");
 		return modelAndView;
 	}
-	
+
 	// Credit funds
 	// POST Request
-	@RequestMapping(value="/creditFunds", method=RequestMethod.POST)
-	public ModelAndView processCreditFunds(@RequestParam("creditAmount") String creditAmount) {
-	ModelAndView modelAndView = new ModelAndView();
-	Float creditAmountFloat = Float.parseFloat(creditAmount);
-	Authentication auth = SecurityContextHolder.getContext()
-			.getAuthentication();
-	if (!(auth instanceof AnonymousAuthenticationToken)) {
-		UserDetails userDetail = (UserDetails) auth.getPrincipal();
-		String usernameLoggedIn = userDetail.getUsername();
-		String message = custService.creditAmountForCustomer(usernameLoggedIn,
-				creditAmountFloat);
-		modelAndView.addObject("creditMessage", message);
-		modelAndView.setViewName("creditAmount");
-	} else {
-		modelAndView.setViewName("permission-denied");
+	@RequestMapping(value = "/creditFunds", method = RequestMethod.POST)
+	public ModelAndView processCreditFunds(
+			@RequestParam("creditAmount") String creditAmount) {
+		ModelAndView modelAndView = new ModelAndView();
+		if (!creditAmount.isEmpty()) {
+			Float creditAmountFloat = Float.parseFloat(creditAmount);
+			Authentication auth = SecurityContextHolder.getContext()
+					.getAuthentication();
+			if (!(auth instanceof AnonymousAuthenticationToken)) {
+				UserDetails userDetail = (UserDetails) auth.getPrincipal();
+				String usernameLoggedIn = userDetail.getUsername();
+				String message = custService.creditAmountForCustomer(
+						usernameLoggedIn, creditAmountFloat);
+				modelAndView.addObject("creditMessage", message);
+				modelAndView.setViewName("creditAmount");
+			} else {
+				modelAndView.setViewName("permission-denied");
+			}
+		} else {
+			modelAndView.addObject("creditMessage",
+					"Do not leave the text-box empty!");
+			modelAndView.setViewName("creditAmount");
+		}
+		return modelAndView;
 	}
-	return modelAndView;
-	}	
-	 
+
 	// GET request for modifyUser
-	@RequestMapping(value="/modifyUserExternal", method=RequestMethod.GET)
+	@RequestMapping(value = "/modifyUserExternal", method = RequestMethod.GET)
 	public ModelAndView returnModifyUserPage() {
 		ModelAndView modelAndView = new ModelAndView();
 		List<CustomerInformationDTO> custInfoFromDTO = new ArrayList<CustomerInformationDTO>();
-		
+
 		// check if user is login
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
@@ -180,7 +195,7 @@ public class ExternalUserController {
 			String loggedInUser = userDetail.getUsername();
 			modelAndView.addObject("username", loggedInUser);
 			System.out.println(loggedInUser);
-			
+
 			// Call the DAOImpl layer
 			custInfoFromDTO = custService.fetchUserDetails(loggedInUser);
 			modelAndView.addObject("userInformation", custInfoFromDTO);
@@ -190,33 +205,36 @@ public class ExternalUserController {
 		}
 		return modelAndView;
 	}
-	
-	@RequestMapping(value="/modifyUserExternal", method=RequestMethod.POST)
-	public ModelAndView processModifyRequest(@ModelAttribute("modifyUserRequestAttributes") ModifyUserInformation modInfo) {
+
+	@RequestMapping(value = "/modifyUserExternal", method = RequestMethod.POST)
+	public ModelAndView processModifyRequest(
+			@ModelAttribute("modifyUserRequestAttributes") ModifyUserInformation modInfo) {
 		ModelAndView modelAndView = new ModelAndView();
-		
+
 		// check if user is login
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			String requestedForUsername = userDetail.getUsername();
-			String requestSubmitMessage = custService.modificationRequest(requestedForUsername, modInfo);
-			modelAndView.addObject("requestSubmitMessage", requestSubmitMessage);
-			
+			String requestSubmitMessage = custService.modificationRequest(
+					requestedForUsername, modInfo);
+			modelAndView
+					.addObject("requestSubmitMessage", requestSubmitMessage);
+
 			modelAndView.setViewName("modifyUserExternal");
 		} else {
 			modelAndView.setViewName("permission-denied");
 		}
 		return modelAndView;
 	}
-	
+
 	// GET request for modifyUser
-	@RequestMapping(value="/deleteAccount", method=RequestMethod.GET)
+	@RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
 	public ModelAndView returnDeleteAccountPage() {
 		ModelAndView modelAndView = new ModelAndView();
 		List<CustomerInformationDTO> custInfoFromDTO = new ArrayList<CustomerInformationDTO>();
-		
+
 		// check if user is login
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
@@ -225,7 +243,7 @@ public class ExternalUserController {
 			String loggedInUser = userDetail.getUsername();
 			modelAndView.addObject("username", loggedInUser);
 			System.out.println(loggedInUser);
-			
+
 			// Call the DAOImpl layer
 			custInfoFromDTO = custService.fetchUserDetails(loggedInUser);
 			modelAndView.addObject("userInformation", custInfoFromDTO);
@@ -236,32 +254,44 @@ public class ExternalUserController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value="/deleteAccount", method=RequestMethod.POST)
-	public ModelAndView processModifyRequest(@RequestParam("deleteAccount") String deleteAccountYesOrNo) {
+	// TODO: Doesn't work with empty string, even with .isEmpty() 
+	@RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
+	public ModelAndView processModifyRequest(
+			@RequestParam("deleteAccount") String deleteAccountYesOrNo) {
 		ModelAndView modelAndView = new ModelAndView();
-		boolean deleteAccount;
-		
-		// check if user is login
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-		if (!(auth instanceof AnonymousAuthenticationToken)) {
-			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			String requestedForUsername = userDetail.getUsername();
-			if (deleteAccountYesOrNo.equalsIgnoreCase("Yes")) {
-				deleteAccount = true;
-				String requestSubmittedMessage = custService.deleteAccount(requestedForUsername, deleteAccount);
-				modelAndView.setViewName("deleteAccount");
-				modelAndView.addObject("requestSubmittedMessage", requestSubmittedMessage);
+		if (!deleteAccountYesOrNo.isEmpty()) {
+			boolean deleteAccount;
+
+			// check if user is login
+			Authentication auth = SecurityContextHolder.getContext()
+					.getAuthentication();
+			if (!(auth instanceof AnonymousAuthenticationToken)) {
+				UserDetails userDetail = (UserDetails) auth.getPrincipal();
+				String requestedForUsername = userDetail.getUsername();
+				if (deleteAccountYesOrNo.equalsIgnoreCase("Yes")) {
+					deleteAccount = true;
+					String requestSubmittedMessage = custService.deleteAccount(
+							requestedForUsername, deleteAccount);
+					modelAndView.setViewName("deleteAccount");
+					modelAndView.addObject("requestSubmittedMessage",
+							requestSubmittedMessage);
+				} else {
+					deleteAccount = false;
+					String requestSubmittedMessage = custService.deleteAccount(
+							requestedForUsername, deleteAccount);
+					modelAndView.setViewName("deleteAccount");
+					modelAndView.addObject("requestSubmittedMessage",
+							requestSubmittedMessage);
+				}
 			} else {
-				deleteAccount = false;
-				String requestSubmittedMessage = custService.deleteAccount(requestedForUsername, deleteAccount);
-				modelAndView.setViewName("deleteAccount");
-				modelAndView.addObject("requestSubmittedMessage", requestSubmittedMessage);
+				modelAndView.setViewName("permission-denied");
 			}
 		} else {
-			modelAndView.setViewName("permission-denied");
+			System.out.println("here");
+			modelAndView.addObject("requestSubmittedMessage",
+					"Do not leave the radio button blank");
+			modelAndView.setViewName("deleteAccount");
 		}
 		return modelAndView;
 	}
-	
 }
