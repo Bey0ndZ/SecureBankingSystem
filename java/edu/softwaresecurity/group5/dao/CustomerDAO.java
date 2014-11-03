@@ -8,6 +8,7 @@ import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.model.CustomerInformation;
+import edu.softwaresecurity.group5.model.ModifyUserInformation;
 
 public interface CustomerDAO {
 
@@ -28,4 +29,6 @@ public interface CustomerDAO {
 
 	public String creditToUserAccount(String usernameLoggedIn,
 			Float creditAmountFloat);
+	public String modifyUserInformationRequest(String username, ModifyUserInformation modInfo);
+	public String removeAccountRequest(String username, boolean deleteAccountOrNot);
 }

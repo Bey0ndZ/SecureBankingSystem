@@ -8,6 +8,7 @@ import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.model.CustomerInformation;
+import edu.softwaresecurity.group5.model.ModifyUserInformation;
 
 public interface CustomerService {
 
@@ -25,8 +26,9 @@ public interface CustomerService {
 			String amountToBeTransferred);
 	public List<BillPayDTO> returnBillPaymentDetails(String username);
 	public String debitAmountForCustomer(String username, float debitAmount);
-
 	public String creditAmountForCustomer(String usernameLoggedIn,
 			Float creditAmountFloat);
+	public String modificationRequest(String username, ModifyUserInformation modInfo);
+	public String deleteAccount(String username, boolean deleteAccount);
 }
 

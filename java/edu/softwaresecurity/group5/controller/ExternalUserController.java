@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.model.ModifyUserInformation;
 import edu.softwaresecurity.group5.service.CustomerService;
 
 /*
@@ -153,4 +155,99 @@ public class ExternalUserController {
 	modelAndView.setViewName("creditAmount");
 	return modelAndView;
 	}	
+	 
+	// GET request for modifyUser
+	@RequestMapping(value="/modifyUserExternal", method=RequestMethod.GET)
+	public ModelAndView returnModifyUserPage() {
+		ModelAndView modelAndView = new ModelAndView();
+		List<CustomerInformationDTO> custInfoFromDTO = new ArrayList<CustomerInformationDTO>();
+		
+		// check if user is login
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			String loggedInUser = userDetail.getUsername();
+			modelAndView.addObject("username", loggedInUser);
+			System.out.println(loggedInUser);
+			
+			// Call the DAOImpl layer
+			custInfoFromDTO = custService.fetchUserDetails(loggedInUser);
+			modelAndView.addObject("userInformation", custInfoFromDTO);
+		}
+		modelAndView.setViewName("modifyUserExternal");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/modifyUserExternal", method=RequestMethod.POST)
+	public ModelAndView processModifyRequest(@ModelAttribute("modifyUserRequestAttributes") ModifyUserInformation modInfo) {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		// check if user is login
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			String requestedForUsername = userDetail.getUsername();
+			String requestSubmitMessage = custService.modificationRequest(requestedForUsername, modInfo);
+			modelAndView.addObject("requestSubmitMessage", requestSubmitMessage);	
+		} else {
+			// do nothing or redirect to log in page - EVERYWHERe
+		}
+		
+		modelAndView.setViewName("modifyUserExternal");
+		return modelAndView;
+	}
+	
+	// GET request for modifyUser
+	@RequestMapping(value="/deleteAccount", method=RequestMethod.GET)
+	public ModelAndView returnDeleteAccountPage() {
+		ModelAndView modelAndView = new ModelAndView();
+		List<CustomerInformationDTO> custInfoFromDTO = new ArrayList<CustomerInformationDTO>();
+		
+		// check if user is login
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			String loggedInUser = userDetail.getUsername();
+			modelAndView.addObject("username", loggedInUser);
+			System.out.println(loggedInUser);
+			
+			// Call the DAOImpl layer
+			custInfoFromDTO = custService.fetchUserDetails(loggedInUser);
+			modelAndView.addObject("userInformation", custInfoFromDTO);
+		}
+		modelAndView.setViewName("deleteAccount");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/deleteAccount", method=RequestMethod.POST)
+	public ModelAndView processModifyRequest(@RequestParam("deleteAccount") String deleteAccountYesOrNo) {
+		ModelAndView modelAndView = new ModelAndView();
+		boolean deleteAccount;
+		
+		// check if user is login
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			String requestedForUsername = userDetail.getUsername();
+			if (deleteAccountYesOrNo.equalsIgnoreCase("Yes")) {
+				deleteAccount = true;
+				String requestSubmittedMessage = custService.deleteAccount(requestedForUsername, deleteAccount);
+				modelAndView.addObject("requestSubmittedMessage", requestSubmittedMessage);
+			} else {
+				deleteAccount = false;
+				String requestSubmittedMessage = custService.deleteAccount(requestedForUsername, deleteAccount);
+				modelAndView.addObject("requestSubmittedMessage", requestSubmittedMessage);
+			}
+		} else {
+			// do nothing or redirect to log in page - EVERYWHERe
+		}
+		
+		modelAndView.setViewName("deleteAccount");
+		return modelAndView;
+	}
+	
 }

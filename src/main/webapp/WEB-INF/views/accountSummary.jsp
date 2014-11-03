@@ -178,8 +178,8 @@
 								<li><a href="creditFunds">Credit</a></li>
 							</ul>
 						</li>
-						<li><a href="transactionReview"><i
-								class="fa fa-fw fa-bar-chart-o"></i> Transaction Review</a></li>
+						<li><a href="deleteAccount"><i
+								class="fa fa-fw fa-bar-chart-o"></i> Delete Account</a></li>
 					</ul>
 				</div>
 				<!-- /.navbar-collapse -->
@@ -246,7 +246,7 @@
 												</table>
 												
 												<div class="text-right">
-                                   					<a href="modifyUser">Update Details <i class="fa fa-arrow-circle-right"></i></a>
+                                   					<a href="modifyUserExternal">Update Details <i class="fa fa-arrow-circle-right"></i></a>
                                					</div>
 												
 												<!-- Bill pay information -->

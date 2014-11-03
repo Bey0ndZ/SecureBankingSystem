@@ -30,6 +30,7 @@ import edu.softwaresecurity.group5.model.AccountAttempts;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.model.CustomerInformation;
+import edu.softwaresecurity.group5.model.ModifyUserInformation;
 
 /*Using Spring JDBC Template
  Reasons: Better connection management, no writing XML files
@@ -422,5 +423,35 @@ public class CustomerDAOImpl implements CustomerDAO {
 		jdbcTemplateForGettingCreditDetails.update(updateAfterCredit,
 				new Object[]{accountBalanceAfterCredit, creditAmountFloat, usernameLoggedIn});
 		return "Amount credited with: "+creditAmountFloat+". New balance is: "+accountBalanceAfterCredit;
+	}
+
+
+	public String modifyUserInformationRequest(String username, ModifyUserInformation modInfo) {
+		
+		String insertIntoModifyRequestsTable = "INSERT INTO modificationrequests(username,"
+				+ "firstname, lastname, sex, MerchantorIndividual, phonenumber, "
+				+ "email,"
+				+ "address, requestcompleted)	 VALUES (?,?,?,?,?,?,?,?,?)";
+		JdbcTemplate insertIntoModifyRequestsTableTemplate = new JdbcTemplate(dataSource);
+		
+		insertIntoModifyRequestsTableTemplate.update(insertIntoModifyRequestsTable,
+				new Object[] {username, modInfo.getFirstname(), modInfo.getLastname(),
+				modInfo.getSex(), modInfo.getSelection(), modInfo.getPhonenumber(),
+				modInfo.getEmail(), modInfo.getAddress(), false});
+		return "Request submitted. The internal user or admin will approve your request.";
+	}
+
+
+	public String removeAccountRequest(String username,
+			boolean deleteAccountOrNot) {
+		if (deleteAccountOrNot) {
+			String updateModificationRequests = "INSERT INTO deleteaccount VALUES (?,?)";
+			JdbcTemplate updateTemplate = new JdbcTemplate(dataSource);
+			updateTemplate.update(updateModificationRequests, new Object[] {username,
+					deleteAccountOrNot});
+			return "Request submitted. The internal user of admin will approve your request.";
+		} else {
+			return "You have selected No. Your account request has not been submitted for internal review.";
+		}
 	}	
 }

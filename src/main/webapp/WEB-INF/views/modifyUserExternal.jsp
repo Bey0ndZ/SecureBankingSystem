@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -46,7 +47,7 @@
 							class="icon-bar"></span> <span class="icon-bar"></span> <span
 							class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="index">Welcome, ${username}!</a>
+					<a class="navbar-brand" href="index">Customer</a>
 				</div>
 				<!-- Top Menu Items -->
 				<ul class="nav navbar-right top-nav">
@@ -161,7 +162,7 @@
 					<ul class="nav navbar-nav side-nav">
 						<li class="active"><a href="index.html"><i
 								class="fa fa-fw fa-dashboard"></i> Account</a></li>
-						<li><a href="charts.html"><i
+						<li><a href="processBillPayment"><i
 								class="fa fa-fw fa-bar-chart-o"></i> Bill Pay</a></li>
 						<li><a href="javascript:;" data-toggle="collapse"
 							data-target="#demo1"><i class="fa fa-fw fa-arrows-v"></i>
@@ -176,7 +177,10 @@
 							<ul id="demo2" class="collapse">
 								<li><a href="debitFunds">Debit</a></li>
 								<li><a href="creditFunds">Credit</a></li>
-							</ul></li>
+							</ul>
+						</li>
+						<li><a href="deleteAccount"><i
+								class="fa fa-fw fa-bar-chart-o"></i> Delete Account</a></li>
 					</ul>
 				</div>
 				<!-- /.navbar-collapse -->
@@ -189,7 +193,7 @@
 					<!-- Page Heading -->
 					<div class="row">
 						<div class="col-lg-12">
-							<h1 class="page-header">Credit Amount</h1>
+							<h1 class="page-header">Modify Information</h1>
 						</div>
 					</div>
 					<!-- /.row -->
@@ -199,25 +203,75 @@
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h3 class="panel-title">
-										<i class="fa fa-bar-chart-o fa-fw"></i> Enter details here
+										<i class="fa fa-bar-chart-o fa-fw"></i> Your details 
 									</h3>
 								</div>
 								<div class="panel-body">
 									<div id="morris-area-chart">
-										<c:if test="${not empty balanceInformation}">
-												<c:forEach var="o" items="${balanceInformation}">
-													Your account balance is: ${o.accountBalance}
-												</c:forEach>
-											</c:if>
-										<!-- Debit requests go here -->
-										<form:form method="POST" action="creditFunds">
-											Amount:<br/><input type="text" name="creditAmount" /><br/><br/>
-											<input type="submit" value="Credit" name="transferMoneyButton"/>
-										</form:form>
-										
-										<c:if test="${not empty creditMessage}">
-											${creditMessage}
-										</c:if>
+										<div class="panel-body">
+											<div class="table-responsive">
+											<c:if test="${not empty userInformation}">
+												<table
+													class="table table-bordered table-hover table-striped">
+													<thead>
+														<tr>
+															<th>Username</th>
+															<th>Firstname</th>
+															<th>Lastname</th>
+															<th>Sex</th>
+															<th>Selection</th>
+															<th>Phonenumber</th>
+															<th>Email</th>
+															<th>Address</th>
+															<th>Accountnumber</th>
+															<th>Accountbalance</th>
+														</tr>
+													</thead>
+													<tbody>
+														<c:if test="${not empty userInformation}">
+															<c:forEach var="o" items="${userInformation}">
+																<tr>
+																	<td>
+																	${o.username}
+																	</td>
+																	<td>${o.firstname}</td>
+																	<td>${o.lastname}</td>
+																	<td>${o.sex }</td>
+																	<td>${o.selection }</td>
+																	<td>${o.phonenumber }</td>
+																	<td>${o.email }</td>
+																	<td>${o.address }</td>
+																	<td>${o.accountNumber }</td>
+																	<td>${o.accountBalance }</td>
+																</tr>
+															</c:forEach>
+														</c:if>
+													</tbody>
+												</table>
+												</c:if>
+												
+												<c:if test="${not empty requestSubmitMessage}">
+													${requestSubmitMessage }
+												</c:if>
+												<!-- New form to update only Lastname,
+												Sex, Selection, Phonenumber, Email and Address -->
+												<form:form method="POST" action="modifyUserExternal" modelAttribute="modifyExternalUserAttributes">
+													First name: <br/><input type="text" name="firstname" /><br/><br/>
+													Last name: <br/><input type="text" name="lastname" /><br/><br/>
+													Sex: <br/> <input type="radio" name="sex" value="Male" id="male"/> Male <br/>
+													<input type="radio" name="sex" value="Female" id="male"/> Female <br/><br/>
+													<b>Individual or Merchant:</b><br/>
+													<select name="selection">
+														<option value="Individual">Individual</option>
+														<option value="Merchant">Merchant</option>
+													</select><br/><br/>
+													Phone Number:<FONT color="red"> <form:errors path="phonenumber" /> </FONT><br/><input type="text" name="phonenumber" id="contact" style="color:#999;" /><br/><br/>
+													Email Address:<br/><input type="email" name="email" id="email" style="color:#999;" /><br/><br/>
+													Address:<FONT color="red"> <form:errors path="address" /></FONT><br/><input type="text" name="address" id="add" style="color:#999;" /><br/><br/>
+													<input type="submit" value="Request Modification" name="requestModificationButton"/>
+												</form:form>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>

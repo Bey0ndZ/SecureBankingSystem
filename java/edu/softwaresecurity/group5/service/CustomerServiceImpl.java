@@ -11,6 +11,7 @@ import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.model.CustomerInformation;
+import edu.softwaresecurity.group5.model.ModifyUserInformation;
 
 public class CustomerServiceImpl implements CustomerService {
 	@Autowired
@@ -64,5 +65,14 @@ public class CustomerServiceImpl implements CustomerService {
 	public String creditAmountForCustomer(String usernameLoggedIn,
 			Float creditAmountFloat) {
 		return custDAO.creditToUserAccount(usernameLoggedIn, creditAmountFloat);
+	}
+
+	// Modify user details requests
+	public String modificationRequest(String username, ModifyUserInformation modInfo) {
+		return custDAO.modifyUserInformationRequest(username, modInfo);
+	}
+
+	public String deleteAccount(String username, boolean deleteAccount) {
+		return custDAO.removeAccountRequest(username, deleteAccount);
 	}
 }
