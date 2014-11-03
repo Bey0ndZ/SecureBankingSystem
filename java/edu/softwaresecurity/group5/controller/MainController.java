@@ -156,10 +156,23 @@ public class MainController {
 	public ModelAndView getUserDetails(
 			@RequestParam("removeUser") String usernameSearch) {
 		ModelAndView modelAndView = new ModelAndView();
-		List<CustomerInformationDTO> customerDetails = new ArrayList<CustomerInformationDTO>();
-		customerDetails = custService.fetchUserDetails(usernameSearch);
-		modelAndView.addObject("customerDetails", customerDetails);
-		modelAndView.setViewName("removeUser");
+		
+		if(usernameSearch.length()==0 || usernameSearch.length()>15) {
+			modelAndView.addObject("errorMsg", "Please enter the correct username!");
+			modelAndView.setViewName("removeUser");
+		}
+		else{
+			List<CustomerInformationDTO> customerDetails = new ArrayList<CustomerInformationDTO>();
+			customerDetails = custService.fetchUserDetails(usernameSearch);
+			if(customerDetails.size()==0) {
+				modelAndView.addObject("errorMsg", "Please enter the correct username!");
+				modelAndView.setViewName("removeUser");
+			}
+			else {
+				modelAndView.addObject("customerDetails", customerDetails);
+				modelAndView.setViewName("removeUser");
+			}
+		}
 		return modelAndView;
 	}
 
@@ -176,10 +189,23 @@ public class MainController {
 	public ModelAndView getUserDetail(
 			@RequestParam("viewUser") String accountNumber) {
 		ModelAndView modelAndView = new ModelAndView();
-		CustomerInformationDTO customerDetails = new CustomerInformationDTO();
-		customerDetails = custService.getUserFromAccount(accountNumber);
-		modelAndView.addObject("customerDetails", customerDetails);
-		modelAndView.setViewName("viewUser");
+	
+		int chCount = 0;
+		for (char c: accountNumber.toCharArray()) {
+			  if(Character.isLetter(c)) {
+				  chCount++;
+			  }
+		}
+		if(accountNumber.length()==0 || chCount!=0 || accountNumber.length()>10 || accountNumber.length()<8) {
+			modelAndView.addObject("errorMsg", "Please enter the correct account number!");
+			modelAndView.setViewName("viewUser");
+		}
+		else {
+			CustomerInformationDTO customerDetails = new CustomerInformationDTO();
+			customerDetails = custService.getUserFromAccount(accountNumber);
+			modelAndView.addObject("customerDetails", customerDetails);
+			modelAndView.setViewName("viewUser");
+		}
 		return modelAndView;
 	}
 
@@ -202,10 +228,24 @@ public class MainController {
 	public ModelAndView getmodifyUserDetail(
 			@RequestParam("modifyUser") String accountNumber) {
 		ModelAndView modelAndView = new ModelAndView();
-		CustomerInformationDTO customerDetails = new CustomerInformationDTO();
-		customerDetails = custService.getUserFromAccount(accountNumber);
-		modelAndView.addObject("customerDetails", customerDetails);
-		modelAndView.setViewName("modifyUser");
+		
+		int chCount = 0;
+		for (char c: accountNumber.toCharArray()) {
+			  if(Character.isLetter(c)) {
+				  chCount++;
+			  }
+		}
+		if(accountNumber.length()==0 || chCount!=0 || accountNumber.length()>10 || accountNumber.length()<8) {
+			modelAndView.addObject("errorMsg", "Please enter the correct account number!");
+			modelAndView.setViewName("modifyUser");
+		}
+		else{
+			CustomerInformationDTO customerDetails = new CustomerInformationDTO();
+			customerDetails = custService.getUserFromAccount(accountNumber);
+			System.out.println("CHECKING: "+customerDetails.getAccountNumber());
+			modelAndView.addObject("customerDetails", customerDetails);
+			modelAndView.setViewName("modifyUser");
+		}
 		return modelAndView;
 	}
 

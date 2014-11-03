@@ -1,203 +1,174 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@page session="true"%>
+<%@ taglib
+    prefix="c"
+    uri="http://java.sun.com/jsp/jstl/core" 
+%>
+<!DOCTYPE html>
+<html lang="en">
 
-<!DOCTYPE HTML>
-
-<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-	<!--Google Fonts-->
-	<link href='http://fonts.googleapis.com/css@family=Open+Sans_3A400,300,300italic,400italic,600,600italic,700,700italic' rel='stylesheet' type='text/css'>
-	<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" type="text/css" />
-	<link href="${pageContext.request.contextPath}/resources/css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
-	
-	<title>Bank of G5!</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-	<link rel="shortcut icon" href="img/favicon.png" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"> </script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.flexslider-min.js"> </script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.easing.1.3.js"> </script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/hoverIntent.js"> </script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.sfmenu.js"> </script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/retina.js"> </script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/custom.js"> </script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.fancybox.js"> </script>
+    <title>Modify User</title>
 
+    <!-- Bootstrap Core CSS -->
+    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 
-	<script type="text/javascript">
-	jQuery(window).load(function() {
-		
-	jQuery('.slider').flexslider();
-	 
-	// Create the dropdown base
-	jQuery("<select />").appendTo(".topmenu");
-	
-	// Create default option "Go to..."
-	jQuery("<option />", {
-	 "selected": "selected",
-	 "value"   : "",
-	 "text"    : "Menu"
-	}).appendTo(".topmenu select");
-	
-	// Populate dropdown with menu items
-	jQuery(".topmenu a").each(function() {
-	var el = jQuery(this);
-	jQuery("<option />", {
-	   "value"   : el.attr("href"),
-	   "text"    : el.text()
-	}).appendTo(".topmenu select");
-	});
+    <!-- Custom CSS -->
+    <link href="${pageContext.request.contextPath}/resources/css/sb-admin.css" rel="stylesheet">
 
-	jQuery(".topmenu select").change(function() {
-	window.location = jQuery(this).find("option:selected").val();
-	});
-	
-	jQuery('.fancybox').fancybox();	
-		
-	});
-	
-	</script>
-	
-	<script type="text/javascript">
-	function formSubmit() {
-		document.getElementById("logoutForm").submit();
-	}
-	</script>
+    <!-- Custom Fonts -->
+    <link href="${pageContext.request.contextPath}/resources/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- Logout Script -->
+    <script type="text/javascript">
+        function formSubmit() {
+            document.getElementById("logoutForm").submit();
+        }
+    </script>
+
 </head>
 
 <body>
 
-	<!-- Start of top wrapper -->
-	<div id="top_wrapper">
-		<!-- Start of content wrapper -->
-		<div class="content_wrapper">
-		</div>
-		<!-- End of content wrapper -->
-	
-		<!-- Clear Fix -->
-		<div class="clear"></div>
-	</div><!-- End of top wrapper -->
-	
-	<!-- Start of header wrapper -->
-	<div id="header_wrapper">
-	
-		<!-- Start of content wrapper -->
-		<div class="content_wrapper">
-		
-			<!-- Start of logo -->
-			<div id="logo">
-				<a href="#"><img src="${pageContext.request.contextPath}/resources/img/bank_logo.png" width="250" height="80" /></a>
-			</div><!-- End of logo -->
-	
-			<!-- Start of top menu wrapper -->
-			<div class="topmenuwrapper">		
-				<!-- Start of topmenu -->
-				<nav class="topmenu"> 
-					<ul class="sf-menu">
-						<li><a href="addUser">Add User</a></li>  
-						<li><a href="removeUser">Remove User</a></li>
-						<li><a href="viewUser">View User</a></li>
-						<li><a href="modifyUser">Modify User</a></li>
-						<li><a href="viewQueue">View Queue</a></li>
-						<li><a href="changePassword">Change password(self)</a></li>
-						<li><a href="javascript:formSubmit()">Logout</a></li>
-					</ul>
-					
-				</nav><!-- End of topmenu -->
-	
-				<!-- Start of header phone -->
-				<div class="header_phone">
-				Contact: (000) 000-0000
-				</div>
-				<!-- End of header phone -->
-				<!-- Clear Fix -->
-				<div class="clear"></div>
-			</div><!-- End of top menu wrapper -->
-		</div><!-- End of content wrapper -->
+    <div id="wrapper">
 
-		<!-- Clear Fix --><div class="clear"></div>
+        <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index"><font COLOR=RED> <b>ADMIN</b> </font></a>
+            </div>
+            <!-- Top Menu Items -->
+            <ul class="nav navbar-right top-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> ADMINISTRATOR <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="javascript:formSubmit()"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <!-- Logout feature implementation -->
+            <c:url value="/j_spring_security_logout" var="logoutUrl" />
+            <form action="${logoutUrl}" method="post" id="logoutForm">
+                <input type="hidden" name="${_csrf.parameterName}"
+                    value="${_csrf.token}" />
+            </form>
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                    <li>
+                        <a href="addUser"><i class="fa fa-fw fa-dashboard"></i> Add User</a>
+                    </li>
+                    <li>
+                        <a href="removeUser"><i class="fa fa-fw fa-dashboard"></i> Remove User</a>
+                    </li>
+                    <li>
+                        <a href="viewUser"><i class="fa fa-fw fa-dashboard"></i> View User</a>
+                    </li>
+                    <li class="active">
+                        <a href="modifyUser"><i class="fa fa-fw fa-dashboard"></i> Modify User</a>
+                    </li>
+                    <li>
+                        <a href="viewQueue"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
+                    </li>
+                    <li>
+                        <a href="getList"><i class="fa fa-fw fa-dashboard"></i>View All</a>
+                    </li>
+                    <li>
+                        <a href="changePassword"><i class="fa fa-fw fa-dashboard"></i>Change Password (SELF)</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
 
-	</div><!-- End of header wrapper -->
+        <div id="page-wrapper">
 
-	
-	<!-- Start of content wrapper -->
-	<div id="contentwrapper">
-		<!-- Start of content wrapper -->
-		<div class="content_wrapper">
-			<div class="contentright" style="width: 100%">
-					
-			<form:form method="post" action="modifyUser" modelAttribute="accountNumber">					
-					<b>Account Number :</b> <br/> <input type="text" name="modifyUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
-					<a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/> <br/> <br/>
-				</form:form>
-				<c:if test="${not empty customerDetails}">
-				
-				<c:if test="${not empty status}">
-				<b>hi : "${status}"</b>
-				</c:if>
-					  
-				<form:form method="post" action="modifyUserDataBase" modelAttribute="customerDetails">				
-				<b>First Name:</b> <br/> <input type="text" name="firstname" id="f_name_modifyUser" value="${customerDetails.firstname}" style="color:#999;" /><br/>
-				<b>Last Name:</b> <br/> <input type="text" name="lastname" id="l_name_modifyUser" value="${customerDetails.lastname}" style="color:#999;" /><br/>
-				<b>Contact:</b> <br/> <input type="text" name="phonenumber" id="contact_modifyUser" value="${customerDetails.phonenumber}" style="color:#999;" /><br/>
-				<b>Address:</b> <br/> <input type="text" name="address" id="add_modifyUser" value="${customerDetails.address}" style="color:#999;" /><br/>
-				<b>Email Address:</b> <br/> <input type="email" name="email" id="email" value="${customerDetails.email}" style="color:#999;" /><br/>
-			    <input type="hidden" name="username" id="u_name_modifyUser" value="${customerDetails.username}" style="color:#999;" /><br/> <br/>
-				<a><input type="submit" style="margin-right: 5%" name="modifyUser" id="modifyUserButton" value="Modify User"/></a>
-				</form:form>
+            <div class="container-fluid">
 
-				</c:if>
-		</div>
-	
-			<div class="clear"></div>
-		</div><!-- End of content wrapper -->
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                          Modify User
+                        </h1>
+                    </div>
+                </div>
+                <!-- /.row -->
 
-		<!-- Clear Fix --><div class="clear"></div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Modify User Details</h3>
+                            </div>
+            
+                            <div class="panel-body">
+                                <div id="morris-area-chart">
+	                                <form:form method="post" action="modifyUser" modelAttribute="accountNumber">                    
+					                    <b>Account Number :</b> <br/> <input type="text" name="modifyUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/> <br/>
+					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/>
+					                    <c:if test="${not empty errorMsg}">
+											<h4> ${errorMsg} </h4>
+	                                    </c:if> <br/> <br/>
+					                </form:form>
+					                <c:if test="${not empty customerDetails}">
+					                
+						                <c:if test="${not empty status}">
+						               		<b>"${status}"</b>
+						                </c:if>
+						                      
+						                <form:form method="post" action="modifyUserDataBase" modelAttribute="customerDetails">              
+							                <b>First Name:</b> <br/> <input type="text" name="firstname" id="f_name_modifyUser" value="${customerDetails.firstname}" style="color:#999;" /><br/>
+							                <b>Last Name:</b> <br/> <input type="text" name="lastname" id="l_name_modifyUser" value="${customerDetails.lastname}" style="color:#999;" /><br/>
+							                <b>Contact:</b> <br/> <input type="text" name="phonenumber" id="contact_modifyUser" value="${customerDetails.phonenumber}" style="color:#999;" /><br/>
+							                <b>Address:</b> <br/> <input type="text" name="address" id="add_modifyUser" value="${customerDetails.address}" style="color:#999;" /><br/>
+							                <b>Email Address:</b> <br/> <input type="email" name="email" id="email" value="${customerDetails.email}" style="color:#999;" /><br/>
+							                <input type="hidden" name="username" id="u_name_modifyUser" value="${customerDetails.username}" style="color:#999;" /><br/> <br/>
+							                <a><input type="submit" style="margin-right: 5%" name="modifyUser" id="modifyUserButton" value="Modify User"/></a>
+						                </form:form>
 
-	</div><!-- End of content wrapper -->
+					                </c:if>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.row -->
+                
+            </div>
+            <!-- /.container-fluid -->
 
-	<!-- Start of bottom wrapper -->
-	<div id="bottom_wrapper">
+        </div>
+        <!-- /#page-wrapper -->
 
-		<!-- Start of content wrapper -->
-		<div class="content_wrapper">
-		
-			<!-- Start of one fourth first -->
-			<div class="one_fourth_first">
-			<h4>FTR_TEXT_1</h4>
-				<ul>
-					<li><a href="#">LINK_1</a></li>
-					<li><a href="#">LINK_2</a></li>			
-				</ul>
-			</div><!-- End of one fourth first -->
-	
-			<!-- Start of one fourth -->
-			<div class="one_fourth">
-				<h4>FTR_TEXT_2</h4>	
-				<ul>
-					<li><a href="#">LINK_1_1</a></li>
-					<li><a href="#">LINK_2_1</a></li>			
-				</ul>	
-			</div><!-- End of one fourth -->
-	
-			<!-- Start of one fourth -->
-			<div class="one_fourth">
-			<h4>FTR_TEXT_3</h4>		
-				<ul>
-					<li><a href="#">LINK_1_2</a></li>
-					<li><a href="#">LINK_2_2</a></li>			
-				</ul>
-			</div><!-- End of one fourth -->
+    </div>
+    <!-- /#wrapper -->
 
-		</div><!-- End of content wrapper -->
+    <!-- jQuery Version 1.11.0 -->
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-1.11.0.js"></script>
 
-		<!-- Clear Fix --><div class="clear"></div>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
 
-	</div><!-- End of bottom wrapper -->
 </body>
+
 </html>

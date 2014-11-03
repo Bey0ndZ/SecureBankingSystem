@@ -20,6 +20,21 @@ body {
 #wrapper {
     padding-left: 0;
 }
+									  
+td {  
+ font-size: 15px;  
+ color: black;  
+ width: 100px;  
+ height: 30px;  
+ text-align: center;  
+}  
+.heading {  
+ font-size: 18px;  
+ color: red;  
+ font: bold;  
+ background-color:silver;  
+ border: thick;  
+}
 
 #page-wrapper {
     width: 100%;
