@@ -176,7 +176,10 @@
 							<ul id="demo2" class="collapse">
 								<li><a href="debitFunds">Debit</a></li>
 								<li><a href="creditFunds">Credit</a></li>
-							</ul></li>
+							</ul>
+						</li>
+						<li><a href="transactionReview"><i
+								class="fa fa-fw fa-bar-chart-o"></i> Transaction Review</a></li>
 					</ul>
 				</div>
 				<!-- /.navbar-collapse -->
@@ -242,6 +245,10 @@
 													</tbody>
 												</table>
 												
+												<div class="text-right">
+                                   					<a href="modifyUser">Update Details <i class="fa fa-arrow-circle-right"></i></a>
+                               					</div>
+												
 												<!-- Bill pay information -->
 												<table
 													class="table table-bordered table-hover table-striped">
@@ -268,11 +275,6 @@
 												</table>
 											</div>
 										</div>
-										
-										<div class="text-right">
-                                   			<a href="#">Update Details <i class="fa fa-arrow-circle-right"></i></a>
-                               			</div>
-
 									</div>
 								</div>
 							</div>
