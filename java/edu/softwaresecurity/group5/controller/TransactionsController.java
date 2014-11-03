@@ -1,5 +1,7 @@
 package edu.softwaresecurity.group5.controller;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,6 +33,10 @@ public class TransactionsController {
 		ModelAndView modelAndView = new ModelAndView();
 		
 		if (!(accountNumber.isEmpty() || amountToBeTransferred.isEmpty())) {
+			
+			Document inputAccountNumber = Jsoup.parse(accountNumber);
+			Document inputAmountToBeTransferred = Jsoup.parse(amountToBeTransferred);
+			
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
@@ -38,7 +44,7 @@ public class TransactionsController {
 			String loggedInUser = userDetail.getUsername();
 			modelAndView.addObject("username", loggedInUser);
 			
-		if (custService.processBillPay(loggedInUser, accountNumber, amountToBeTransferred)) {
+		if (custService.processBillPay(loggedInUser, inputAccountNumber.text(), inputAmountToBeTransferred.text())) {
 			modelAndView.addObject("submitMessage", "Request submitted.");
 		} else {
 			modelAndView.addObject("submitMessage", "Request cannot be proccessed. Contact employee or admin.");

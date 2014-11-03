@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -122,7 +124,10 @@ public class ExternalUserController {
 			@RequestParam("debitAmount") String debitAmount) {
 		ModelAndView modelAndView = new ModelAndView();
 		if (!debitAmount.isEmpty()) {
-			Float debitAmountFloat = Float.parseFloat(debitAmount);
+			// Removing the html tags (if present) using JSoup library
+			Document inputText = Jsoup.parse(debitAmount);
+			
+			Float debitAmountFloat = Float.parseFloat(inputText.text());
 			Authentication auth = SecurityContextHolder.getContext()
 					.getAuthentication();
 			if (!(auth instanceof AnonymousAuthenticationToken)) {
@@ -160,7 +165,9 @@ public class ExternalUserController {
 			@RequestParam("creditAmount") String creditAmount) {
 		ModelAndView modelAndView = new ModelAndView();
 		if (!creditAmount.isEmpty()) {
-			Float creditAmountFloat = Float.parseFloat(creditAmount);
+			// Removing the html tags (if present) using JSoup library
+			Document inputText = Jsoup.parse(creditAmount);
+			Float creditAmountFloat = Float.parseFloat(inputText.text());
 			Authentication auth = SecurityContextHolder.getContext()
 					.getAuthentication();
 			if (!(auth instanceof AnonymousAuthenticationToken)) {
@@ -210,13 +217,39 @@ public class ExternalUserController {
 	public ModelAndView processModifyRequest(
 			@ModelAttribute("modifyUserRequestAttributes") ModifyUserInformation modInfo) {
 		ModelAndView modelAndView = new ModelAndView();
-
+		
+		if (!(modInfo.getFirstname().isEmpty() || modInfo.getLastname().isEmpty()
+	|| modInfo.getPhonenumber().isEmpty() || modInfo.getAddress().isEmpty() || modInfo.getSelection().isEmpty()
+	|| modInfo.getSex().isEmpty() || modInfo.getEmail().isEmpty())) {
 		// check if user is login
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			String requestedForUsername = userDetail.getUsername();
+			
+			// Using Jsoup to parse html (if present in input)
+			Document inputFirstname = Jsoup.parse(modInfo.getFirstname());
+			modInfo.setFirstname(inputFirstname.text());
+			
+			Document inputLastname = Jsoup.parse(modInfo.getLastname());
+			modInfo.setLastname(inputLastname.text());
+			
+			Document inputSex = Jsoup.parse(modInfo.getSex());
+			modInfo.setSex(inputSex.text());
+			
+			Document inputSelection = Jsoup.parse(modInfo.getSelection());
+			modInfo.setSelection(inputSelection.text());
+			
+			Document inputPhoneNumber = Jsoup.parse(modInfo.getPhonenumber());
+			modInfo.setPhonenumber(inputPhoneNumber.text());
+			
+			Document inputEmail = Jsoup.parse(modInfo.getEmail());
+			modInfo.setEmail(inputEmail.text());
+			
+			Document inputAddress = Jsoup.parse(modInfo.getAddress());
+			modInfo.setAddress(inputAddress.text());
+			
 			String requestSubmitMessage = custService.modificationRequest(
 					requestedForUsername, modInfo);
 			modelAndView
@@ -225,6 +258,10 @@ public class ExternalUserController {
 			modelAndView.setViewName("modifyUserExternal");
 		} else {
 			modelAndView.setViewName("permission-denied");
+		}
+		} else {
+			modelAndView.addObject("requestSubmitMessage", "Do not leave any of the fields empty. If you do not want to change the value, please input previous value.");
+			modelAndView.setViewName("modifyUserExternal");
 		}
 		return modelAndView;
 	}
@@ -261,14 +298,17 @@ public class ExternalUserController {
 		ModelAndView modelAndView = new ModelAndView();
 		if (!deleteAccountYesOrNo.isEmpty()) {
 			boolean deleteAccount;
-
+			
+			// Using Jsoup to strip html tags (if present)
+			Document deleteAccountOption = Jsoup.parse(deleteAccountYesOrNo);
+			
 			// check if user is login
 			Authentication auth = SecurityContextHolder.getContext()
 					.getAuthentication();
 			if (!(auth instanceof AnonymousAuthenticationToken)) {
 				UserDetails userDetail = (UserDetails) auth.getPrincipal();
 				String requestedForUsername = userDetail.getUsername();
-				if (deleteAccountYesOrNo.equalsIgnoreCase("Yes")) {
+				if (deleteAccountOption.text().equalsIgnoreCase("Yes")) {
 					deleteAccount = true;
 					String requestSubmittedMessage = custService.deleteAccount(
 							requestedForUsername, deleteAccount);
