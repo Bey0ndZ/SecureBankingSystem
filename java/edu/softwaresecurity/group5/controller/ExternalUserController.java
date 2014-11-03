@@ -57,8 +57,11 @@ public class ExternalUserController {
 			// Add it to the model
 			modelAndView.addObject("userInformation", custInfoFromDTO);
 			modelAndView.addObject("billPayInformation", billPayFromDTO);
-		}
-		modelAndView.setViewName("accountSummary");
+			
+			modelAndView.setViewName("accountSummary");
+		} else {
+			modelAndView.setViewName("permission-denied");
+		}	
 		return modelAndView;
 	}
 
@@ -104,8 +107,11 @@ public class ExternalUserController {
 			custInfoFromDTO = custService.fetchUserDetails(usernameLoggedIn);
 			System.out.println(custInfoFromDTO);
 			modelAndView.addObject("balanceInformation", custInfoFromDTO);
+			
+			modelAndView.setViewName("debitAmount");
+		} else {
+			modelAndView.setViewName("permission-denied");
 		}
-		modelAndView.setViewName("debitAmount");
 		return modelAndView;
 	}
 	
@@ -123,8 +129,10 @@ public class ExternalUserController {
 			String message = custService.debitAmountForCustomer(usernameLoggedIn
 					, debitAmountFloat);
 			modelAndView.addObject("debitMessage", message);
+			modelAndView.setViewName("debitAmount");
+		} else {
+			modelAndView.setViewName("permission-denied");
 		}
-		modelAndView.setViewName("debitAmount");
 		return modelAndView;
 	}
 	
@@ -151,8 +159,10 @@ public class ExternalUserController {
 		String message = custService.creditAmountForCustomer(usernameLoggedIn,
 				creditAmountFloat);
 		modelAndView.addObject("creditMessage", message);
+		modelAndView.setViewName("creditAmount");
+	} else {
+		modelAndView.setViewName("permission-denied");
 	}
-	modelAndView.setViewName("creditAmount");
 	return modelAndView;
 	}	
 	 
@@ -174,8 +184,10 @@ public class ExternalUserController {
 			// Call the DAOImpl layer
 			custInfoFromDTO = custService.fetchUserDetails(loggedInUser);
 			modelAndView.addObject("userInformation", custInfoFromDTO);
+			modelAndView.setViewName("modifyUserExternal");
+		} else {
+			modelAndView.setViewName("permission-denied");
 		}
-		modelAndView.setViewName("modifyUserExternal");
 		return modelAndView;
 	}
 	
@@ -190,12 +202,12 @@ public class ExternalUserController {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			String requestedForUsername = userDetail.getUsername();
 			String requestSubmitMessage = custService.modificationRequest(requestedForUsername, modInfo);
-			modelAndView.addObject("requestSubmitMessage", requestSubmitMessage);	
+			modelAndView.addObject("requestSubmitMessage", requestSubmitMessage);
+			
+			modelAndView.setViewName("modifyUserExternal");
 		} else {
-			// do nothing or redirect to log in page - EVERYWHERe
+			modelAndView.setViewName("permission-denied");
 		}
-		
-		modelAndView.setViewName("modifyUserExternal");
 		return modelAndView;
 	}
 	
@@ -217,8 +229,10 @@ public class ExternalUserController {
 			// Call the DAOImpl layer
 			custInfoFromDTO = custService.fetchUserDetails(loggedInUser);
 			modelAndView.addObject("userInformation", custInfoFromDTO);
+			modelAndView.setViewName("deleteAccount");
+		} else {
+			modelAndView.setViewName("permission-denied");
 		}
-		modelAndView.setViewName("deleteAccount");
 		return modelAndView;
 	}
 	
@@ -236,17 +250,17 @@ public class ExternalUserController {
 			if (deleteAccountYesOrNo.equalsIgnoreCase("Yes")) {
 				deleteAccount = true;
 				String requestSubmittedMessage = custService.deleteAccount(requestedForUsername, deleteAccount);
+				modelAndView.setViewName("deleteAccount");
 				modelAndView.addObject("requestSubmittedMessage", requestSubmittedMessage);
 			} else {
 				deleteAccount = false;
 				String requestSubmittedMessage = custService.deleteAccount(requestedForUsername, deleteAccount);
+				modelAndView.setViewName("deleteAccount");
 				modelAndView.addObject("requestSubmittedMessage", requestSubmittedMessage);
 			}
 		} else {
-			// do nothing or redirect to log in page - EVERYWHERe
+			modelAndView.setViewName("permission-denied");
 		}
-		
-		modelAndView.setViewName("deleteAccount");
 		return modelAndView;
 	}
 	
