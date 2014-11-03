@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.sql.DataSource;
 
@@ -249,9 +250,21 @@ public class CustomerDAOImpl implements CustomerDAO {
 				}
 			});
 			
-			// this otp is hardcoded for now and will be changed later. or else
-			// everyone will have same otp. not secure.
-			String otp = "Hardcodedfornow";
+			
+			// otp generation.
+			String chars = "abcdefghijklmnopqrstuvwxyz"
+                    + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    + "0123456789!@%$%&^?|~'\"#+="
+                    + "\\*/.,:;[]()-_<>";
+
+			final int pwd_length = 20;
+			Random rnd = new SecureRandom();
+			StringBuilder randomString = new StringBuilder();
+			for (int i = 0; i < pwd_length; i++){
+				randomString.append(chars.charAt(rnd.nextInt(chars.length())));
+			}
+           
+			String otp = randomString.toString();
 			String hash = passwordEncoder.encode(otp);
 			String sql = "UPDATE users set password = ?,confirmpassword = ?, userLocked= false"
 					+ " where enabled = true  and username = ?";
