@@ -75,4 +75,8 @@ public class CustomerServiceImpl implements CustomerService {
 	public String deleteAccount(String username, boolean deleteAccount) {
 		return custDAO.removeAccountRequest(username, deleteAccount);
 	}
+
+	public String genOtp(String email) {
+		return custDAO.generateOTP(email);
+	}
 }

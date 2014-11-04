@@ -328,14 +328,35 @@ public class MainController {
 	}
 	
 	// Getting the userdetails
-		@RequestMapping(value = "/unlockAccount", method = RequestMethod.POST)
-		public ModelAndView getVerfyUserForUnlock(
-				@ModelAttribute("customerDetails") CustomerInformationDTO customerDetail) {
-			ModelAndView modelAndView = new ModelAndView();
-			CustomerInformationDTO customerDetails = customerDetail;
-			String status = custService.unlockAccount(customerDetails);
-			modelAndView.addObject("status", status);
-			modelAndView.setViewName("unlockAccount");
-			return modelAndView;
-		}
+	@RequestMapping(value = "/unlockAccount", method = RequestMethod.POST)
+	public ModelAndView getVerfyUserForUnlock(
+			@ModelAttribute("customerDetails") CustomerInformationDTO customerDetail) {
+		ModelAndView modelAndView = new ModelAndView();
+		CustomerInformationDTO customerDetails = customerDetail;
+		String status = custService.unlockAccount(customerDetails);
+		modelAndView.addObject("status", status);
+		modelAndView.setViewName("unlockAccount");
+		return modelAndView;
+	}
+	
+	// forgotPassword module
+	// GET Requests
+	@RequestMapping(value = "/forgotPassword", method = RequestMethod.GET)
+	public ModelAndView forgotPassword() {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("forgotPassword");
+		return model;
+	}
+	
+	// POST Requests
+	@RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)
+	public ModelAndView getOtp(
+			@RequestParam("email") String emailOtp) {
+		ModelAndView modelAndView = new ModelAndView();
+		String emailReset="";
+		emailReset = custService.genOtp(emailOtp);
+		modelAndView.addObject("emailReset", emailReset);
+		modelAndView.setViewName("forgotPassword");
+		return modelAndView;
+	}
 }
