@@ -27,8 +27,10 @@ import edu.softwaresecurity.group5.dao.CustomerDAO;
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.dto.DuplicateValidationCheckerDTO;
+import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.jdbc.BillPayMapper;
 import edu.softwaresecurity.group5.jdbc.DuplicateValidationCheckerMapper;
+import edu.softwaresecurity.group5.jdbc.TicketRowMapper;
 import edu.softwaresecurity.group5.jdbc.UserRowMapper;
 import edu.softwaresecurity.group5.mail.EmailService;
 import edu.softwaresecurity.group5.model.AccountAttempts;
@@ -46,6 +48,10 @@ import edu.softwaresecurity.group5.model.ModifyUserInformation;
 public class CustomerDAOImpl implements CustomerDAO {
 	@Autowired
 	DataSource dataSource;
+	
+	private final String Ticket_Type_Delete = "Delete";
+	private final String Ticket_Type_Modify = "Modify";
+	private final String Ticket_Type_Authorize = "Authorize";
 
 	public String addUser(AddUserInformation addInfo)
 			throws NoSuchAlgorithmException {
@@ -580,13 +586,19 @@ public class CustomerDAOImpl implements CustomerDAO {
 				+ "address, requestcompleted)	 VALUES (?,?,?,?,?,?,?,?,?)";
 		JdbcTemplate insertIntoModifyRequestsTableTemplate = new JdbcTemplate(
 				dataSource);
-
 		insertIntoModifyRequestsTableTemplate.update(
 				insertIntoModifyRequestsTable,
 				new Object[] { username, modInfo.getFirstname(),
 						modInfo.getLastname(), modInfo.getSex(),
 						modInfo.getSelection(), modInfo.getPhonenumber(),
 						modInfo.getEmail(), modInfo.getAddress(), false });
+		String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requesttype)"
+				+ " VALUES (?,?,?,?)";
+		JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
+				dataSource);
+		insertIntoTicketsTableTemplate.update(
+				insertIntoTicketsTable,
+				new Object[] { username, false,false, Ticket_Type_Modify});
 		return "Request submitted. The internal user or admin will approve your request.";
 	}
 
@@ -597,6 +609,13 @@ public class CustomerDAOImpl implements CustomerDAO {
 			JdbcTemplate updateTemplate = new JdbcTemplate(dataSource);
 			updateTemplate.update(updateModificationRequests, new Object[] {
 					username, deleteAccountOrNot });
+			String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requesttype)"
+					+ " VALUES (?,?,?,?)";
+			JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
+					dataSource);
+			insertIntoTicketsTableTemplate.update(
+					insertIntoTicketsTable,
+					new Object[] { username, false,false, Ticket_Type_Delete});
 			return "Request submitted. The internal user of admin will approve your request.";
 		} else {
 			return "You have selected No. Your account request has not been submitted for internal review.";
@@ -656,5 +675,17 @@ public class CustomerDAOImpl implements CustomerDAO {
 			return true;
 		}
 		return false;
+	}
+	
+	//TODO make this list only return tickets for active users not the deleted ones.
+	public List<TicketInformationDTO> getTicketList() {
+		List<TicketInformationDTO> userList = new ArrayList<TicketInformationDTO>();
+
+		String sql = "SELECT id, username, requestcompleted, requestapproved, requesttype "
+				+ " from user_tickets where requestcompleted=false";
+
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		userList = jdbcTemplate.query(sql, new TicketRowMapper());
+		return userList;
 	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.model.CustomerInformation;
@@ -33,5 +34,6 @@ public interface CustomerService {
 	public String genOtp(String email);
 	public boolean activateAccount(String username);
 	public boolean deleteAccountBYInternal(String username);
+	public List<TicketInformationDTO> getTicketList();
 }
 

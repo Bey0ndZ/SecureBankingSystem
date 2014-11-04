@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS `user_roles`;
 DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `account`;
 DROP TABLE IF EXISTS `user_attempts`;
+DROP TABLE IF EXISTS `user_tickets`;
 
 
 
@@ -107,7 +108,7 @@ MerchantorIndividual VARCHAR(45) NOT NULL,
 phonenumber VARCHAR(45) NOT NULL,  
 email VARCHAR(45) NOT NULL, 
 address VARCHAR(45) NOT NULL, 
-requestcompleted TINYINT NOT NULL, 
+requestcompleted TINYINT NOT NULL DEFAULT 0, 
 PRIMARY KEY (id));
 
 CREATE TABLE deleteaccount (
@@ -120,3 +121,14 @@ CREATE TABLE user_keys (
   username varchar(45) NOT NULL,
   userKey blob NOT NULL,
   PRIMARY KEY (user_keys_id));
+  
+CREATE TABLE user_tickets (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  username VARCHAR(45) NOT NULL,
+  requestcompleted TINYINT NOT NULL DEFAULT 0, 
+  requestapproved TINYINT NOT NULL DEFAULT 0, 
+  requesttype VARCHAR(10) NOT NULL, 
+  PRIMARY KEY (id)
+);
+
+INSERT into user_tickets(username, requestcompleted, requestapproved, requesttype) VALUES ("shivam",false,false,"Modify");

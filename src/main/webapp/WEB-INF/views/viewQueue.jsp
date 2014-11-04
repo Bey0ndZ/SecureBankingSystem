@@ -137,6 +137,31 @@
 											    <td> <a href="ticketDetails.jsp"> <input type="button" style="margin-right: 5%" name="ticketDetails" id="removeUserButton" value="View Detais" onclick=""/></a></td>
 											</tr>
 										</table>
+										
+										
+										<b> <u> <h4> LIST OF ALL OPEN Tickets- </h4> </u> </b>
+									  <table border="1">  
+									   <tr>  
+									    <td class="heading">Ticket Number</td>  
+									    <td class="heading">UserName</td>  
+									    <td class="heading">Type</td>    
+									    <td class="heading">Edit</td>  
+									    <td class="heading">Delete</td>  
+									   </tr>  
+									   <c:forEach var="user" items="${userList}">  
+									    <tr>  
+									     <td>${user.id}</td>  
+									     <td>${user.username}</td>  
+									     <td>${user.requesttype}</td>   
+									     <td><a href="modifyUser?id=${user.username}">Modify</a></td>  
+									     <td> <form:form method="post" action="removeUserDB" modelAttribute="usernameSearch">					
+										 <input type="hidden" name="account" id="accountNumber_RemoveUser" value="${user.username}" style="color:#999;" /><br/> <br/>
+										 <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Remove" /></a> <br/> <br/>
+										 </form:form></td> 
+									    </tr>  
+									   </c:forEach>  
+									   <tr><td colspan="11"><a href="addUser">Add New User</a></td></tr>  
+									  </table>
 										<br/><br/> <br/>
 									</form>
                                 </div>

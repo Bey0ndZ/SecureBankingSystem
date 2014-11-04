@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.model.CustomerInformation;
@@ -18,7 +19,6 @@ public interface CustomerDAO {
 	public List<CustomerInformationDTO> retrieveUserDetails(String username);
 	public List<CustomerInformationDTO> getUserList();  
 	public String updateAccount(CustomerInformationDTO custInfo);  
-//	public void deleteData(String id);  
 	public CustomerInformationDTO getUserFromAccount(String accountNumber);  
 	public String changeAccountPassword(ChangePassword custInfo);  
 	public String unlockAccount(CustomerInformationDTO custInfo);
@@ -34,4 +34,5 @@ public interface CustomerDAO {
 	public String generateOTP(String email);
 	public boolean activateAccountRequest(String username);
 	public boolean deleteAccountRequest(String username);
+	public List<TicketInformationDTO> getTicketList();  
 }

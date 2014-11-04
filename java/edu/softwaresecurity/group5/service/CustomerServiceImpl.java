@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import edu.softwaresecurity.group5.dao.CustomerDAO;
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.model.CustomerInformation;
@@ -83,5 +84,10 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 	public boolean deleteAccountBYInternal(String username){
 		return custDAO.deleteAccountRequest(username);
+	}
+
+	public List<TicketInformationDTO> getTicketList() {
+		// TODO Auto-generated method stub
+		return custDAO.getTicketList(); 
 	}
 }

@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.service.CustomerService;
@@ -418,8 +419,7 @@ public class MainController {
 		
 	@RequestMapping(value = "/viewQueue", method = RequestMethod.GET)
 	public ModelAndView returnViewQueuePage() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("viewQueue");
-		return modelAndView;
+		List<TicketInformationDTO> userList = custService.getTicketList();
+		return new ModelAndView("viewQueue", "userList", userList);
 	}	
 }
