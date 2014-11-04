@@ -370,7 +370,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			if (status == 1) {
 				sendEmail(email.get(0), "Your password is changed",
 						"Please login and change the password, you temp password is  : "
-								+ hash);
+								+ otp);
 				return "your new password is emailed to you at : " + hash + " "
 						+ email.get(0);
 			}
