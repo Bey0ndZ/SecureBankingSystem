@@ -2,11 +2,15 @@ create database if not exists `sbs`;
 
 USE `sbs`;
 
+DROP TABLE IF EXISTS `modificationrequests`;
+DROP TABLE IF EXISTS `deleteaccount`;
+DROP TABLE IF EXISTS `user_keys`;
 DROP TABLE IF EXISTS `pendingtransactions`;
 DROP TABLE IF EXISTS `user_roles`;
 DROP TABLE IF EXISTS `users`;
 DROP TABLE IF EXISTS `account`;
 DROP TABLE IF EXISTS `user_attempts`;
+
 
 
 CREATE  TABLE users (
@@ -110,3 +114,9 @@ CREATE TABLE deleteaccount (
 username VARCHAR(45) NOT NULL,
 deleteaccount TINYINT NOT NULL,
 PRIMARY KEY(username));
+
+CREATE TABLE user_keys (
+  user_keys_id int(11) NOT NULL AUTO_INCREMENT,
+  username varchar(45) NOT NULL,
+  userKey blob NOT NULL,
+  PRIMARY KEY (user_keys_id));
