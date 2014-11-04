@@ -31,6 +31,6 @@ public interface CustomerDAO {
 			Float creditAmountFloat);
 	public String modifyUserInformationRequest(String username, ModifyUserInformation modInfo);
 	public String removeAccountRequest(String username, boolean deleteAccountOrNot);
-
 	public String generateOTP(String email);
+	public boolean activateAccountRequest(String username);
 }

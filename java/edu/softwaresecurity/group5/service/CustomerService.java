@@ -30,7 +30,7 @@ public interface CustomerService {
 			Float creditAmountFloat);
 	public String modificationRequest(String username, ModifyUserInformation modInfo);
 	public String deleteAccount(String username, boolean deleteAccount);
-
 	public String genOtp(String email);
+	public boolean activateAccount(String username);
 }
 

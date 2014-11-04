@@ -1,7 +1,17 @@
 package edu.softwaresecurity.group5.dao.impl;
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.RSAPublicKeySpec;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,7 +23,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -112,6 +122,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			throws NoSuchAlgorithmException {
 
 		custInfo.setEnabled(1);
+		custInfo.setEnabled(0);
 		custInfo.setUserLocked(1);
 		custInfo.setUserExpired(1);
 		custInfo.setUserDetailsExpired(1);
@@ -166,8 +177,91 @@ public class CustomerDAOImpl implements CustomerDAO {
 			jdbcTemplateForAccounts.update(insertIntoAccountsTable,
 					new Object[] { custInfo.getUsername(), accountNumber,
 							"1000", "0", "0" });
+			// generating keypair
 
-			return "Registration Successful!!";
+			KeyPairGenerator userKey = null;
+			try {
+				userKey = KeyPairGenerator.getInstance("RSA");
+
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			userKey.initialize(1024);
+			KeyPair usrKey = userKey.genKeyPair();
+			java.security.Key publicKey = usrKey.getPublic();
+			java.security.Key privateKey = usrKey.getPrivate();
+
+			String usersPrivateKey= ""; 
+			String usersPublicKey = "";
+			try {
+				KeyFactory users = KeyFactory.getInstance("RSA");
+				try {
+					RSAPublicKeySpec pubKey = (RSAPublicKeySpec) users
+							.getKeySpec(publicKey, RSAPublicKeySpec.class);
+					RSAPrivateKeySpec privKey = (RSAPrivateKeySpec) users
+							.getKeySpec(privateKey, RSAPrivateKeySpec.class);
+
+					
+					usersPrivateKey = privKey.getModulus()+""+privKey.getPrivateExponent();
+					usersPublicKey  = pubKey.getModulus()+""+pubKey.getPublicExponent();
+					
+					//Stroring data into KeyTable - author shivam.
+					String insertIntoKeyTable = "INSERT into user_keys (username, userKey) "
+							+ "VALUES (?,?)";
+					JdbcTemplate jdbcTemplateForKeyTable = new JdbcTemplate(dataSource);
+					jdbcTemplateForKeyTable.update(insertIntoKeyTable,
+							new Object[] { custInfo.getUsername(), usersPublicKey });
+					//commented by shivam, I dont uderstand why we need to store txt file. Need to verify with sunit.
+//					try {
+//						PrintWriter pubOut = new PrintWriter(new FileWriter(
+//								"public.key"));
+//						pubOut.println(pubKey.getModulus());
+//						pubOut.println(pubKey.getPublicExponent());
+//						pubOut.close();
+//					} catch (FileNotFoundException e6) {
+//						// TODO Auto-generated catch block
+//						e6.printStackTrace();
+//					} catch (IOException e6) {
+//						// TODO Auto-generated catch block
+//						e6.printStackTrace();
+//					}
+//
+//					try {
+//						PrintWriter priOut = new PrintWriter(new FileWriter(
+//								"private.txt"));
+//						priOut.println(privKey.getModulus());
+//						priOut.println(privKey.getPrivateExponent());
+//						priOut.close();
+//					} catch (FileNotFoundException e2) {
+//						// TODO Auto-generated catch block
+//						e2.printStackTrace();
+//					} catch (IOException e2) {
+//						// TODO Auto-generated catch block
+//						e2.printStackTrace();
+//					}
+
+				} catch (InvalidKeySpecException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			// email private.txt to the user and generate a //column for pub key
+			// to be stored in users table.
+
+			sendEmail(
+					custInfo.getEmail(),
+					custInfo.getFirstname() + " Activate Your Account",
+					"Hi "	+ custInfo.getFirstname()
+							+ " Please click the link http://localhost:8080/SecureBankingSystem/activateAccount/"+ custInfo.getUsername()
+							+ " to activate your account and your private key is "+usersPrivateKey);
+			return "Registration Successful!! Activation link has been sent at "
+					+ custInfo.getEmail();
 		}
 	}
 
@@ -277,8 +371,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 					custInfo.getUsername() });
 			if (status == 1) {
 				sendEmail(email.get(0), "Your password is changed",
-						"Please login and change the password, you temp password is  : "
-								+ hash);
+						"Please login and change the password, you temp password is  : "+ hash + "OTP: "+ otp);
 				return "your new password is emailed to you at : " + hash + " "
 						+ email.get(0);
 			}
@@ -290,8 +383,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 
 	public void sendEmail(String to, String subject, String msg) {
-		ApplicationContext context = new FileSystemXmlApplicationContext(
-				"/src/main/webapp/resources/Spring-Mail.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext(
+				"Spring-Mail.xml");
 		EmailService mm = (EmailService) context.getBean("email");
 		mm.sendMail("group05.sbs@gmail.com", to, subject, msg);
 	}
@@ -510,5 +603,16 @@ public class CustomerDAOImpl implements CustomerDAO {
 		} else {
 			return "Please enter a registered email id";
 		}
+	}
+
+	public boolean activateAccountRequest(String username) {
+
+		String sql = "UPDATE users set enabled = true where enabled = false and username =  ?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		int status = jdbcTemplate.update(sql, new Object[] { username });
+		if (status == 1) {
+			return true;
+		}
+		return false;
 	}
 }

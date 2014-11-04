@@ -15,6 +15,7 @@
 		<intercept-url pattern="/viewUser*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
 		<intercept-url pattern="/getList*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
 		<intercept-url pattern="/modifyUser*" access="hasAnyRole('ROLE_USER', 'ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
+        <intercept-url pattern="/viewQueue*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
 
 
 		<!-- These are permitAll -->
@@ -32,6 +33,8 @@
 		<intercept-url pattern="/unlockAccount*" access="permitAll" />
 		<intercept-url pattern="/**" access="permitAll" />
 		<intercept-url pattern="/changePassword*" access="isAuthenticated()" />
+		<intercept-url pattern="/activateAccount*" access="permitAll" />
+		<intercept-url pattern="/activateAccount/activateAccount*" access="permitAll" />
 
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />

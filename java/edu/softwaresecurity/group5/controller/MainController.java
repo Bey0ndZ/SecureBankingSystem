@@ -8,6 +8,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -157,13 +159,16 @@ public class MainController {
 			@RequestParam("removeUser") String usernameSearch) {
 		ModelAndView modelAndView = new ModelAndView();
 		
-		if(usernameSearch.length()==0 || usernameSearch.length()>15) {
+		Document userInput = Jsoup.parse(usernameSearch);
+		String userName = userInput.text();
+		
+		if(userName.length()==0 || userName.length()>15) {
 			modelAndView.addObject("errorMsg", "Please enter the correct username!");
 			modelAndView.setViewName("removeUser");
 		}
 		else{
 			List<CustomerInformationDTO> customerDetails = new ArrayList<CustomerInformationDTO>();
-			customerDetails = custService.fetchUserDetails(usernameSearch);
+			customerDetails = custService.fetchUserDetails(userName);
 			if(customerDetails.size()==0) {
 				modelAndView.addObject("errorMsg", "Please enter the correct username!");
 				modelAndView.setViewName("removeUser");
@@ -189,20 +194,23 @@ public class MainController {
 	public ModelAndView getUserDetail(
 			@RequestParam("viewUser") String accountNumber) {
 		ModelAndView modelAndView = new ModelAndView();
+		
+		Document userInput = Jsoup.parse(accountNumber);
+		String userAccountNumber = userInput.text();
 	
 		int chCount = 0;
-		for (char c: accountNumber.toCharArray()) {
+		for (char c: userAccountNumber.toCharArray()) {
 			  if(Character.isLetter(c)) {
 				  chCount++;
 			  }
 		}
-		if(accountNumber.length()==0 || chCount!=0 || accountNumber.length()>10 || accountNumber.length()<8) {
+		if(userAccountNumber.length()==0 || chCount!=0 || userAccountNumber.length()>10 || userAccountNumber.length()<8) {
 			modelAndView.addObject("errorMsg", "Please enter the correct account number!");
 			modelAndView.setViewName("viewUser");
 		}
 		else {
 			CustomerInformationDTO customerDetails = new CustomerInformationDTO();
-			customerDetails = custService.getUserFromAccount(accountNumber);
+			customerDetails = custService.getUserFromAccount(userAccountNumber);
 			modelAndView.addObject("customerDetails", customerDetails);
 			modelAndView.setViewName("viewUser");
 		}
@@ -229,19 +237,22 @@ public class MainController {
 			@RequestParam("modifyUser") String accountNumber) {
 		ModelAndView modelAndView = new ModelAndView();
 		
+		Document userInput = Jsoup.parse(accountNumber);
+		String userAccountNumber = userInput.text();
+		
 		int chCount = 0;
-		for (char c: accountNumber.toCharArray()) {
+		for (char c: userAccountNumber.toCharArray()) {
 			  if(Character.isLetter(c)) {
 				  chCount++;
 			  }
 		}
-		if(accountNumber.length()==0 || chCount!=0 || accountNumber.length()>10 || accountNumber.length()<8) {
+		if(userAccountNumber.length()==0 || chCount!=0 || userAccountNumber.length()>10 || userAccountNumber.length()<8) {
 			modelAndView.addObject("errorMsg", "Please enter the correct account number!");
 			modelAndView.setViewName("modifyUser");
 		}
 		else{
 			CustomerInformationDTO customerDetails = new CustomerInformationDTO();
-			customerDetails = custService.getUserFromAccount(accountNumber);
+			customerDetails = custService.getUserFromAccount(userAccountNumber);
 			System.out.println("CHECKING: "+customerDetails.getAccountNumber());
 			modelAndView.addObject("customerDetails", customerDetails);
 			modelAndView.setViewName("modifyUser");
@@ -359,4 +370,11 @@ public class MainController {
 		modelAndView.setViewName("forgotPassword");
 		return modelAndView;
 	}
+		
+	@RequestMapping(value = "/viewQueue", method = RequestMethod.GET)
+	public ModelAndView returnViewQueuePage() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("viewQueue");
+		return modelAndView;
+	}	
 }
