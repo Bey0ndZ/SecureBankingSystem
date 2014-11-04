@@ -124,6 +124,12 @@
                             <div class="panel-body">
                                 <div id="morris-area-chart">
                                 
+                                        <c:if test="${not empty status}">
+											<h4> ${status} </h4>
+											<h4> <a href="getList">Get View All Customer List click here</a></h4>
+	                                    </c:if> <br/> <br/>
+                                <c:if test="${empty status}">
+                                
 									 <b> <u> <h4> LIST OF ALL USERS - </h4> </u> </b>
 									  <table border="1">  
 									   <tr>  
@@ -150,12 +156,16 @@
 									     <td>${user.email}</td> 
 									     <td>${user.address}</td>  
 									     <td>${user.accountNumber}</td>   
-									     <td><a href="modifyUser?id=${user.accountNumber}">Modify</a></td>  
-									     <td><a href="removeUser?id=${user.accountNumber}">Remove user</a></td>  
+									     <td><a href="modifyUser?id=${user.username}">Modify</a></td>  
+									     <td> <form:form method="post" action="removeUserDB" modelAttribute="usernameSearch">					
+										 <input type="hidden" name="account" id="accountNumber_RemoveUser" value="${user.username}" style="color:#999;" /><br/> <br/>
+										 <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Remove" /></a> <br/> <br/>
+										 </form:form></td> 
 									    </tr>  
 									   </c:forEach>  
 									   <tr><td colspan="11"><a href="addUser">Add New User</a></td></tr>  
 									  </table>  
+									  </c:if>
                                 </div>
                             </div>
                         </div>

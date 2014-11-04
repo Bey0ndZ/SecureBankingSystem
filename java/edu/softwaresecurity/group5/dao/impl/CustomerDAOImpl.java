@@ -301,7 +301,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		List<CustomerInformationDTO> customerInformationToDisplay = new ArrayList<CustomerInformationDTO>();
 		String retrieveDetailsQuery = "SELECT users.username, users.firstname, users.lastname, users.sex, "
 				+ "users.MerchantorIndividual, users.phonenumber, users.email, "
-				+ "users.address, account.accountnumber, account.accountbalance from users inner join account on users.username = account.username where users.enabled = true and users.username=?";
+				+ "users.address, account.accountnumber, account.accountbalance from users inner join account on users.username = account.username where users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true and users.username=?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		customerInformationToDisplay = jdbcTemplate.query(retrieveDetailsQuery,
 				new Object[] { username }, new UserRowMapper());
@@ -314,7 +314,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		String sql = "SELECT users.username, users.firstname, users.lastname, users.sex, "
 				+ "users.MerchantorIndividual, users.phonenumber, users.email, "
-				+ "users.address, account.accountnumber, account.accountbalance from users inner join account on users.username = account.username where users.enabled = true";
+				+ "users.address, account.accountnumber, account.accountbalance from users inner join account on users.username = account.username where users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true";
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		userList = jdbcTemplate.query(sql, new UserRowMapper());
@@ -354,7 +354,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hash = passwordEncoder.encode(custInfo.getPassword());
 		String sql = "UPDATE users set password = ?,confirmpassword = ?"
-				+ " where enabled = true  and username = ?";
+				+ " where enabled = true and userDetailsExpired=true and userDetailsExpired=true  and username = ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		int status = jdbcTemplate.update(sql, new Object[] { hash, hash,
 				custInfo.getUsername() });
@@ -427,7 +427,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 			AccountAttempts userAttempts = jdbcTemplate
 					.queryForObject(
-							"SELECT username,userLocked  FROM users WHERE username = ?",
+							"SELECT username,userLocked  FROM users WHERE enabled = true and userDetailsExpired=true and userDetailsExpired=true and username = ?",
 							new Object[] { username },
 							new RowMapper<AccountAttempts>() {
 								public AccountAttempts mapRow(ResultSet rs,
@@ -638,7 +638,18 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 	public boolean activateAccountRequest(String username) {
 
-		String sql = "UPDATE users set enabled = true where enabled = false and username =  ?";
+		String sql = "UPDATE users set enabled = true where enabled = false and userDetailsExpired=true and userDetailsExpired=true and username =  ?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		int status = jdbcTemplate.update(sql, new Object[] { username });
+		if (status == 1) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean deleteAccountRequest(String username) {
+
+		String sql = "UPDATE users set enabled = false, userExpired=false, userLocked=false, userDetailsExpired=false where enabled = true and userExpired=true  and username =  ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		int status = jdbcTemplate.update(sql, new Object[] { username });
 		if (status == 1) {

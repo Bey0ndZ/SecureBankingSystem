@@ -125,11 +125,14 @@
                             <div class="panel-body">
                                 <div id="morris-area-chart">
 	                                <form:form method="post" action="removeUser" modelAttribute="usernameSearch">					
-										<b>User Name :</b> <br/> <input type="text" name="removeUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/> <br/>
+										<b>User Name :</b> <br/> <input type="text" name="removeUser" id="accountNumber_RemoveUser" value="${id}" style="color:#999;" /><br/> <br/>
 										<a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/>
 										<c:if test="${not empty errorMsg}">
 											<h4> ${errorMsg} </h4>
 	                                    </c:if> <br/> <br/>
+	                                    <c:if test="${not empty status}">
+											<h4> ${status} </h4>
+	                                    </c:if> <br/>
 									</form:form>
 									<c:if test="${not empty customerDetails}">
 						   			<table style="width: 100%">
@@ -141,7 +144,11 @@
 							               		<td>${o.selection}</td>
 							               		<td>${o.phonenumber}</td>
 							               		<td>${o.email}</td>
-							               		<td>${o.address}</td>   
+							               		<td>${o.address}</td>
+							               		<td> <form:form method="post" action="removeUserDBSingle" modelAttribute="usernameSearch">					
+										 <input type="hidden" name="account" id="accountNumber_RemoveUser" value="${o.username}" style="color:#999;" /><br/> <br/>
+										 <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Remove" /></a> <br/> <br/>
+										 </form:form></td>   
 							            	</tr>
 						        		</c:forEach>
 						    		</table>

@@ -32,5 +32,6 @@ public interface CustomerService {
 	public String deleteAccount(String username, boolean deleteAccount);
 	public String genOtp(String email);
 	public boolean activateAccount(String username);
+	public boolean deleteAccountBYInternal(String username);
 }
 

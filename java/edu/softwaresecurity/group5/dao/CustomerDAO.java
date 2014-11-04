@@ -33,4 +33,5 @@ public interface CustomerDAO {
 	public String removeAccountRequest(String username, boolean deleteAccountOrNot);
 	public String generateOTP(String email);
 	public boolean activateAccountRequest(String username);
+	public boolean deleteAccountRequest(String username);
 }

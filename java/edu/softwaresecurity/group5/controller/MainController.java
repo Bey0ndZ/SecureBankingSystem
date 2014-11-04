@@ -180,6 +180,51 @@ public class MainController {
 		}
 		return modelAndView;
 	}
+	// Remove user from db, mark user detailed expired to 0.
+		@RequestMapping(value = "/removeUserDB", method = RequestMethod.POST)
+		public ModelAndView getremoveUserDB(
+				@RequestParam("account") String usernameSearch) {
+			ModelAndView modelAndView = new ModelAndView();
+			
+			Document userInput = Jsoup.parse(usernameSearch);
+			String userName = userInput.text();
+			
+
+				boolean status = custService.deleteAccountBYInternal(userName);
+				if(status) {
+					modelAndView.addObject("status", "User Deleted Succefully!");
+					modelAndView.setViewName("userList");
+				}
+				else {
+					modelAndView.addObject("status", "Please couldnot be deleted please contact Adminstrator personally!");
+					modelAndView.setViewName("userList");
+				}
+			
+			return modelAndView;
+		}
+		
+		// Remove user from db, mark user detailed expired to 0.
+				@RequestMapping(value = "/removeUserDBSingle", method = RequestMethod.POST)
+				public ModelAndView getremoveUserDBSingle(
+						@RequestParam("account") String usernameSearch) {
+					ModelAndView modelAndView = new ModelAndView();
+					
+					Document userInput = Jsoup.parse(usernameSearch);
+					String userName = userInput.text();
+					
+
+						boolean status = custService.deleteAccountBYInternal(userName);
+						if(status) {
+							modelAndView.addObject("status", "User Deleted Succefully!");
+							modelAndView.setViewName("removeUser");
+						}
+						else {
+							modelAndView.addObject("status", "Please couldnot be deleted please contact Adminstrator personally!");
+							modelAndView.setViewName("removeUser");
+						}
+					
+					return modelAndView;
+				}	
 
 	// Displaying the ViewUser(SearchUser).jsp page
 	@RequestMapping(value = "/viewUser", method = RequestMethod.GET)

@@ -81,4 +81,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public boolean activateAccount(String username){
 		return custDAO.activateAccountRequest(username);
 	}
+	public boolean deleteAccountBYInternal(String username){
+		return custDAO.deleteAccountRequest(username);
+	}
 }
