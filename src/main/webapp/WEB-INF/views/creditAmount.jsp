@@ -139,7 +139,10 @@
 											Amount:<br/><input type="text" name="creditAmount" /><br/><br/>
 											<input type="submit" value="Credit" name="transferMoneyButton"/>
 										</form:form>
-										
+										<c:if test="${not empty errorMsg}">
+											<b> ${errorMsg} </b>
+                                    	</c:if>
+                                    			<br/>
 										<c:if test="${not empty creditMessage}">
 											${creditMessage}
 										</c:if>

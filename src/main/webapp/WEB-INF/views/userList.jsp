@@ -78,19 +78,10 @@
                         <a href="addUser"><i class="fa fa-fw fa-dashboard"></i> Add User</a>
                     </li>
                     <li>
-                        <a href="removeUser"><i class="fa fa-fw fa-dashboard"></i> Remove User</a>
-                    </li>
-                    <li>
-                        <a href="viewUser"><i class="fa fa-fw fa-dashboard"></i> View User</a>
-                    </li>
-                    <li>
-                        <a href="modifyUser"><i class="fa fa-fw fa-dashboard"></i> Modify User</a>
-                    </li>
-                    <li>
                         <a href="viewQueue"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
                     </li>
                     <li class="active">
-                        <a href="getList"><i class="fa fa-fw fa-dashboard"></i>View All</a>
+                        <a href="getList"><i class="fa fa-fw fa-dashboard"></i>View All Regular Employee</a>
                     </li>
                     <li>
                         <a href="changePassword"><i class="fa fa-fw fa-dashboard"></i>Change Password (SELF)</a>
@@ -129,20 +120,17 @@
 											<h4> <a href="getList">Get View All Customer List click here</a></h4>
 	                                    </c:if> <br/> <br/>
                                 <c:if test="${empty status}">
-                                
-									 <b> <u> <h4> LIST OF ALL USERS - </h4> </u> </b>
+                                 <b> <u> <h4> LIST OF ALL USERS - </h4> </u> </b>
 									  <table border="1">  
 									   <tr>  
 									    <td class="heading">User Name</td>  
 									    <td class="heading">First Name</td>  
 									    <td class="heading">Last Name</td>  
 									    <td class="heading">Sex</td> 
-									    <td class="heading">User Type</td>  
 									    <td class="heading">Contact Number</td>  
 									    <td class="heading">Email</td>
-									    <td class="heading">Address</td>  
-									    <td class="heading">Account number</td>  
-									    <td class="heading">Edit</td>  
+									    <td class="heading">Address</td> 
+									    <td class="heading">Modify</td>  
 									    <td class="heading">Delete</td>  
 									   </tr>  
 									   <c:forEach var="user" items="${userList}">  
@@ -151,15 +139,16 @@
 									     <td>${user.firstname}</td>  
 									     <td>${user.lastname}</td>   
 									     <td>${user.sex}</td> 
-									     <td>${user.selection}</td>  
 									     <td>${user.phonenumber}</td>  
 									     <td>${user.email}</td> 
 									     <td>${user.address}</td>  
-									     <td>${user.accountNumber}</td>   
-									     <td><a href="modifyUser?id=${user.username}">Modify</a></td>  
+									     <td><form:form method="post" action="modifyUser" modelAttribute="accountNumber">                    
+					                     <input type="hidden" name="modifyUser" id="accountNumber_RemoveUser" value="${user.username}" style="color:#999;" /><br/> <br/>
+					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="modifyUserButton" value="Search User" /></a> <br/> <br/>
+					                        </form:form></td>  
 									     <td> <form:form method="post" action="removeUserDB" modelAttribute="usernameSearch">					
 										 <input type="hidden" name="account" id="accountNumber_RemoveUser" value="${user.username}" style="color:#999;" /><br/> <br/>
-										 <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Remove" /></a> <br/> <br/>
+										 <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="removeUserButton" value="Remove" /></a> <br/> <br/>
 										 </form:form></td> 
 									    </tr>  
 									   </c:forEach>  

@@ -169,12 +169,18 @@
 								<div class="panel-body">
 									<div id="morris-area-chart">
 										<div class="panel-body">
+											
+                                    		
 											<form:form method="POST" action="transferMoney">
-												Accountnumber to transfer to:<br />
+												<b>Please enter account number of receiver:</b><br />
 												<input type="text" name="accountNumber" />
-												<br />
+												<br /> <br/>
 												<input type="submit" value="Search User" />
 											</form:form>
+											<c:if test="${not empty errorMsg}">
+													<b> ${errorMsg} </b>
+                                    			</c:if>
+                                    			<br/>
 
 											<!-- Display user details -->
 											<c:if test="${not empty customerDetails }">

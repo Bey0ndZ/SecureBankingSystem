@@ -5,6 +5,13 @@ public class TicketInformationDTO {
 	private int id;
 	private boolean requestcompleted;
 	private boolean requestapproved;
+	private boolean requestrejected;
+	public boolean isRequestrejected() {
+		return requestrejected;
+	}
+	public void setRequestrejected(boolean requestrejected) {
+		this.requestrejected = requestrejected;
+	}
 	private String requesttype;
 	public String getUsername() {
 		return username;

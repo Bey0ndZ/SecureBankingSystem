@@ -11,5 +11,4 @@
 		<property name="username" value="root" />
 		<property name="password" value="inc0gnit0" />
 	</bean>
-
 </beans>

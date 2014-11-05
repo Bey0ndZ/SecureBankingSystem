@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.dto.EmployeeInformationDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.dto.UserTransactionsDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
@@ -19,7 +20,7 @@ public interface CustomerService {
 	public String insertAddUserInformation(AddUserInformation addInfo) throws NoSuchAlgorithmException;
 
 	public List<CustomerInformationDTO> fetchUserDetails(String usernameSearch);
-	public List<CustomerInformationDTO> getUserList();
+	public List<EmployeeInformationDTO> getUserList();
 	public String changeAccountPassword(ChangePassword cust);
 	public String unlockAccount(CustomerInformationDTO cust);
 	public boolean processBillPay(String loggedInUser, String accountNumber,
@@ -33,8 +34,11 @@ public interface CustomerService {
 	public String genOtp(String email);
 	public boolean activateAccount(String username);
 	public boolean deleteAccountBYInternal(String username);
-	public List<TicketInformationDTO> getTicketList();
+	public List<TicketInformationDTO> getPendingTicketList();
+	public List<TicketInformationDTO> getApprovedTicketList();
+	public List<TicketInformationDTO> getRejectedTicketList();
 	public CustomerInformationDTO getUserFromAccount(String accountnumber);  
+	public EmployeeInformationDTO getEmployeeFromUserName(String accountnumber);  
 	public String updateAccount(CustomerInformationDTO cust); 
 	public boolean transfer(String loggedInUser, String accountNumber,String amountToBeTransferred);
 	public boolean pendingTransfer(String loggedInUser, String accountNumber,String amountToBeTransferred);

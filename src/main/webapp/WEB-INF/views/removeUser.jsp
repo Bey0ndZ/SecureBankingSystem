@@ -79,19 +79,19 @@
                         <a href="addUser"><i class="fa fa-fw fa-dashboard"></i> Add User</a>
                     </li>
                     <li class="active">
-                        <a href="removeUser"><i class="fa fa-fw fa-dashboard"></i> Remove User</a>
+                        <a href="removeUser"><i class="fa fa-fw fa-dashboard"></i> Remove Employee User</a>
                     </li>
                      <li>
-                        <a href="viewUser"><i class="fa fa-fw fa-dashboard"></i> View User</a>
+                        <a href="viewUser"><i class="fa fa-fw fa-dashboard"></i> View Regular User</a>
                     </li>
                      <li>
-                        <a href="modifyUser"><i class="fa fa-fw fa-dashboard"></i> Modify User</a>
+                        <a href="modifyUser"><i class="fa fa-fw fa-dashboard"></i> Modify Regular User</a>
                     </li>
                      <li>
                         <a href="viewQueue"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
                     </li>
                     <li>
-                        <a href="getList"><i class="fa fa-fw fa-dashboard"></i>View All</a>
+                        <a href="getList"><i class="fa fa-fw fa-dashboard"></i>View All Regular Employee</a>
                     </li>
                     <li>
                         <a href="changePassword"><i class="fa fa-fw fa-dashboard"></i>Change Password (SELF)</a>

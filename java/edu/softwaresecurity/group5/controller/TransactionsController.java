@@ -39,31 +39,57 @@ public class TransactionsController {
 		ModelAndView modelAndView = new ModelAndView();
 
 		if (!(accountNumber.isEmpty() || amountToBeTransferred.isEmpty())) {
-
-			Document inputAccountNumber = Jsoup.parse(accountNumber);
-			Document inputAmountToBeTransferred = Jsoup
-					.parse(amountToBeTransferred);
-
-			Authentication auth = SecurityContextHolder.getContext()
-					.getAuthentication();
-			if (!(auth instanceof AnonymousAuthenticationToken)) {
-				UserDetails userDetail = (UserDetails) auth.getPrincipal();
-				String loggedInUser = userDetail.getUsername();
-				modelAndView.addObject("username", loggedInUser);
-
-				if (custService.processBillPay(loggedInUser,
-						inputAccountNumber.text(),
-						inputAmountToBeTransferred.text())) {
-					modelAndView.addObject("submitMessage",
-							"Request submitted.");
-				} else {
-					modelAndView
-							.addObject("submitMessage",
-									"Request cannot be proccessed. Contact employee or admin.");
+			int length1 = accountNumber.length();
+			int length2 = amountToBeTransferred.length();
+			int counter = 0;
+			for (char ch: accountNumber.toCharArray()) {
+				if (Character.isDigit(ch) == false) {
+					counter ++;
 				}
-
-			} else {
-				modelAndView.setViewName("permission-denied");
+			}
+			int counter1 = 0;
+			for (char ch: amountToBeTransferred.toCharArray()) {
+				if (Character.isDigit(ch) == false) {
+					counter1 ++;
+				}
+			}
+			if (counter>0 || length1 != 10) {
+				modelAndView.addObject("errorMsg", "Please enter the correct account number and amount!");
+				modelAndView.setViewName("billPay");
+				return modelAndView;
+			}
+			else if (counter1>0) {
+				modelAndView.addObject("errorMsg", "Please enter the correct account numebr and amount!");
+				modelAndView.setViewName("billPay");
+				return modelAndView;
+			}
+			else {
+			
+				Document inputAccountNumber = Jsoup.parse(accountNumber);
+				Document inputAmountToBeTransferred = Jsoup
+						.parse(amountToBeTransferred);
+	
+				Authentication auth = SecurityContextHolder.getContext()
+						.getAuthentication();
+				if (!(auth instanceof AnonymousAuthenticationToken)) {
+					UserDetails userDetail = (UserDetails) auth.getPrincipal();
+					String loggedInUser = userDetail.getUsername();
+					modelAndView.addObject("username", loggedInUser);
+	
+					if (custService.processBillPay(loggedInUser,
+							inputAccountNumber.text(),
+							inputAmountToBeTransferred.text())) {
+						modelAndView.addObject("submitMessage",
+								"Request submitted.");
+					} else {
+						modelAndView
+								.addObject("submitMessage",
+										"Request cannot be proccessed. Contact employee or admin.");
+					}
+	
+				} else {
+					modelAndView.setViewName("permission-denied");
+				}
 			}
 		} else {
 			modelAndView.addObject("submitMessage",
@@ -95,10 +121,22 @@ public class TransactionsController {
 	public ModelAndView getUserDetail(
 			@RequestParam("accountNumber") String accountnumber) {
 		ModelAndView modelAndView = new ModelAndView();
-		CustomerInformationDTO customerDetails = new CustomerInformationDTO();
-		customerDetails = custService.getUserFromAccount(accountnumber);
-		modelAndView.addObject("customerDetails", customerDetails);
-		modelAndView.setViewName("transferMoney");
+		int counter = 0;
+		for (char ch: accountnumber.toCharArray()) {
+			if (Character.isDigit(ch)) {
+				counter ++;
+			}
+		}
+		if (counter != 10 || accountnumber.length() != 10) {
+			modelAndView.addObject("errorMsg", "Please enter the correct account number!");
+			modelAndView.setViewName("transferMoney");
+		}
+		else {
+			CustomerInformationDTO customerDetails = new CustomerInformationDTO();
+			customerDetails = custService.getUserFromAccount(accountnumber);
+			modelAndView.addObject("customerDetails", customerDetails);
+			modelAndView.setViewName("transferMoney");
+		}
 		return modelAndView;
 	}
 

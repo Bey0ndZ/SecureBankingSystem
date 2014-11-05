@@ -78,15 +78,6 @@
                         <a href="addUser"><i class="fa fa-fw fa-dashboard"></i> Add User</a>
                     </li>
                     <li>
-                        <a href="removeUser"><i class="fa fa-fw fa-dashboard"></i> Remove User</a>
-                    </li>
-                    <li>
-                        <a href="viewUser"><i class="fa fa-fw fa-dashboard"></i> View User</a>
-                    </li>
-                    <li>
-                        <a href="modifyUser"><i class="fa fa-fw fa-dashboard"></i> Modify User</a>
-                    </li>
-                    <li>
                         <a href="viewQueue"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
                     </li>
                     <li>
@@ -132,6 +123,9 @@
 						                <b>Confirm Password:</b> <br/> <input type="password" name="confirmPassword" id="cfrm_pwd" style="color:#999;" /><br/> <br/>
 						                <a><input type="submit" style="margin-right: 5%" name="modifyUser" id="modifyUserButton" value="Change Password"/></a>
 					                </form:form>
+					                <c:if test="${not empty errorMsg}">
+											<h4> ${errorMsg} </h4>
+	                                </c:if> <br/> <br/>
                                 </div>
                             </div>
                         </div>

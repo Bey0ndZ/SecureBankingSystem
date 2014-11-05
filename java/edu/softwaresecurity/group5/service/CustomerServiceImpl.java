@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import edu.softwaresecurity.group5.dao.CustomerDAO;
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.dto.EmployeeInformationDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.dto.UserTransactionsDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
@@ -30,24 +31,24 @@ public class CustomerServiceImpl implements CustomerService {
 	public List<CustomerInformationDTO> fetchUserDetails(String usernameSearch) {
 		return custDAO.retrieveUserDetails(usernameSearch);
 	}
-	public List<CustomerInformationDTO> getUserList() {  
+	public List<EmployeeInformationDTO> getUserList() {  
 	  return custDAO.getUserList();  
 	 }  
 	public CustomerInformationDTO getUserFromAccount(String accountNumber){
 		return custDAO.getUserFromAccount(accountNumber);
 	}
+	public EmployeeInformationDTO getEmployeeFromUserName(String accountNumber){
+		return custDAO.getEmployeeFromUserName(accountNumber);
+	}
 
 	public String updateAccount(CustomerInformationDTO cust) {
-		// TODO Auto-generated method stub
 		return custDAO.updateAccount(cust);
 	}
 	
 	public String changeAccountPassword(ChangePassword cust) {
-		// TODO Auto-generated method stub
 		return custDAO.changeAccountPassword(cust);
 	}
 	public String unlockAccount(CustomerInformationDTO cust) {
-		// TODO Auto-generated method stub
 		return custDAO.unlockAccount(cust);
 	}
 
@@ -87,9 +88,8 @@ public class CustomerServiceImpl implements CustomerService {
 		return custDAO.deleteAccountRequest(username);
 	}
 
-	public List<TicketInformationDTO> getTicketList() {
-		// TODO Auto-generated method stub
-		return custDAO.getTicketList(); 
+	public List<TicketInformationDTO> getPendingTicketList() {
+		return custDAO.getPendingTicketList(); 
 	}
 	public boolean transfer(String loggedInUser, String accountNumber,String amountToBeTransferred) {
 		return custDAO.processtransfer(loggedInUser,accountNumber,amountToBeTransferred);
@@ -104,5 +104,13 @@ public class CustomerServiceImpl implements CustomerService {
 
 	public boolean deleteTx(int txID) {
 		return custDAO.deleteTransaction(txID);
+	}
+	
+	public List<TicketInformationDTO> getApprovedTicketList() {
+		return custDAO.getApprovedTicketList();
+	}
+
+	public List<TicketInformationDTO> getRejectedTicketList() {
+		return custDAO.getRejectedTicketList();
 	}
 }
