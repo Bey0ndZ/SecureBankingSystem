@@ -417,7 +417,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		if (verifyAccountForLock(custInfo)) {
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-			String retrieveDetailsQuery = "SELECT email from users where enabled = true and username=?";
+			String retrieveDetailsQuery = "SELECT email from users where enabled = true and userDetailsExpired=true and userDetailsExpired=true and username=?";
 			List<String> email = jdbcTemplate.query(retrieveDetailsQuery,
 					new Object[] { custInfo.getUsername() },
 					new RowMapper<String>() {
@@ -429,6 +429,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 							return mail;
 						}
 					});
+			if(email.get(0).isEmpty()||email.get(0)==null){
+				return "NO such active account exist with us";
+			}
 
 			// otp generation.
 			String chars = "abcdefghijklmnopqrstuvwxyz"
@@ -459,7 +462,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		}
 		return "User account for "
 				+ custInfo.getUsername()
-				+ " is not locked, please contact adminstrator if you have login issues.";
+				+ " is not locked or has been deleted or does not exist, please contact adminstrator if you have login issues.";
 	}
 
 	public void sendEmail(String to, String subject, String msg) {
@@ -490,6 +493,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 								}
 
 							});
+
 			if (userAttempts.isLocked() == 1) {
 				return false;
 			}

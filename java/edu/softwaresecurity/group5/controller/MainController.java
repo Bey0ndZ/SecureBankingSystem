@@ -450,9 +450,17 @@ public class MainController {
 	public ModelAndView getVerfyUserForUnlock(
 			@ModelAttribute("customerDetails") CustomerInformationDTO customerDetail) {
 		ModelAndView modelAndView = new ModelAndView();
-		CustomerInformationDTO customerDetails = customerDetail;
-		String status = custService.unlockAccount(customerDetails);
-		modelAndView.addObject("status", status);
+		Document userInput = Jsoup.parse(customerDetail.getUsername());
+		customerDetail.setUsername(userInput.text());
+		if(customerDetail.getUsername().isEmpty()||customerDetail.getUsername()==null){
+			modelAndView.addObject("status", "Please Enter a valid Input.");
+		}
+		else{
+			CustomerInformationDTO customerDetails = customerDetail;
+			String status = custService.unlockAccount(customerDetails);
+			modelAndView.addObject("status", status);
+		}
+		
 		modelAndView.setViewName("unlockAccount");
 		return modelAndView;
 	}
