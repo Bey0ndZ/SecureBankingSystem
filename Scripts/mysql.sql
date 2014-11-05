@@ -42,6 +42,9 @@ CREATE  TABLE users (
   VALUES ('skgarg', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam','male', 'Merchant', '4804804801',
   'shivam@asu.edu', 'ssn', 'address', true,true,true,true);
   INSERT INTO users 
+  VALUES ('skgarg1', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam','male', 'Merchant', '4804804801',
+  'shivam@asu.edu', 'ssn', 'address', true,true,true,true);
+  INSERT INTO users 
   VALUES ('employee', '$2a$10$G5HnxB7yjAEdxUQ4lDwkHuSPAoaITmM7O2DFp762bpytmUlisTTxa', '$2a$10$G5HnxB7yjAEdxUQ4lDwkHuSPAoaITmM7O2DFp762bpytmUlisTTxa', 'employee', 'employee','male', 'Merchant', '4804804802',
   'employee@asu.edu', 'ssn', 'address', true,true,true,true);
 
@@ -127,8 +130,11 @@ CREATE TABLE user_tickets (
   username VARCHAR(45) NOT NULL,
   requestcompleted TINYINT NOT NULL DEFAULT 0, 
   requestapproved TINYINT NOT NULL DEFAULT 0, 
+  requestrejected TINYINT NOT NULL DEFAULT 0,
   requesttype VARCHAR(10) NOT NULL, 
   PRIMARY KEY (id)
 );
 
-INSERT into user_tickets(username, requestcompleted, requestapproved, requesttype) VALUES ("shivam",false,false,"Modify");
+INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype) VALUES ("shivam",false,false,false,"Modify");
+INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype) VALUES ("skgarg",true,false,true,"Modify");
+INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype) VALUES ("skgarg1",true,true,false,"Modify");

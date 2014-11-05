@@ -451,13 +451,20 @@ public class MainController {
 		
 	@RequestMapping(value = "/viewQueue", method = RequestMethod.GET)
 	public ModelAndView returnViewQueuePage() {
-		List<TicketInformationDTO> userList = custService.getTicketList();
-		return new ModelAndView("viewQueue", "userList", userList);
+		ModelAndView modelAndView = new ModelAndView();
+		List<TicketInformationDTO> userList = custService.getPendingTicketList();
+		List<TicketInformationDTO> approvedList = custService.getApprovedTicketList();
+		List<TicketInformationDTO> rejectedList = custService.getRejectedTicketList();
+		modelAndView.addObject("userList", userList);
+		modelAndView.addObject("approvedList", approvedList);
+		modelAndView.addObject("rejectedList", rejectedList);
+		modelAndView.setViewName("viewQueue");
+		return modelAndView;
 	}
 	
 	@RequestMapping(value = "/ticketDetails", method = RequestMethod.GET)
 	public ModelAndView returnTicketDetailsPage() {
-		List<TicketInformationDTO> userList = custService.getTicketList();
+		List<TicketInformationDTO> userList = custService.getPendingTicketList();
 		return new ModelAndView("viewQueue", "userList", userList);
 	}
 }

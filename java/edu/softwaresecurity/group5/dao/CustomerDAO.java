@@ -34,7 +34,9 @@ public interface CustomerDAO {
 	public String generateOTP(String email);
 	public boolean activateAccountRequest(String username);
 	public boolean deleteAccountRequest(String username);
-	public List<TicketInformationDTO> getTicketList();  
+	public List<TicketInformationDTO> getPendingTicketList();  
+	public List<TicketInformationDTO> getApprovedTicketList();
+	public List<TicketInformationDTO> getRejectedTicketList();
 	public boolean processtransfer(String generatedFromUsername, String account, String amount);
 	public boolean updatePending(String generatedFromUsernameFrom, String account, String amount);
 	

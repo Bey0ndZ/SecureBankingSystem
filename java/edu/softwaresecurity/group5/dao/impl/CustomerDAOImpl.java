@@ -593,12 +593,15 @@ public class CustomerDAOImpl implements CustomerDAO {
 						modInfo.getLastname(), modInfo.getSex(),
 						modInfo.getSelection(), modInfo.getPhonenumber(),
 						modInfo.getEmail(), modInfo.getAddress(), false });
-		String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requesttype)"
-				+ " VALUES (?,?,?,?)";
+		String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected,requesttype)"
+				+ " VALUES (?,?,?,?,?)";
 		JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
 				dataSource);
-		insertIntoTicketsTableTemplate.update(insertIntoTicketsTable,
-				new Object[] { username, false, false, Ticket_Type_Modify });
+
+		insertIntoTicketsTableTemplate.update(
+				insertIntoTicketsTable,
+				new Object[] { username, false,false,false, Ticket_Type_Modify});
+
 		return "Request submitted. The internal user or admin will approve your request.";
 	}
 
@@ -609,13 +612,15 @@ public class CustomerDAOImpl implements CustomerDAO {
 			JdbcTemplate updateTemplate = new JdbcTemplate(dataSource);
 			updateTemplate.update(updateModificationRequests, new Object[] {
 					username, deleteAccountOrNot });
-			String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requesttype)"
-					+ " VALUES (?,?,?,?)";
+			String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype)"
+					+ " VALUES (?,?,?,?,?)";
 			JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
 					dataSource);
-			insertIntoTicketsTableTemplate
-					.update(insertIntoTicketsTable, new Object[] { username,
-							false, false, Ticket_Type_Delete });
+
+			insertIntoTicketsTableTemplate.update(
+					insertIntoTicketsTable,
+					new Object[] { username, false,false, false,Ticket_Type_Delete});
+
 			return "Request submitted. The internal user of admin will approve your request.";
 		} else {
 			return "You have selected No. Your account request has not been submitted for internal review.";
@@ -659,7 +664,6 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 
 	public boolean activateAccountRequest(String username) {
-
 		String sql = "UPDATE users set enabled = true where enabled = false and userDetailsExpired=true and userDetailsExpired=true and username =  ?";
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		int status = jdbcTemplate.update(sql, new Object[] { username });
@@ -680,13 +684,44 @@ public class CustomerDAOImpl implements CustomerDAO {
 		return false;
 	}
 
-	// TODO make this list only return tickets for active users not the deleted
-	// ones.
-	public List<TicketInformationDTO> getTicketList() {
+	//TODO make this list only return tickets for active users not the deleted ones.
+	public List<TicketInformationDTO> getPendingTicketList() {
 		List<TicketInformationDTO> userList = new ArrayList<TicketInformationDTO>();
 
-		String sql = "SELECT id, username, requestcompleted, requestapproved, requesttype "
-				+ " from user_tickets where requestcompleted=false";
+		String sql = "SELECT user_tickets.id, user_tickets.username, user_tickets.requestcompleted, user_tickets.requestapproved, user_tickets.requestrejected, user_tickets.requesttype "
+				+ " from user_tickets inner join users on "
+				+ "user_tickets.username=users.username where user_tickets.requestcompleted=false and user_tickets.requestrejected=false and"
+				+" user_tickets.requestapproved=false and users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true";
+
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		userList = jdbcTemplate.query(sql, new TicketRowMapper());
+		return userList;
+	}
+
+	// TODO make this list only return tickets for active users not the deleted
+	// ones.
+	public List<TicketInformationDTO> getApprovedTicketList() {
+		List<TicketInformationDTO> userList = new ArrayList<TicketInformationDTO>();
+
+		String sql = "SELECT user_tickets.id, user_tickets.username, user_tickets.requestcompleted, user_tickets.requestapproved, user_tickets.requestrejected, user_tickets.requesttype "
+				+ " from user_tickets inner join users on "
+				+ "user_tickets.username=users.username where user_tickets.requestcompleted=true and user_tickets.requestrejected=false and"
+				+" user_tickets.requestapproved=true and users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true";
+
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		userList = jdbcTemplate.query(sql, new TicketRowMapper());
+		return userList;
+	}
+
+	// TODO make this list only return tickets for active users not the deleted
+	// ones.
+	public List<TicketInformationDTO> getRejectedTicketList() {
+		List<TicketInformationDTO> userList = new ArrayList<TicketInformationDTO>();
+
+		String sql = "SELECT user_tickets.id, user_tickets.username, user_tickets.requestcompleted, user_tickets.requestapproved, user_tickets.requestrejected, user_tickets.requesttype "
+				+ " from user_tickets inner join users on "
+				+ "user_tickets.username=users.username where user_tickets.requestcompleted=true and user_tickets.requestrejected=true and"
+				+" user_tickets.requestapproved=false and users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true";
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		userList = jdbcTemplate.query(sql, new TicketRowMapper());

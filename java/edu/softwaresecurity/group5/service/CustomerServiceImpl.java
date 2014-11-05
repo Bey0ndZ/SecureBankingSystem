@@ -86,14 +86,24 @@ public class CustomerServiceImpl implements CustomerService {
 		return custDAO.deleteAccountRequest(username);
 	}
 
-	public List<TicketInformationDTO> getTicketList() {
+	public List<TicketInformationDTO> getPendingTicketList() {
 		// TODO Auto-generated method stub
-		return custDAO.getTicketList(); 
+		return custDAO.getPendingTicketList(); 
 	}
 	public boolean transfer(String loggedInUser, String accountNumber,String amountToBeTransferred) {
 		return custDAO.processtransfer(loggedInUser,accountNumber,amountToBeTransferred);
 	}
 	public boolean pendingTransfer(String loggedInUser, String accountNumber,String amountToBeTransferred) {
 		return custDAO.updatePending(loggedInUser,accountNumber,amountToBeTransferred);
+	}
+
+	public List<TicketInformationDTO> getApprovedTicketList() {
+		// TODO Auto-generated method stub
+		return custDAO.getApprovedTicketList();
+	}
+
+	public List<TicketInformationDTO> getRejectedTicketList() {
+		// TODO Auto-generated method stub
+		return custDAO.getRejectedTicketList();
 	}
 }

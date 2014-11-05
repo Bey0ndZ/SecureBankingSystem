@@ -123,27 +123,12 @@
             
                             <div class="panel-body">
                                 <div id="morris-area-chart">
-	                                <form method="post" action="#">					
-										<table style="width:100%">
-						  					<tr>
-											    <td> Ticket Number</td> <br/>
-											    <td> Invoked By</td> <br/>
-											    <td> Description</td> <br/>
-											</tr>
-											<br/><br/>
-						  					<tr>
-											    <td> PRINT TICKET HERE</td>
-											    <td> PRINT USERNAME HERE</td> 
-											    <td> <a href="ticketDetails"> <input type="button" style="margin-right: 5%" name="ticketDetails" id="removeUserButton" value="View Detais" onclick=""/></a></td>
-											</tr>
-										</table>
-										
-										
+	                                					
 										<b> <u> <h4> LIST OF ALL OPEN Tickets- </h4> </u> </b>
 									  <table border="1">  
 									   <tr>  
 									    <td class="heading">Ticket Number</td>  
-									    <td class="heading">UserName</td>  
+									    <td class="heading">Invoked By</td>  
 									    <td class="heading">Type</td>    
 									    <td class="heading">Edit</td>  
 									    <td class="heading">Delete</td>  
@@ -163,9 +148,64 @@
 									   <tr><td colspan="11"><a href="addUser">Add New User</a></td></tr>  
 									  </table>
 										<br/><br/> <br/>
-									</form>
+									
                                 </div>
                             </div>
+                            
+                            <c:if test="${not empty approvedList}">
+                            <!-- this is for approved tickets -->
+                            <div class="panel-body">
+                                <div id="morris-area-chart">
+	                                					
+										<b> <u> <h4> LIST OF ALL Approved Tickets- </h4> </u> </b>
+									  <table border="1">  
+									   <tr>  
+									    <td class="heading">Ticket Number</td>  
+									    <td class="heading">Invoked By</td>  
+									    <td class="heading">Type</td>
+									   </tr>  
+									   <c:forEach var="approvedList" items="${approvedList}">  
+									    <tr>  
+									     <td>${approvedList.id}</td>  
+									     <td>${approvedList.username}</td>  
+									     <td>${approvedList.requesttype}</td>   
+									      
+									    </tr>  
+									   </c:forEach>  
+									  </table>
+										<br/><br/> <br/>
+									
+                                </div>
+                            </div>
+                            </c:if>
+                            
+                            <c:if test="${not empty rejectedList}">
+                            <!-- this is for rejected tickets -->
+                            <div class="panel-body">
+                                <div id="morris-area-chart">
+	                                					
+										<b> <u> <h4> LIST OF ALL Rejected Tickets- </h4> </u> </b>
+									  <table border="1">  
+									   <tr>  
+									    <td class="heading">Ticket Number</td>  
+									    <td class="heading">Invoked By</td>  
+									    <td class="heading">Type</td>
+									   </tr>  
+									   <c:forEach var="rejectedList" items="${rejectedList}">  
+									    <tr>  
+									     <td>${rejectedList.id}</td>  
+									     <td>${rejectedList.username}</td>  
+									     <td>${rejectedList.requesttype}</td>   
+									      
+									    </tr>  
+									   </c:forEach>  
+									  </table>
+										<br/><br/> <br/>
+									
+                                </div>
+                            </div>
+                            </c:if>
+                            
                         </div>
                     </div>
                 </div>

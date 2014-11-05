@@ -20,7 +20,8 @@ public class TicketExtractor implements ResultSetExtractor<TicketInformationDTO>
 	  ticketInfoDTO.setUsername(resultSet.getString(2));
 	  ticketInfoDTO.setRequestcompleted(resultSet.getBoolean(3));
 	  ticketInfoDTO.setRequestapproved(resultSet.getBoolean(4));
-	  ticketInfoDTO.setRequesttype(resultSet.getString(5));
+	  ticketInfoDTO.setRequestrejected(resultSet.getBoolean(5));
+	  ticketInfoDTO.setRequesttype(resultSet.getString(6));
 	  
 	  return ticketInfoDTO;
 	 }

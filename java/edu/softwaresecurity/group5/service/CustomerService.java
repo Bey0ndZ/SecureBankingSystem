@@ -32,7 +32,9 @@ public interface CustomerService {
 	public String genOtp(String email);
 	public boolean activateAccount(String username);
 	public boolean deleteAccountBYInternal(String username);
-	public List<TicketInformationDTO> getTicketList();
+	public List<TicketInformationDTO> getPendingTicketList();
+	public List<TicketInformationDTO> getApprovedTicketList();
+	public List<TicketInformationDTO> getRejectedTicketList();
 	public CustomerInformationDTO getUserFromAccount(String accountnumber);  
 	public String updateAccount(CustomerInformationDTO cust); 
 	public boolean transfer(String loggedInUser, String accountNumber,String amountToBeTransferred);
