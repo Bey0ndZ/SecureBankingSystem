@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.dto.EmployeeInformationDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
@@ -267,7 +268,7 @@ public class MainController {
 
 	@RequestMapping("/getList")
 	public ModelAndView getUserLIst() {
-		List<CustomerInformationDTO> userList = custService.getUserList();
+		List<EmployeeInformationDTO> userList = custService.getUserList();
 		return new ModelAndView("userList", "userList", userList);
 	}
 

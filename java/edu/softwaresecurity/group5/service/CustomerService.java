@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.dto.EmployeeInformationDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
@@ -18,7 +19,7 @@ public interface CustomerService {
 	public String insertAddUserInformation(AddUserInformation addInfo) throws NoSuchAlgorithmException;
 
 	public List<CustomerInformationDTO> fetchUserDetails(String usernameSearch);
-	public List<CustomerInformationDTO> getUserList();
+	public List<EmployeeInformationDTO> getUserList();
 	public String changeAccountPassword(ChangePassword cust);
 	public String unlockAccount(CustomerInformationDTO cust);
 	public boolean processBillPay(String loggedInUser, String accountNumber,

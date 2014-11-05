@@ -27,9 +27,11 @@ import edu.softwaresecurity.group5.dao.CustomerDAO;
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.dto.DuplicateValidationCheckerDTO;
+import edu.softwaresecurity.group5.dto.EmployeeInformationDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.jdbc.BillPayMapper;
 import edu.softwaresecurity.group5.jdbc.DuplicateValidationCheckerMapper;
+import edu.softwaresecurity.group5.jdbc.InternalUserRowMapper;
 import edu.softwaresecurity.group5.jdbc.TicketRowMapper;
 import edu.softwaresecurity.group5.jdbc.UserRowMapper;
 import edu.softwaresecurity.group5.mail.EmailService;
@@ -314,16 +316,18 @@ public class CustomerDAOImpl implements CustomerDAO {
 		return customerInformationToDisplay;
 
 	}
-
-	public List<CustomerInformationDTO> getUserList() {
-		List<CustomerInformationDTO> userList = new ArrayList<CustomerInformationDTO>();
+	
+	
+	//This method will return all the internal employees which are active, and is used in admin.
+	public List<EmployeeInformationDTO> getUserList() {
+		List<EmployeeInformationDTO> userList = new ArrayList<EmployeeInformationDTO>();
 
 		String sql = "SELECT users.username, users.firstname, users.lastname, users.sex, "
-				+ "users.MerchantorIndividual, users.phonenumber, users.email, "
-				+ "users.address, account.accountnumber, account.accountbalance from users inner join account on users.username = account.username where users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true";
+				+ " users.phonenumber, users.email, "
+				+ "users.address from users inner join user_roles on users.username = user_roles.username where users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true and user_roles.role='ROLE_EMPLOYEE'";
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-		userList = jdbcTemplate.query(sql, new UserRowMapper());
+		userList = jdbcTemplate.query(sql, new InternalUserRowMapper());
 		return userList;
 	}
 

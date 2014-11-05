@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.dto.EmployeeInformationDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
@@ -17,7 +18,7 @@ public interface CustomerDAO {
 
 	public String addUser(AddUserInformation addInfo) throws NoSuchAlgorithmException;
 	public List<CustomerInformationDTO> retrieveUserDetails(String username);
-	public List<CustomerInformationDTO> getUserList();  
+	public List<EmployeeInformationDTO> getUserList();  
 	public String updateAccount(CustomerInformationDTO custInfo);  
 	public CustomerInformationDTO getUserFromAccount(String accountNumber);  
 	public String changeAccountPassword(ChangePassword custInfo);  

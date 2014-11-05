@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import edu.softwaresecurity.group5.dao.CustomerDAO;
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.dto.EmployeeInformationDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
@@ -29,7 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
 	public List<CustomerInformationDTO> fetchUserDetails(String usernameSearch) {
 		return custDAO.retrieveUserDetails(usernameSearch);
 	}
-	public List<CustomerInformationDTO> getUserList() {  
+	public List<EmployeeInformationDTO> getUserList() {  
 	  return custDAO.getUserList();  
 	 }  
 	public CustomerInformationDTO getUserFromAccount(String accountNumber){
