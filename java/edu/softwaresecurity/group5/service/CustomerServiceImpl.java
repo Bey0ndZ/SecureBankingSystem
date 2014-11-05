@@ -125,4 +125,14 @@ public class CustomerServiceImpl implements CustomerService {
 		// TODO Auto-generated method stub
 		return custDAO.fetchTicketDetail(ticketDetails);
 	}
+
+	public boolean rejectAuthorizeTransactions(TicketDetailDTO ticketDetailDTO) {
+		// TODO Auto-generated method stub
+		return custDAO.rejectAuthorizeTransactions(ticketDetailDTO);
+	}
+
+	public boolean approveAuthorizeTransactions(TicketDetailDTO ticketDetailDTO) {
+		// TODO Auto-generated method stub
+		return custDAO.approveAuthorizeTransactions(ticketDetailDTO);
+	}
 }

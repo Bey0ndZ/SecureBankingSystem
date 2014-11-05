@@ -141,17 +141,17 @@
 									     <td>${ticketDetailDTO.email}</td> 
 									     <td>${ticketDetailDTO.address}</td>  
 									     <td><form:form method="post" action="modifyExternalUserByInternal" modelAttribute="modifyExternalUserByAdmin">                    
-					                     <input type="hidden" name="username" id="accountNumber_RemoveUser" value="${ticketDetailDTO.username}" style="color:#999;" /><br/> <br/>
-					                     <input type="hidden" name="firstname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.firstname}" style="color:#999;" /><br/> <br/>
-					               		 <input type="hidden" name="lastname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.lastname}" style="color:#999;" /><br/> <br/>
+					                     <input type="hidden" name="username" id="accountNumber_RemoveUser" value="${ticketDetailDTO.username}" style="color:#999;" />
+					                     <input type="hidden" name="firstname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.firstname}" style="color:#999;" />
+					               		 <input type="hidden" name="lastname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.lastname}" style="color:#999;" />
 					                     <input type="hidden" name="sex" id="accountNumber_RemoveUser" value="${ticketDetailDTO.sex}" style="color:#999;" /><br/> <br/>
-					                     <input type="hidden" name="phonenumber" id="accountNumber_RemoveUser" value="${ticketDetailDTO.phonenumber}" style="color:#999;" /><br/> <br/>
-					               		 <input type="hidden" name="email" id="accountNumber_RemoveUser" value="${ticketDetailDTO.email}" style="color:#999;" /><br/> <br/>
-					                     <input type="hidden" name="address" id="accountNumber_RemoveUser" value="${ticketDetailDTO.address}" style="color:#999;" /><br/> <br/>
-					                     <input type="hidden" name="requesttype" id="accountNumber_RemoveUser" value="${ticketDetailDTO.requesttype}" style="color:#999;" /><br/> <br/>
-					                     <input type="hidden" name="id" id="accountNumber_RemoveUser" value="${ticketDetailDTO.id}" style="color:#999;" /><br/> <br/>
+					                     <input type="hidden" name="phonenumber" id="accountNumber_RemoveUser" value="${ticketDetailDTO.phonenumber}" style="color:#999;" />
+					               		 <input type="hidden" name="email" id="accountNumber_RemoveUser" value="${ticketDetailDTO.email}" style="color:#999;" />
+					                     <input type="hidden" name="address" id="accountNumber_RemoveUser" value="${ticketDetailDTO.address}" style="color:#999;" />
+					                     <input type="hidden" name="requesttype" id="accountNumber_RemoveUser" value="${ticketDetailDTO.requesttype}" style="color:#999;" />
+					                     <input type="hidden" name="id" id="accountNumber_RemoveUser" value="${ticketDetailDTO.id}" style="color:#999;" />
 					                    
-					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="modifyUserButton" value="Update User" /></a> <br/> <br/>
+					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="modifyUserButton" value="Update User" /></a>
 					                        </form:form></td>  
 									     
 									    </tr>
@@ -180,8 +180,8 @@
 									     <td>${ticketDetailDTO.accountNumber}</td>   
 									     <td>${ticketDetailDTO.accountBalance}</td>  
 									     <td> <form:form method="post" action="removeUserExternal" modelAttribute="usernameSearch">					
-										 <input type="hidden" name="account" id="accountNumber_RemoveUser" value="${ticketDetailDTO.username}" style="color:#999;" /><br/> <br/>
-										 <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="removeUserButton" value="Remove User" /></a> <br/> <br/>
+										 <input type="hidden" name="account" id="accountNumber_RemoveUser" value="${ticketDetailDTO.username}" style="color:#999;" />
+										 <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="removeUserButton" value="Remove User" /></a>
 										 </form:form></td> 
 									    </tr>
 									  </table> 
@@ -214,23 +214,34 @@
 									     <td>${ticketDetailDTO.transactionAmount}</td> 
 									     <td>${ticketDetailDTO.toAccountNumber}</td> 
 									     <td>${ticketDetailDTO.billpay}</td> 
-									     <td><form:form method="post" action="authorizeTransactions" modelAttribute="authorizeTransactions">                    
-					                     <input type="hidden" name="accountNumber" id="accountNumber_RemoveUser" value="${ticketDetailDTO.accountNumber}" style="color:#999;" /><br/> <br/>
-					                     <input type="hidden" name="username" id="accountNumber_RemoveUser" value="${ticketDetailDTO.username}" style="color:#999;" /><br/> <br/>
-					                     <input type="hidden" name="firstname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.firstname}" style="color:#999;" /><br/> <br/>
-					               		 <input type="hidden" name="lastname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.lastname}" style="color:#999;" /><br/> <br/>
-					                     <input type="hidden" name="accountBalance" id="accountNumber_RemoveUser" value="${ticketDetailDTO.accountBalance}" style="color:#999;" /><br/> <br/>
-					                     <input type="hidden" name="transactionAmount" id="accountNumber_RemoveUser" value="${ticketDetailDTO.transactionAmount}" style="color:#999;" /><br/> <br/>
-					               		 <input type="hidden" name="toAccountNumber" id="accountNumber_RemoveUser" value="${ticketDetailDTO.toAccountNumber}" style="color:#999;" /><br/> <br/>
-					                     <input type="hidden" name="billpay" id="accountNumber_RemoveUser" value="${ticketDetailDTO.billpay}" style="color:#999;" /><br/> <br/>
-					                     <input type="hidden" name="requesttype" id="accountNumber_RemoveUser" value="${ticketDetailDTO.requesttype}" style="color:#999;" /><br/> <br/>
+									     <td><form:form method="post" action="authorizeTransactionsApprove" modelAttribute="authorizeTransactions">                    
+					                     <input type="hidden" name="accountNumber" id="accountNumber_RemoveUser" value="${ticketDetailDTO.accountNumber}" style="color:#999;" />
+					                     <input type="hidden" name="username" id="accountNumber_RemoveUser" value="${ticketDetailDTO.username}" style="color:#999;" />
+					                     <input type="hidden" name="firstname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.firstname}" style="color:#999;" />
+					               		 <input type="hidden" name="lastname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.lastname}" style="color:#999;" />
+					                     <input type="hidden" name="accountBalance" id="accountNumber_RemoveUser" value="${ticketDetailDTO.accountBalance}" style="color:#999;" />
+					                     <input type="hidden" name="transactionAmount" id="accountNumber_RemoveUser" value="${ticketDetailDTO.transactionAmount}" style="color:#999;" />
+					               		 <input type="hidden" name="toAccountNumber" id="accountNumber_RemoveUser" value="${ticketDetailDTO.toAccountNumber}" style="color:#999;" />
+					                     <input type="hidden" name="billpay" id="accountNumber_RemoveUser" value="${ticketDetailDTO.billpay}" style="color:#999;" />
+					                     <input type="hidden" name="requesttype" id="accountNumber_RemoveUser" value="${ticketDetailDTO.requesttype}" style="color:#999;" />
+					                     <input type="hidden" name="pendingid" id="accountNumber_RemoveUser" value="${ticketDetailDTO.pendingid}" style="color:#999;" />
 					                    
 					                    
-					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="modifyUserButton" value="Approve" /></a> <br/> <br/>
+					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="modifyUserButton" value="Approve" /></a>
 					                        </form:form></td>  
-									     <td> <form:form method="post" action="removeUserDB" modelAttribute="usernameSearch">					
-										 <input type="hidden" name="account" id="accountNumber_RemoveUser" value="${user.username}" style="color:#999;" /><br/> <br/>
-										 <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="removeUserButton" value="Reject" /></a> <br/> <br/>
+									     <td> <form:form method="post" action="authorizeTransactionsReject" modelAttribute="authorizeTransactions">					
+										 <input type="hidden" name="accountNumber" id="accountNumber_RemoveUser" value="${ticketDetailDTO.accountNumber}" style="color:#999;" />
+					                     <input type="hidden" name="username" id="accountNumber_RemoveUser" value="${ticketDetailDTO.username}" style="color:#999;" />
+					                     <input type="hidden" name="firstname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.firstname}" style="color:#999;" />
+					               		 <input type="hidden" name="lastname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.lastname}" style="color:#999;" />
+					                     <input type="hidden" name="accountBalance" id="accountNumber_RemoveUser" value="${ticketDetailDTO.accountBalance}" style="color:#999;" />
+					                     <input type="hidden" name="transactionAmount" id="accountNumber_RemoveUser" value="${ticketDetailDTO.transactionAmount}" style="color:#999;" />
+					               		 <input type="hidden" name="toAccountNumber" id="accountNumber_RemoveUser" value="${ticketDetailDTO.toAccountNumber}" style="color:#999;" />
+					                     <input type="hidden" name="billpay" id="accountNumber_RemoveUser" value="${ticketDetailDTO.billpay}" style="color:#999;" />
+					                     <input type="hidden" name="requesttype" id="accountNumber_RemoveUser" value="${ticketDetailDTO.requesttype}" style="color:#999;" />
+					                     <input type="hidden" name="pendingid" id="accountNumber_RemoveUser" value="${ticketDetailDTO.pendingid}" style="color:#999;" />
+					                    
+					                     <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="removeUserButton" value="Reject" /></a>
 										 </form:form></td> 
 									    </tr>
 									  </table>  

@@ -10,6 +10,13 @@ public class TicketDetailDTO {
 	private String email;
 	private String address;
 	private int id;
+	private int pendingid;
+	public int getPendingid() {
+		return pendingid;
+	}
+	public void setPendingid(int pendingid) {
+		this.pendingid = pendingid;
+	}
 	private boolean requestcompleted;
 	private boolean requestapproved;
 	private boolean requestrejected;
@@ -17,19 +24,19 @@ public class TicketDetailDTO {
 	private int accountNumber;
 	private float accountBalance;
 	private String requesttype;
-	private float transactionAmount;
-	private int toAccountNumber;
+	private String transactionAmount;
+	private String toAccountNumber;
 	private boolean billpay;
-	public float getTransactionAmount() {
+	public String getTransactionAmount() {
 		return transactionAmount;
 	}
-	public void setTransactionAmount(float transactionAmount) {
+	public void setTransactionAmount(String transactionAmount) {
 		this.transactionAmount = transactionAmount;
 	}
-	public int getToAccountNumber() {
+	public String getToAccountNumber() {
 		return toAccountNumber;
 	}
-	public void setToAccountNumber(int toAccountNumber) {
+	public void setToAccountNumber(String toAccountNumber) {
 		this.toAccountNumber = toAccountNumber;
 	}
 	public boolean isBillpay() {

@@ -48,5 +48,7 @@ public interface CustomerDAO {
 	public List<UserTransactionsDTO> getUserTransactionList(String username);
 	public boolean deleteTransaction(int txID);
 	public TicketDetailDTO fetchTicketDetail(TicketInformationDTO ticketDetails);
+	public boolean rejectAuthorizeTransactions(TicketDetailDTO ticketDetailDTO);
+	public boolean approveAuthorizeTransactions(TicketDetailDTO ticketDetailDTO);
 	
 }

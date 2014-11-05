@@ -48,5 +48,7 @@ public interface CustomerService {
 	public List<UserTransactionsDTO> getUserTransactions(String username);
 	public boolean deleteTx(int txID);
 	public TicketDetailDTO fetchTicketDetail(TicketInformationDTO ticketDetails);
+	public boolean rejectAuthorizeTransactions(TicketDetailDTO ticketDetailDTO);
+	public boolean approveAuthorizeTransactions(TicketDetailDTO ticketDetailDTO);
 }
 

@@ -1049,7 +1049,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			return customerInformationToDisplay.get(0);
 		} else if (ticketDetails.getRequesttype().equalsIgnoreCase(Ticket_Type_Authorize)) {
 			String retrieveDetailsQuery = "SELECT user_tickets.id, user_tickets.username, user_tickets.requestcompleted, user_tickets.requestapproved, user_tickets.requestrejected, user_tickets.requesttype , users.firstname, users.lastname, "
-					+ " account.accountnumber, account.accountbalance, pendingtransactions.amount, pendingtransactions.accountnumberto, pendingtransactions.billpay  from user_tickets inner join pendingtransactions on user_tickets.username=pendingtransactions.username"
+					+ " account.accountnumber, account.accountbalance, pendingtransactions.amount, pendingtransactions.accountnumberto, pendingtransactions.billpay,pendingtransactions.id  from user_tickets inner join pendingtransactions on user_tickets.username=pendingtransactions.username"
 					+ " inner join account on pendingtransactions.username = account.username inner join users on users.username = pendingtransactions.username "
 					+ " where user_tickets.requestcompleted=false and user_tickets.requestrejected=false and"
 					+ " user_tickets.requestapproved=false and users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true and user_tickets.id=? and user_tickets.username=?";
@@ -1061,5 +1061,41 @@ public class CustomerDAOImpl implements CustomerDAO {
 			return customerInformationToDisplay.get(0);
 		}
 		return null;
+	}
+	public boolean rejectAuthorizeTransactions(TicketDetailDTO ticketDetailDTO) {
+		// TODO Auto-generated method stub
+		
+		return false;
+	}
+
+	public boolean approveAuthorizeTransactions(TicketDetailDTO ticketDetailDTO) {
+		// TODO Auto-generated method stub
+		String updatePendingtable = "UPDATE pendingtransactions  SET pending = false where username=? and pending=true and accountnumberfrom =? and accountnumberto= ? and id = ? ";
+		JdbcTemplate updatePendingTableJDBC = new JdbcTemplate(dataSource);
+		int status = updatePendingTableJDBC.update(updatePendingtable, new Object[]{ticketDetailDTO.getUsername(), ticketDetailDTO.getAccountNumber(),ticketDetailDTO.getToAccountNumber(),ticketDetailDTO.getPendingid()});
+		if (status==1) {
+//			String sql = "Select accountnumber from account where username =?";
+//			JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
+//			String AccountNumberReceipient = jdbcTemplateForAccountNumber
+//					.queryForObject(sql,
+//							new Object[] { ticketDetailDTO.getToAccountNumber() }, String.class);
+
+			//Trusting chaitali calling here function here.
+			if(processtransfer(ticketDetailDTO.getUsername(), ticketDetailDTO.getToAccountNumber(), ticketDetailDTO.getTransactionAmount())){
+				String updateIntoTicketsTable = "UPDATE user_tickets set requestcompleted =true, requestapproved=true, requestrejected=false where username =  ?";
+				JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
+						dataSource);
+
+				int status1 = insertIntoTicketsTableTemplate.update(updateIntoTicketsTable, new Object[] { ticketDetailDTO.getUsername() });
+				return true;
+			}
+			
+			else
+				return false;
+		} else {
+			return false;
+		}
+
+		
 	}
 }

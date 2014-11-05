@@ -40,10 +40,6 @@ import edu.softwaresecurity.group5.service.CustomerService;
 public class MainController {
 	@Autowired
 	CustomerService custService;
-	
-	private final String Ticket_Type_Delete = "Delete";
-	private final String Ticket_Type_Modify = "Modify";
-	private final String Ticket_Type_Authorize = "Authorize";
 
 	@RequestMapping(value = { "/", "/index" }, method = RequestMethod.GET)
 	public ModelAndView indexPage(
@@ -233,28 +229,29 @@ public class MainController {
 
 		return modelAndView;
 	}
-		// Remove user from db, mark user detailed expired to 0.
-				@RequestMapping(value = "/removeUserDBSingle", method = RequestMethod.POST)
-				public ModelAndView getremoveUserDBSingle(
-						@RequestParam("account") String usernameSearch) {
-					ModelAndView modelAndView = new ModelAndView();
-					
-					Document userInput = Jsoup.parse(usernameSearch);
-					String userName = userInput.text();
-					
 
-						boolean status = custService.deleteAccountBYInternal(userName);
-						if(status) {
-							modelAndView.addObject("status", "User Deleted Succefully!");
-							modelAndView.setViewName("viewTicket");
-						}
-						else {
-							modelAndView.addObject("status", "Please couldnot be deleted please contact Adminstrator personally!");
-							modelAndView.setViewName("viewTicket");
-						}
-					
-					return modelAndView;
-				}	
+	// Remove user from db, mark user detailed expired to 0.
+	@RequestMapping(value = "/removeUserDBSingle", method = RequestMethod.POST)
+	public ModelAndView getremoveUserDBSingle(
+			@RequestParam("account") String usernameSearch) {
+		ModelAndView modelAndView = new ModelAndView();
+
+		Document userInput = Jsoup.parse(usernameSearch);
+		String userName = userInput.text();
+
+		boolean status = custService.deleteAccountBYInternal(userName);
+		if (status) {
+			modelAndView.addObject("status", "User Deleted Succefully!");
+			modelAndView.setViewName("viewTicket");
+		} else {
+			modelAndView
+					.addObject("status",
+							"Please couldnot be deleted please contact Adminstrator personally!");
+			modelAndView.setViewName("viewTicket");
+		}
+
+		return modelAndView;
+	}
 
 //	// Displaying the ViewUser(SearchUser).jsp page
 //	@RequestMapping(value = "/viewUser", method = RequestMethod.GET)
@@ -521,15 +518,31 @@ public class MainController {
 		}
 		
 	// Authhorize Critical transactions.
-	@RequestMapping(value = "/authorizeTransactions", method = RequestMethod.POST)
-	public ModelAndView getauthorizeTransactions(
+	@RequestMapping(value = "/authorizeTransactionsApprove", method = RequestMethod.POST)
+	public ModelAndView getauthorizeTransactionsApprove(
 			@ModelAttribute("authorizeTransactions") TicketDetailDTO ticketDetailDTO) {
 		ModelAndView modelAndView = new ModelAndView();
 		TicketDetailDTO detailDTO = ticketDetailDTO;
-//		String status = custService.updateExternalAccount(detailDTO);
-//		modelAndView.addObject("customerDetails", detailDTO);
-//		modelAndView.addObject("status", status);
+		boolean result = custService.approveAuthorizeTransactions(detailDTO);
+		if(result){
+			modelAndView.addObject("status", "Success, Authorization Approved!");
+		}
+		else{
+			modelAndView.addObject("status", "Error Occured, Please contact admin!");
+		}
 		modelAndView.setViewName("ticketAuthorizedSuccess");
 		return modelAndView;
 	}
+	// Reject Critical transactions.
+		@RequestMapping(value = "/authorizeTransactionsReject", method = RequestMethod.POST)
+		public ModelAndView getauthorizeTransactionsReject(
+				@ModelAttribute("authorizeTransactions") TicketDetailDTO ticketDetailDTO) {
+			ModelAndView modelAndView = new ModelAndView();
+			TicketDetailDTO detailDTO = ticketDetailDTO;
+//			String status = custService.updateExternalAccount(detailDTO);
+//			modelAndView.addObject("customerDetails", detailDTO);
+//			modelAndView.addObject("status", status);
+			modelAndView.setViewName("ticketAuthorizedSuccess");
+			return modelAndView;
+		}
 }

@@ -25,9 +25,10 @@ public class AuthorizeTransactionExtractor implements ResultSetExtractor<TicketD
 	  ticketInfoDTO.setLastname(resultSet.getString(8));
 	  ticketInfoDTO.setAccountNumber(resultSet.getInt(9));
 	  ticketInfoDTO.setAccountBalance(resultSet.getFloat(10));
-	  ticketInfoDTO.setTransactionAmount(resultSet.getFloat(11));
-	  ticketInfoDTO.setToAccountNumber(resultSet.getInt(12));
+	  ticketInfoDTO.setTransactionAmount(resultSet.getString(11));
+	  ticketInfoDTO.setToAccountNumber(resultSet.getString(12));
 	  ticketInfoDTO.setBillpay(resultSet.getBoolean(13));
+	  ticketInfoDTO.setPendingid(resultSet.getInt(14));
 	  
 	  return ticketInfoDTO;
 	 }
