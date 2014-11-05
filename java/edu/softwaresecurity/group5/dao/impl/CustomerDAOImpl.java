@@ -48,7 +48,7 @@ import edu.softwaresecurity.group5.model.ModifyUserInformation;
 public class CustomerDAOImpl implements CustomerDAO {
 	@Autowired
 	DataSource dataSource;
-	
+
 	private final String Ticket_Type_Delete = "Delete";
 	private final String Ticket_Type_Modify = "Modify";
 	private final String Ticket_Type_Authorize = "Authorize";
@@ -192,98 +192,98 @@ public class CustomerDAOImpl implements CustomerDAO {
 			KeyPair usrKey = userKey.genKeyPair();
 			Key publicKey = usrKey.getPublic();
 			Key privateKey = usrKey.getPrivate();
-			String priKey =  DatatypeConverter.printBase64Binary(privateKey
-							.getEncoded());
+			String priKey = DatatypeConverter.printBase64Binary(privateKey
+					.getEncoded());
 			String pubKey = DatatypeConverter.printBase64Binary(publicKey
-							.getEncoded());
+					.getEncoded());
 			// Stroring data into KeyTable - author shivam.
 			String insertIntoKeyTable = "INSERT into user_keys (username, userKey) "
 					+ "VALUES (?,?)";
-			JdbcTemplate jdbcTemplateForKeyTable = new JdbcTemplate(
-					dataSource);
-			jdbcTemplateForKeyTable.update(insertIntoKeyTable,
-					new Object[] { custInfo.getUsername(),
-					pubKey });
-			
-			
-//  commented for keeping backup, sunit sent this first and then changed to above code. so playing safe keeping old commented just incase. Shivam
-//			// generating keypair
-//
-//			KeyPairGenerator userKey = null;
-//			try {
-//				userKey = KeyPairGenerator.getInstance("RSA");
-//
-//			} catch (NoSuchAlgorithmException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//
-//			userKey.initialize(1024);
-//			KeyPair usrKey = userKey.genKeyPair();
-//			java.security.Key publicKey = usrKey.getPublic();
-//			java.security.Key privateKey = usrKey.getPrivate();
-//
-//			String usersPrivateKey = "";
-//			String usersPublicKey = "";
-//			try {
-//				KeyFactory users = KeyFactory.getInstance("RSA");
-//				try {
-//					RSAPublicKeySpec pubKey = (RSAPublicKeySpec) users
-//							.getKeySpec(publicKey, RSAPublicKeySpec.class);
-//					RSAPrivateKeySpec privKey = (RSAPrivateKeySpec) users
-//							.getKeySpec(privateKey, RSAPrivateKeySpec.class);
-//
-//					usersPrivateKey = privKey.getModulus() + ""
-//							+ privKey.getPrivateExponent();
-//					usersPublicKey = pubKey.getModulus() + ""
-//							+ pubKey.getPublicExponent();
-//
-////					// Stroring data into KeyTable - author shivam.
-////					String insertIntoKeyTable = "INSERT into user_keys (username, userKey) "
-////							+ "VALUES (?,?)";
-////					JdbcTemplate jdbcTemplateForKeyTable = new JdbcTemplate(
-////							dataSource);
-////					jdbcTemplateForKeyTable.update(insertIntoKeyTable,
-////							new Object[] { custInfo.getUsername(),
-////									usersPublicKey });
-//					// commented by shivam, I dont uderstand why we need to
-//					// store txt file. Need to verify with sunit.
-//					// try {
-//					// PrintWriter pubOut = new PrintWriter(new FileWriter(
-//					// "public.key"));
-//					// pubOut.println(pubKey.getModulus());
-//					// pubOut.println(pubKey.getPublicExponent());
-//					// pubOut.close();
-//					// } catch (FileNotFoundException e6) {
-//					// // TODO Auto-generated catch block
-//					// e6.printStackTrace();
-//					// } catch (IOException e6) {
-//					// // TODO Auto-generated catch block
-//					// e6.printStackTrace();
-//					// }
-//					//
-//					// try {
-//					// PrintWriter priOut = new PrintWriter(new FileWriter(
-//					// "private.txt"));
-//					// priOut.println(privKey.getModulus());
-//					// priOut.println(privKey.getPrivateExponent());
-//					// priOut.close();
-//					// } catch (FileNotFoundException e2) {
-//					// // TODO Auto-generated catch block
-//					// e2.printStackTrace();
-//					// } catch (IOException e2) {
-//					// // TODO Auto-generated catch block
-//					// e2.printStackTrace();
-//					// }
-//
-//				} catch (InvalidKeySpecException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			} catch (NoSuchAlgorithmException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+			JdbcTemplate jdbcTemplateForKeyTable = new JdbcTemplate(dataSource);
+			jdbcTemplateForKeyTable.update(insertIntoKeyTable, new Object[] {
+					custInfo.getUsername(), pubKey });
+
+			// commented for keeping backup, sunit sent this first and then
+			// changed to above code. so playing safe keeping old commented just
+			// incase. Shivam
+			// // generating keypair
+			//
+			// KeyPairGenerator userKey = null;
+			// try {
+			// userKey = KeyPairGenerator.getInstance("RSA");
+			//
+			// } catch (NoSuchAlgorithmException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
+			//
+			// userKey.initialize(1024);
+			// KeyPair usrKey = userKey.genKeyPair();
+			// java.security.Key publicKey = usrKey.getPublic();
+			// java.security.Key privateKey = usrKey.getPrivate();
+			//
+			// String usersPrivateKey = "";
+			// String usersPublicKey = "";
+			// try {
+			// KeyFactory users = KeyFactory.getInstance("RSA");
+			// try {
+			// RSAPublicKeySpec pubKey = (RSAPublicKeySpec) users
+			// .getKeySpec(publicKey, RSAPublicKeySpec.class);
+			// RSAPrivateKeySpec privKey = (RSAPrivateKeySpec) users
+			// .getKeySpec(privateKey, RSAPrivateKeySpec.class);
+			//
+			// usersPrivateKey = privKey.getModulus() + ""
+			// + privKey.getPrivateExponent();
+			// usersPublicKey = pubKey.getModulus() + ""
+			// + pubKey.getPublicExponent();
+			//
+			// // // Stroring data into KeyTable - author shivam.
+			// // String insertIntoKeyTable =
+			// "INSERT into user_keys (username, userKey) "
+			// // + "VALUES (?,?)";
+			// // JdbcTemplate jdbcTemplateForKeyTable = new JdbcTemplate(
+			// // dataSource);
+			// // jdbcTemplateForKeyTable.update(insertIntoKeyTable,
+			// // new Object[] { custInfo.getUsername(),
+			// // usersPublicKey });
+			// // commented by shivam, I dont uderstand why we need to
+			// // store txt file. Need to verify with sunit.
+			// // try {
+			// // PrintWriter pubOut = new PrintWriter(new FileWriter(
+			// // "public.key"));
+			// // pubOut.println(pubKey.getModulus());
+			// // pubOut.println(pubKey.getPublicExponent());
+			// // pubOut.close();
+			// // } catch (FileNotFoundException e6) {
+			// // // TODO Auto-generated catch block
+			// // e6.printStackTrace();
+			// // } catch (IOException e6) {
+			// // // TODO Auto-generated catch block
+			// // e6.printStackTrace();
+			// // }
+			// //
+			// // try {
+			// // PrintWriter priOut = new PrintWriter(new FileWriter(
+			// // "private.txt"));
+			// // priOut.println(privKey.getModulus());
+			// // priOut.println(privKey.getPrivateExponent());
+			// // priOut.close();
+			// // } catch (FileNotFoundException e2) {
+			// // // TODO Auto-generated catch block
+			// // e2.printStackTrace();
+			// // } catch (IOException e2) {
+			// // // TODO Auto-generated catch block
+			// // e2.printStackTrace();
+			// // }
+			//
+			// } catch (InvalidKeySpecException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
+			// } catch (NoSuchAlgorithmException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// }
 
 			// email private.txt to the user and generate a //column for pub key
 			// to be stored in users table.
@@ -355,106 +355,6 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		return "Database not updated, please contact Branch Representative";
 	}
-	
-
-	
-	public boolean processtransfer(String generatedFromUsernameFrom, String account, String amount) {
-		float amountToTransfer = Float.parseFloat(amount);	
-		CustomerInformationDTO  custinfo = getUserFromAccount(account);
-		String generatedFromUsernameTo = custinfo.getUsername();
-		String balanceFromS= "SELECT account.accountbalance from account "
-				+ " inner join users on "
-				+ "account.username=users.username "
-				+ "WHERE account.username=?";
-		String balanceToS= "SELECT account.accountbalance from account "
-				+ " inner join users on "
-				+ "account.username=users.username "
-				+ "WHERE account.username=?";
-		String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
-				+ " inner join users on "
-				+ "account.username=users.username "
-				+ "where account.username=?";
-		String debitS= "SELECT account.debit from account "
-				+ " inner join users on "
-				+ "account.username=users.username "
-				+ "WHERE account.username=?";
-		String creditS= "SELECT account.credit from account "
-				+ " inner join users on "
-				+ "account.username=users.username "
-				+ "WHERE account.username=?";
-		String insertIntoAccountFrom = "UPDATE "
-				+ "account SET account.accountbalance=?, account.debit=?"
-				+ "WHERE account.username= ? ";
-		String insertIntoAccountTo = "UPDATE "
-				+ "account SET account.accountbalance=?, account.credit=?"
-				+ "WHERE account.username= ? ";
-		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
-		JdbcTemplate jdbcTemplateForAccount = new JdbcTemplate(dataSource);
-		
-		String getUsernameAccount = jdbcTemplateForAccountNumber.queryForObject(getAccountDetailsFromUsernameFrom,
-				new Object[] {generatedFromUsernameFrom},
-				String.class);
-
-		String balanceFromString=jdbcTemplateForAccountNumber.queryForObject(balanceFromS, 
-				new Object[]{generatedFromUsernameFrom}, 
-				String.class);
-		
-		String balanceToString=jdbcTemplateForAccountNumber.queryForObject(balanceToS, 
-				new Object[]{generatedFromUsernameTo}, 
-				String.class);
-		
-		String debitString=jdbcTemplateForAccountNumber.queryForObject(debitS, 
-				new Object[]{generatedFromUsernameFrom}, 
-				String.class);
-		
-		String creditString=jdbcTemplateForAccountNumber.queryForObject(creditS, 
-				new Object[]{generatedFromUsernameTo}, 
-				String.class);
-		
-		float balanceFrom = Float.parseFloat(balanceFromString);
-		float balanceTo = Float.parseFloat(balanceToString);
-		float credit = Float.parseFloat(creditString);
-		float debit = Float.parseFloat(debitString);
-		balanceFrom= balanceFrom- amountToTransfer;
-		balanceTo= balanceTo+ amountToTransfer;
-		credit=credit+amountToTransfer;
-		debit=debit+amountToTransfer;
-		int accountNumber = Integer.parseInt(getUsernameAccount);
-		int accountNumberFrom = Integer.parseInt(account);
-		if(accountNumber== accountNumberFrom){return false;}
-		jdbcTemplateForAccount.update(insertIntoAccountFrom,
-				new Object[]{balanceFrom,debit,generatedFromUsernameFrom});
-		jdbcTemplateForAccount.update(insertIntoAccountTo,
-				new Object[]{balanceTo,credit,generatedFromUsernameTo});
-		return true;
-	}
-	public boolean updatePending(String generatedFromUsernameFrom, String account, String amount) {
-		float amountToTransfer = Float.parseFloat(amount);	
-		//CustomerInformationDTO  custinfo = getUserFromAccount(account);
-		//String generatedFromUsernameTo = custinfo.getUsername();
-		
-		String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
-				+ " inner join users on "
-				+ "account.username=users.username "
-				+ "where account.username=?";
-		
-		String insertIntoPendingFrom = "INSERT INTO pendingtransactions (username,amount,pending,accountnumberfrom,accountnumberto)"
-				+ "VALUES((SELECT username from account where accountnumber=?),?,?,?,?)";
-		
-		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
-		JdbcTemplate jdbcTemplateForPending = new JdbcTemplate(dataSource);
-		String getUsernameAccount = jdbcTemplateForAccountNumber.queryForObject(getAccountDetailsFromUsernameFrom,
-				new Object[] {generatedFromUsernameFrom},
-				String.class);
-
-		int accountNumber = Integer.parseInt(getUsernameAccount);
-		int accountNumberTo = Integer.parseInt(account);
-		if(accountNumber== accountNumberTo){return false;}
-		jdbcTemplateForPending.update(insertIntoPendingFrom,
-				new Object[]{accountNumber,amountToTransfer," 1", accountNumber, accountNumberTo});
-		
-		return true;
-	}
 
 	public String changeAccountPassword(ChangePassword custInfo) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -508,7 +408,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 					custInfo.getUsername() });
 			if (status == 1) {
 				sendEmail(email.get(0), "Your password is changed",
-						"Please login and change the password, you temp password is  : "+ hash + "OTP: "+ otp);
+						"Please login and change the password, you temp password is  : "
+								+ hash + "OTP: " + otp);
 				return "your new password is emailed to you at : " + hash + " "
 						+ email.get(0);
 			}
@@ -696,9 +597,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 				+ " VALUES (?,?,?,?)";
 		JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
 				dataSource);
-		insertIntoTicketsTableTemplate.update(
-				insertIntoTicketsTable,
-				new Object[] { username, false,false, Ticket_Type_Modify});
+		insertIntoTicketsTableTemplate.update(insertIntoTicketsTable,
+				new Object[] { username, false, false, Ticket_Type_Modify });
 		return "Request submitted. The internal user or admin will approve your request.";
 	}
 
@@ -713,9 +613,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 					+ " VALUES (?,?,?,?)";
 			JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
 					dataSource);
-			insertIntoTicketsTableTemplate.update(
-					insertIntoTicketsTable,
-					new Object[] { username, false,false, Ticket_Type_Delete});
+			insertIntoTicketsTableTemplate
+					.update(insertIntoTicketsTable, new Object[] { username,
+							false, false, Ticket_Type_Delete });
 			return "Request submitted. The internal user of admin will approve your request.";
 		} else {
 			return "You have selected No. Your account request has not been submitted for internal review.";
@@ -738,17 +638,20 @@ public class CustomerDAOImpl implements CustomerDAO {
 		JdbcTemplate jdbcTemplateToGetUsername = new JdbcTemplate(dataSource);
 		String username = jdbcTemplateToGetUsername.queryForObject(sql,
 				new Object[] { emailUserInput }, String.class);
-		
+
 		System.out.println(username);
-		
+
 		// Creating a timestamp object
 		Calendar calendar = Calendar.getInstance();
-		java.sql.Timestamp timestampForOTP = new java.sql.Timestamp(calendar.getTime().getTime());
-		
+		java.sql.Timestamp timestampForOTP = new java.sql.Timestamp(calendar
+				.getTime().getTime());
+
 		if (!username.isEmpty()) {
 			String insertIntoOTPTable = "insert into otp(username,otp,generateTime) values (?,?,?)";
-			JdbcTemplate jdbcTemplateInsertIntoOTPTable = new JdbcTemplate(dataSource);
-			jdbcTemplateInsertIntoOTPTable.update(insertIntoOTPTable, new Object[]{username, otp, timestampForOTP});
+			JdbcTemplate jdbcTemplateInsertIntoOTPTable = new JdbcTemplate(
+					dataSource);
+			jdbcTemplateInsertIntoOTPTable.update(insertIntoOTPTable,
+					new Object[] { username, otp, timestampForOTP });
 			return "Email sent to the user";
 		} else {
 			return "Please enter a registered email id";
@@ -765,7 +668,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		}
 		return false;
 	}
-	
+
 	public boolean deleteAccountRequest(String username) {
 
 		String sql = "UPDATE users set enabled = false, userExpired=false, userLocked=false, userDetailsExpired=false where enabled = true and userExpired=true  and username =  ?";
@@ -776,8 +679,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 		}
 		return false;
 	}
-	
-	//TODO make this list only return tickets for active users not the deleted ones.
+
+	// TODO make this list only return tickets for active users not the deleted
+	// ones.
 	public List<TicketInformationDTO> getTicketList() {
 		List<TicketInformationDTO> userList = new ArrayList<TicketInformationDTO>();
 
@@ -787,5 +691,110 @@ public class CustomerDAOImpl implements CustomerDAO {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		userList = jdbcTemplate.query(sql, new TicketRowMapper());
 		return userList;
+	}
+
+	// Transfer money module
+	public boolean processtransfer(String generatedFromUsernameFrom,
+			String account, String amount) {
+		float amountToTransfer = Float.parseFloat(amount);
+		CustomerInformationDTO custinfo = getUserFromAccount(account);
+		String generatedFromUsernameTo = custinfo.getUsername();
+		String balanceFromS = "SELECT account.accountbalance from account "
+				+ " inner join users on " + "account.username=users.username "
+				+ "WHERE account.username=?";
+		String balanceToS = "SELECT account.accountbalance from account "
+				+ " inner join users on " + "account.username=users.username "
+				+ "WHERE account.username=?";
+		String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
+				+ " inner join users on "
+				+ "account.username=users.username "
+				+ "where account.username=?";
+		String debitS = "SELECT account.debit from account "
+				+ " inner join users on " + "account.username=users.username "
+				+ "WHERE account.username=?";
+		String creditS = "SELECT account.credit from account "
+				+ " inner join users on " + "account.username=users.username "
+				+ "WHERE account.username=?";
+		String insertIntoAccountFrom = "UPDATE "
+				+ "account SET account.accountbalance=?, account.debit=?"
+				+ "WHERE account.username= ? ";
+		String insertIntoAccountTo = "UPDATE "
+				+ "account SET account.accountbalance=?, account.credit=?"
+				+ "WHERE account.username= ? ";
+		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForAccount = new JdbcTemplate(dataSource);
+
+		String getUsernameAccount = jdbcTemplateForAccountNumber
+				.queryForObject(getAccountDetailsFromUsernameFrom,
+						new Object[] { generatedFromUsernameFrom },
+						String.class);
+
+		String balanceFromString = jdbcTemplateForAccountNumber.queryForObject(
+				balanceFromS, new Object[] { generatedFromUsernameFrom },
+				String.class);
+
+		String balanceToString = jdbcTemplateForAccountNumber.queryForObject(
+				balanceToS, new Object[] { generatedFromUsernameTo },
+				String.class);
+
+		String debitString = jdbcTemplateForAccountNumber.queryForObject(
+				debitS, new Object[] { generatedFromUsernameFrom },
+				String.class);
+
+		String creditString = jdbcTemplateForAccountNumber
+				.queryForObject(creditS,
+						new Object[] { generatedFromUsernameTo }, String.class);
+
+		float balanceFrom = Float.parseFloat(balanceFromString);
+		float balanceTo = Float.parseFloat(balanceToString);
+		float credit = Float.parseFloat(creditString);
+		float debit = Float.parseFloat(debitString);
+		balanceFrom = balanceFrom - amountToTransfer;
+		balanceTo = balanceTo + amountToTransfer;
+		credit = credit + amountToTransfer;
+		debit = debit + amountToTransfer;
+		int accountNumber = Integer.parseInt(getUsernameAccount);
+		int accountNumberFrom = Integer.parseInt(account);
+		if (accountNumber == accountNumberFrom) {
+			return false;
+		}
+		jdbcTemplateForAccount.update(insertIntoAccountFrom, new Object[] {
+				balanceFrom, debit, generatedFromUsernameFrom });
+		jdbcTemplateForAccount.update(insertIntoAccountTo, new Object[] {
+				balanceTo, credit, generatedFromUsernameTo });
+		return true;
+	}
+
+	public boolean updatePending(String generatedFromUsernameFrom,
+			String account, String amount) {
+		float amountToTransfer = Float.parseFloat(amount);
+		// CustomerInformationDTO custinfo = getUserFromAccount(account);
+		// String generatedFromUsernameTo = custinfo.getUsername();
+
+		String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
+				+ " inner join users on "
+				+ "account.username=users.username "
+				+ "where account.username=?";
+
+		String insertIntoPendingFrom = "INSERT INTO pendingtransactions (username,amount,pending,accountnumberfrom,accountnumberto)"
+				+ "VALUES((SELECT username from account where accountnumber=?),?,?,?,?)";
+
+		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForPending = new JdbcTemplate(dataSource);
+		String getUsernameAccount = jdbcTemplateForAccountNumber
+				.queryForObject(getAccountDetailsFromUsernameFrom,
+						new Object[] { generatedFromUsernameFrom },
+						String.class);
+
+		int accountNumber = Integer.parseInt(getUsernameAccount);
+		int accountNumberTo = Integer.parseInt(account);
+		if (accountNumber == accountNumberTo) {
+			return false;
+		}
+		jdbcTemplateForPending.update(insertIntoPendingFrom, new Object[] {
+				accountNumber, amountToTransfer, " 1", accountNumber,
+				accountNumberTo });
+
+		return true;
 	}
 }

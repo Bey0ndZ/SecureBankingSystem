@@ -1,37 +1,39 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page session="true"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-<!DOCTYPE HTML>
+<!DOCTYPE html>
+<html lang="en">
 
-<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-	<!--Google Fonts-->
-	<link href='http://fonts.googleapis.com/css@family=Open+Sans_3A400,300,300italic,400italic,600,600italic,700,700italic' rel='stylesheet' type='text/css'>
-	<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" type="text/css" />
-	<link href="${pageContext.request.contextPath}/resources/css/jquery.fancybox.css" rel="stylesheet" type="text/css" />
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>Welcome, ${username }</title>
+
+<!-- Bootstrap Core CSS -->
+<link
+	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
+	rel="stylesheet">
+
+<!-- Custom CSS -->
+<link
+	href="${pageContext.request.contextPath}/resources/css/sb-admin.css"
+	rel="stylesheet">
+
+<!-- Custom Fonts -->
+<link
+	href="${pageContext.request.contextPath}/resources/font-awesome-4.1.0/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
 	
-	<title>Bank of G5!</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-	<link rel="shortcut icon" href="img/favicon.png" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
 
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.js"> </script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.flexslider-min.js"> </script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.easing.1.3.js"> </script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/hoverIntent.js"> </script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.sfmenu.js"> </script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/retina.js"> </script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/custom.js"> </script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.fancybox.js"> </script>
-
-<script src=" https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
-
-
-	<script type="text/javascript">
+<script type="text/javascript">
 	jQuery(window).load(function() {
 		jQuery("#pendingButton").css("display","none");
 	//jQuery('.slider').flexslider();
@@ -46,198 +48,192 @@
 	 "text"    : "Menu"
 	}).appendTo(".topmenu select");
 	
-	jQuery("#transfer_amount").change(function()
-			{
+	jQuery("#transfer_amount").change(function() {
 		
 		var value=jQuery("#transfer_amount").val();
 		
-		if(value<10000)
-			{
+		if(value<10000) {
 			jQuery("#transferButton").css("display","block");
 			jQuery("#pendingButton").css("display","none");
 			//<input type="submit" name="pending" id="pendingButton" value="Approve Transfer" />
 			
 			//jQuery.append("<input type="submit" name="transfer" id="transferButton" value="Request" />")
 			}
-		else
-			{
+		else {
 			jQuery("#pendingButton").css("display","block");
 			jQuery("#transferButton").css("display","none");
 			//jQuery.append("<input type="submit" name="pending" id="pendingButton" value="Approve Transfer" />")
 			}
 	});
-	
-	// Populate dropdown with menu items
-	jQuery(".topmenu a").each(function() {
-	var el = jQuery(this);
-	jQuery("<option />", {
-	   "value"   : el.attr("href"),
-	   "text"    : el.text()
-	}).appendTo(".topmenu select");
-	});
+</script>
 
-	jQuery(".topmenu select").change(function() {
-	window.location = jQuery(this).find("option:selected").val();
-	});
-	
-	//jQuery('.fancybox').fancybox();	
-		
-	});
-	
-	</script>
 </head>
 
 <body>
+	<sec:authorize access="hasRole('ROLE_USER')">
+		<div id="wrapper">
 
-	<!-- Start of top wrapper -->
-	<div id="top_wrapper">
-		<!-- Start of content wrapper -->
-		<div class="content_wrapper">
-		</div>
-		<!-- End of content wrapper -->
-	
-		<!-- Clear Fix -->
-		<div class="clear"></div>
-	</div><!-- End of top wrapper -->
-	
-	<!-- Start of header wrapper -->
-	<div id="header_wrapper">
-	
-		<!-- Start of content wrapper -->
-		<div class="content_wrapper">
-		
-			<!-- Start of logo -->
-			<div id="logo">
-				<a href="#"><img src="${pageContext.request.contextPath}/resources/img/bank_logo.png" width="250" height="80" /></a>
-			</div><!-- End of logo -->
-	
-			<!-- Start of top menu wrapper -->
-			<div class="topmenuwrapper">		
-				<!-- Start of topmenu -->
-				<nav class="topmenu"> 
-					<ul class="sf-menu">
-						<li><a href="accountSummary.jsp">Accounts</a></li>  
-						<li><a href="billPay.jsp">Bill Pay</a></li>
-						<li><a href="transferMoney.jsp">Transfer Money</a>
-							<ul>
-								<li><a href="transferMoney.jsp"> Make A Transfer</a></li>
-								<li><a href="transferActivity.jsp"> View Transfer Activity</a></li>
-							</ul>
-						</li>
-						<li><a href="">Debit/Credit Funds</a>
-							<ul>
-								<li><a href="debitAmount.jsp"> Debit Money</a></li>
-								<li><a href="creditAmount.jsp"> Credit Money</a></li>
-							</ul>
-						</li>
-						<li><a href="helpSupport.jsp">Help and Support</a></li>
-					</ul>
-					
-				</nav><!-- End of topmenu -->
-	
-				<!-- Start of header phone -->
-				<div class="header_phone">
-				Contact: (000) 000-0000
+			<!-- Navigation -->
+			<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse"
+						data-target=".navbar-ex1-collapse">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="index">Customer</a>
 				</div>
-				<!-- End of header phone -->
-				<!-- Clear Fix -->
-				<div class="clear"></div>
-			</div><!-- End of top menu wrapper -->
-		</div><!-- End of content wrapper -->
+				<!-- Top Menu Items -->
+				<ul class="nav navbar-right top-nav">
 
-		<!-- Clear Fix --><div class="clear"></div>
 
-	</div><!-- End of header wrapper -->
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown"><i class="fa fa-user"></i> <!-- Accessing the session object -->
+							<c:if test="${pageContext.request.userPrincipal.name != null }">
+                    	${pageContext.request.userPrincipal.name}
+                    </c:if> <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+							</li>
+							<li class="divider"></li>
+							<li><a href="javascript:formSubmit()"><i
+									class="fa fa-fw fa-power-off"></i> Log Out</a></li>
+						</ul></li>
+				</ul>
 
-	
-	<!-- Start of content wrapper -->
-	<div id="contentwrapper">
-		<!-- Start of content wrapper -->
-		<div class="content_wrapper">
-			<div class="contentright" style="width: 100%">
-			<form:form method="post" action="transferMoney" modelAttribute="accountNumber">	
-			<i><b>Transfer Money at Bank of G5!</b></i>				
-<<<<<<< Updated upstream
-					<b>Account Number :</b> <br/> <input type="text" name="verifyUser" value="${param.verifyUser}" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
-=======
-					<b>Account Number :</b> <br/> <input type="text" name="verifyUser" id="accountNumber_RemoveUser"  style="color:#999;" /><br/>
->>>>>>> Stashed changes
-					<a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/> <br/> <br/>
-				</form:form>
-				<c:if test="${not empty customerDetails}">
-					  
-				<b>First Name:</b> ${customerDetails.firstname}<br/>
-				<b>Last Name:</b> ${customerDetails.lastname}<br/>
-				<b>Contact:</b> ${customerDetails.phonenumber}<br/> <br/>
-				<b>Address:</b> ${customerDetails.address}<br/> <br/>
-				<b>Email Address:</b> ${customerDetails.email}<br/><br/>
-				<b>Account no:</b> ${param.verifyUser}<br/><br/>
-				
-			
-			<!-- commented by shivam, to enable above form temporary for chaitali to start working. -->
-				<form:form method="post" action="transferMoneyConfirmation" modelAttribute="transfer" >
-					<i><b>Transfer Money at Bank of G5!</b></i> <br/>					
-					<p> Current Account Balance: PRINT BALANCE HERE --</p>
-	
-					<input type="text" name="accountNo" id="accountNo" value="${param.verifyUser}" style="color:#999" visibility:"hidden" /><br/>
-<!-- 					<h6>Transfer Money To:</h6><input type="number" name="transferTo" id="receiver" style="color:#999;" /><br/> -->
-					<h6>Amount:</h6><input type="number" name="amount" id="transfer_amount" style="color:#999;" /> <br/>
-					<input type="submit" name="action" id="transferButton" value="Transfer" />
-					<input type="submit" name="action" id="pendingButton" value="Approve Transfer" />
-				</form:form>
-				
-				</c:if>
-				<c:if test="${not empty submitMessage}">
+				<!-- Logout feature implementation -->
+				<c:url value="/j_spring_security_logout" var="logoutUrl" />
+				<form action="${logoutUrl}" method="post" id="logoutForm">
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
+				</form>
+
+				<!-- Logout Script -->
+				<script type="text/javascript">
+					function formSubmit() {
+						document.getElementById("logoutForm").submit();
+					}
+				</script>
+
+				<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+				<div class="collapse navbar-collapse navbar-ex1-collapse">
+					<ul class="nav navbar-nav side-nav">
+						<li class="active"><a href="index.html"><i
+								class="fa fa-fw fa-dashboard"></i> Account</a></li>
+						<li><a href="processBillPayment"><i
+								class="fa fa-fw fa-bar-chart-o"></i> Bill Pay</a></li>
+						<li><a href="javascript:;" data-toggle="collapse"
+							data-target="#demo1"><i class="fa fa-fw fa-arrows-v"></i>
+								Transfer Money <i class="fa fa-fw fa-caret-down"></i></a>
+							<ul id="demo1" class="collapse">
+								<li><a href="transferMoney">Make a Transfer</a></li>
+								<li><a href="#">View Transfer Activity</a></li>
+							</ul></li>
+						<li><a href="javascript:;" data-toggle="collapse"
+							data-target="#demo2"><i class="fa fa-fw fa-arrows-v"></i>
+								Debit or Credit Funds <i class="fa fa-fw fa-caret-down"></i></a>
+							<ul id="demo2" class="collapse">
+								<li><a href="debitFunds">Debit</a></li>
+								<li><a href="creditFunds">Credit</a></li>
+							</ul></li>
+						<li><a href="deleteAccount"><i
+								class="fa fa-fw fa-bar-chart-o"></i> Delete Account</a></li>
+					</ul>
+				</div>
+				<!-- /.navbar-collapse -->
+			</nav>
+
+			<div id="page-wrapper">
+
+				<div class="container-fluid">
+
+					<!-- Page Heading -->
+					<div class="row">
+						<div class="col-lg-12">
+							<h1 class="page-header">General Information</h1>
+						</div>
+					</div>
+					<!-- /.row -->
+
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h3 class="panel-title">
+										<i class="fa fa-bar-chart-o fa-fw"></i> Information
+									</h3>
+								</div>
+								<div class="panel-body">
+									<div id="morris-area-chart">
+										<div class="panel-body">
+											<form:form method="POST" action="transferMoney">
+												Accountnumber to transfer to:<br />
+												<input type="text" name="accountNumber" />
+												<br />
+												<input type="submit" value="Search User" />
+											</form:form>
+
+											<!-- Display user details -->
+											<c:if test="${not empty customerDetails }">
+												<b>First Name:</b> ${customerDetails.firstname}<br />
+												<b>Last Name:</b> ${customerDetails.lastname}<br />
+												<b>Contact:</b> ${customerDetails.phonenumber}<br />
+												<b>Address:</b> ${customerDetails.address}<br />
+												<b>Email Address:</b> ${customerDetails.email}<br />
+												<b></b>
+
+												<form:form method="post" action="transferMoneyConfirmation"
+													modelAttribute="transfer">
+													<i><b>Transfer Money at Bank of G5!</b></i>
+													<br />
+													<p>Current Account Balance: PRINT BALANCE HERE --</p>
+
+													<input type="text" name="accountNo" id="accountNo"
+														value="${param.accountNumber}"
+														style="color: #999; visibility: hidden;" />
+													<br />
+
+													<h6>Amount:</h6>
+													<input type="number" name="amount" id="transfer_amount"
+														style="color: #999;" />
+													<br />
+													<input type="submit" name="action" id="transferButton"
+														value="Transfer" />
+													<input type="submit" name="action" id="pendingButton"
+														value="Approve Transfer" />
+
+												</form:form>
+											</c:if>
+											<c:if test="${not empty submitMessage}">
 											${submitMessage}
 										</c:if>
-				
-				
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /.row -->
+
+				</div>
+				<!-- /.container-fluid -->
+
 			</div>
-	
-			<div class="clear"></div>
-		</div><!-- End of content wrapper -->
+			<!-- /#page-wrapper -->
 
-		<!-- Clear Fix --><div class="clear"></div>
+		</div>
+		<!-- /#wrapper -->
 
-	</div><!-- End of content wrapper -->
+		<!-- jQuery Version 1.11.0 -->
+		<script
+			src="${pageContext.request.contextPath}/resources/js/jquery-1.11.0.js"></script>
 
-	<!-- Start of bottom wrapper -->
-	<div id="bottom_wrapper">
-
-		<!-- Start of content wrapper -->
-		<div class="content_wrapper">
-		
-			<!-- Start of one fourth first -->
-			<div class="one_fourth_first">
-			<h4>FTR_TEXT_1</h4>
-				<ul>
-					<li><a href="#">LINK_1</a></li>
-					<li><a href="#">LINK_2</a></li>			
-				</ul>
-			</div><!-- End of one fourth first -->
-	
-			<!-- Start of one fourth -->
-			<div class="one_fourth">
-				<h4>FTR_TEXT_2</h4>	
-				<ul>
-					<li><a href="#">LINK_1_1</a></li>
-					<li><a href="#">LINK_2_1</a></li>			
-				</ul>	
-			</div><!-- End of one fourth -->
-	
-			<!-- Start of one fourth -->
-			<div class="one_fourth">
-			<h4>FTR_TEXT_3</h4>		
-				<ul>
-					<li><a href="#">LINK_1_2</a></li>
-					<li><a href="#">LINK_2_2</a></li>			
-				</ul>
-			</div><!-- End of one fourth -->
-
-		</div><!-- End of content wrapper -->
-
-		<!-- Clear Fix --><div class="clear"></div>
-
-	</div><!-- End of bottom wrapper -->
+		<!-- Bootstrap Core JavaScript -->
+		<script
+			src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+	</sec:authorize>
 </body>
+
 </html>

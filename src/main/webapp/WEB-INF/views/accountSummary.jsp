@@ -92,7 +92,7 @@
 							data-target="#demo1"><i class="fa fa-fw fa-arrows-v"></i>
 								Transfer Money <i class="fa fa-fw fa-caret-down"></i></a>
 							<ul id="demo1" class="collapse">
-								<li><a href="#">Make a Transfer</a></li>
+								<li><a href="transferMoney">Make a Transfer</a></li>
 								<li><a href="#">View Transfer Activity</a></li>
 							</ul></li>
 						<li><a href="javascript:;" data-toggle="collapse"
