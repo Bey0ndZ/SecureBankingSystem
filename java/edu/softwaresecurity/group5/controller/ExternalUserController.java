@@ -321,11 +321,17 @@ public class ExternalUserController {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			String loggedInUser = userDetail.getUsername();
 			modelAndView.addObject("username", loggedInUser);
-			System.out.println(loggedInUser);
-
+			
+			// Check whether the user has already requested a delete
+			String requestForDelete = custService.deleteAccount(loggedInUser, false);
+			String returnStringForDeleteAccount = "You have already submitted a request for account deletion.";
+			if (!requestForDelete.equalsIgnoreCase(returnStringForDeleteAccount)) {
 			// Call the DAOImpl layer
 			custInfoFromDTO = custService.fetchUserDetails(loggedInUser);
 			modelAndView.addObject("userInformation", custInfoFromDTO);
+			} else {
+				modelAndView.addObject("alreadySubmitted", returnStringForDeleteAccount);
+			}
 			modelAndView.setViewName("deleteAccount");
 		} else {
 			modelAndView.setViewName("permission-denied");

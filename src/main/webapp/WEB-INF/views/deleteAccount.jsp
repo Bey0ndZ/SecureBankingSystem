@@ -1,6 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
@@ -57,8 +59,8 @@
                     	${pageContext.request.userPrincipal.name}
                     </c:if> <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="accountSummary"><i class="fa fa-fw fa-user"></i> Profile</a>
-							</li>
+							<li><a href="accountSummary"><i class="fa fa-fw fa-user"></i>
+									Profile</a></li>
 							<li class="divider"></li>
 							<li><a href="javascript:formSubmit()"><i
 									class="fa fa-fw fa-power-off"></i> Log Out</a></li>
@@ -99,8 +101,7 @@
 							<ul id="demo2" class="collapse">
 								<li><a href="debitFunds">Debit</a></li>
 								<li><a href="creditFunds">Credit</a></li>
-							</ul>
-						</li>
+							</ul></li>
 						<li><a href="deleteAccount"><i
 								class="fa fa-fw fa-bar-chart-o"></i> Delete Account</a></li>
 					</ul>
@@ -125,54 +126,69 @@
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h3 class="panel-title">
-										<i class="fa fa-bar-chart-o fa-fw"></i> Your details 
+										<i class="fa fa-bar-chart-o fa-fw"></i> Your details
 									</h3>
 								</div>
 								<div class="panel-body">
 									<div id="morris-area-chart">
 										<div class="panel-body">
-											<c:if test="${not empty userInformation}">
-										<c:forEach var="o" items="${userInformation}">
-											<b> Username: </b> ${o.username} <br/> <br/>
-											<b> Firstname: </b> ${o.firstname} <br/> <br/>
-											<b> Lastname: </b> ${o.lastname} <br/> <br/>
-											<b> Sex: </b> ${o.sex} <br/> <br/>
-											<b> Selection: </b> ${o.selection} <br/> <br/>
-											<b> Phonenumber: </b> ${o.phonenumber} <br/> <br/>
-											<b> Email: </b> ${o.email} <br/> <br/>
-											<b> Address: </b> ${o.address} <br/> <br/>
- 											<b> Accountnumber: </b> ${o.accountNumber} <br/> <br/>
-											<b> Accountbalance: </b> ${o.accountBalance}<br/> <br/>
-										</c:forEach>
+											<c:if test="${not empty alreadySubmitted }">
+											${alreadySubmitted } Please wait till the admin approves.
 										</c:if>
-										<br/>
-										<br/>		
-										<c:if test="${not empty requestSubmittedMessage}">
+											<c:if test="${not empty userInformation}">
+												<c:forEach var="o" items="${userInformation}">
+													<b> Username: </b> ${o.username} <br />
+													<br />
+													<b> Firstname: </b> ${o.firstname} <br />
+													<br />
+													<b> Lastname: </b> ${o.lastname} <br />
+													<br />
+													<b> Sex: </b> ${o.sex} <br />
+													<br />
+													<b> Selection: </b> ${o.selection} <br />
+													<br />
+													<b> Phonenumber: </b> ${o.phonenumber} <br />
+													<br />
+													<b> Email: </b> ${o.email} <br />
+													<br />
+													<b> Address: </b> ${o.address} <br />
+													<br />
+													<b> Accountnumber: </b> ${o.accountNumber} <br />
+													<br />
+													<b> Accountbalance: </b> ${o.accountBalance}<br />
+													<br />
+												</c:forEach>
+
+												<!-- New form to update only Lastname,
+										Sex, Selection, Phonenumber, Email and Address -->
+												<form:form method="POST" action="deleteAccount"
+													modelAttribute="modifyExternalUserAttributes">
+													<b> Do you wish to delete your account? </b>
+													<br />
+													<input type="radio" name="deleteAccount" value="Yes" /> Yes <br />
+													<input type="radio" name="deleteAccount" value="No" /> No <br />
+													<br />
+													<input type="submit" value="Request Deletion" />
+												</form:form>
+											</c:if>
+											<br /> <br />
+											<c:if test="${not empty requestSubmittedMessage}">
 											${requestSubmittedMessage }
 										</c:if>
-										<!-- New form to update only Lastname,
-										Sex, Selection, Phonenumber, Email and Address -->
-										<form:form method="POST" action="deleteAccount" modelAttribute="modifyExternalUserAttributes">
-											<b> Do you wish to delete your account? </b> <br/>
-											<input type="radio" name="deleteAccount" value="Yes"/> Yes <br/>
-											<input type="radio" name="deleteAccount" value="No" /> No <br/>
-											<br/>
-											<input type="submit" value="Request Deletion" />	
-												</form:form>
-											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<!-- /.row -->
-
 				</div>
-				<!-- /.container-fluid -->
+				<!-- /.row -->
 
 			</div>
-			<!-- /#page-wrapper -->
+			<!-- /.container-fluid -->
+
+		</div>
+		<!-- /#page-wrapper -->
 
 		</div>
 		<!-- /#wrapper -->

@@ -88,7 +88,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hash = passwordEncoder.encode(addInfo.getPassword());
-		
+
 		List<DuplicateValidationCheckerDTO> list1 = new ArrayList<DuplicateValidationCheckerDTO>();
 		list1 = checkDuplicateDetails(addInfo.getUserName(),
 				addInfo.getEmailAddress_addUser(),
@@ -318,9 +318,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 		return customerInformationToDisplay;
 
 	}
-	
-	
-	//This method will return all the internal employees which are active, and is used in admin.
+
+	// This method will return all the internal employees which are active, and
+	// is used in admin.
 	public List<EmployeeInformationDTO> getUserList() {
 		List<EmployeeInformationDTO> userList = new ArrayList<EmployeeInformationDTO>();
 
@@ -344,7 +344,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		return customerInformationToDisplay.get(0);
 
 	}
-	
+
 	public EmployeeInformationDTO getEmployeeFromUserName(String accountNumber) {
 		List<EmployeeInformationDTO> employeeInformationToDisplay = new ArrayList<EmployeeInformationDTO>();
 		String retrieveDetailsQuery = "SELECT users.username, users.firstname, users.lastname, users.sex, "
@@ -373,6 +373,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		return "Database not updated, please contact Branch Representative";
 	}
+
 	public String updateExternalAccount(TicketDetailDTO custInfo) {
 		// TODO Auto-generated method stub
 		String sql = "UPDATE users set firstname = ?,lastname = ?, phonenumber = ?, email = ?, address=?"
@@ -385,13 +386,16 @@ public class CustomerDAOImpl implements CustomerDAO {
 						custInfo.getAddress(), custInfo.getUsername() });
 		if (status == 1) {
 			String updateModificationTable = "UPDATE modificationrequests set requestcompleted = true where username =  ?";
-			int status1 = jdbcTemplate.update(updateModificationTable, new Object[] { custInfo.getUsername() });
+			int status1 = jdbcTemplate.update(updateModificationTable,
+					new Object[] { custInfo.getUsername() });
 			String updateIntoTicketsTable = "UPDATE user_tickets set requestcompleted =true, requestapproved=true, requestrejected=false where username =  ? and id = ?";
 			JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
 					dataSource);
 
-			int status2 = insertIntoTicketsTableTemplate.update(updateIntoTicketsTable, new Object[] { custInfo.getUsername(), custInfo.getId() });
-			if (status1 >0 && status2>0) {
+			int status2 = insertIntoTicketsTableTemplate.update(
+					updateIntoTicketsTable,
+					new Object[] { custInfo.getUsername(), custInfo.getId() });
+			if (status1 > 0 && status2 > 0) {
 				return "Updated account details Succesfully";
 			}
 			return "Database not updated, please contact Branch Representative!";
@@ -399,6 +403,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		return "Database not updated, please contact Branch Representative";
 	}
+
 	public String changeAccountPassword(ChangePassword custInfo) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hash = passwordEncoder.encode(custInfo.getPassword());
@@ -429,7 +434,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 							return mail;
 						}
 					});
-			if(email.get(0).isEmpty()||email.get(0)==null){
+			if (email.get(0).isEmpty() || email.get(0) == null) {
 				return "NO such active account exist with us";
 			}
 
@@ -456,7 +461,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 				sendEmail(email.get(0), "Your password is changed",
 						"Please login and change the password, you temp password is  : "
 								+ "OTP: " + otp);
-				return "your new password is emailed to you at : " + email.get(0)+" . Please login and change your password immediately.";
+				return "your new password is emailed to you at : "
+						+ email.get(0)
+						+ " . Please login and change your password immediately.";
 			}
 			return "Database please contact Branch Representative";
 		}
@@ -516,24 +523,25 @@ public class CustomerDAOImpl implements CustomerDAO {
 		String insertIntoPendingTransactions = "INSERT INTO "
 				+ "pendingtransactions(username, amount, pending, accountnumberfrom,"
 				+ "accountnumberto, billpay) " + "VALUES (?,?,?,?,?,?)";
-		
+
 		// Query for inserting into the transactions table
 		String insertIntoTxTable = "INSERT INTO transactions(id, usernamefrom,"
 				+ "usernameto, usernamefromaccountnumber, usernametoaccountnumber, transactiontype, userdelete"
 				+ "transactiondate) VALUES (?,?,?,?,?,?,?,?)";
-		
+
 		// Generating random tx IDs
 		Random randGenerator = new Random();
 		int txID = 100000 + randGenerator.nextInt(999999);
-		
+
 		// Generating timestamp
 		Calendar calendarForTx = Calendar.getInstance();
-		Timestamp timeStampForTx = new Timestamp(calendarForTx
-				.getTime().getTime());
+		Timestamp timeStampForTx = new Timestamp(calendarForTx.getTime()
+				.getTime());
 
 		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
 		// Insert into tx table
-		JdbcTemplate jdbcTemplateToInsertInTxTable = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateToInsertInTxTable = new JdbcTemplate(
+				dataSource);
 		JdbcTemplate jdbcTemplateForPendingTransactions = new JdbcTemplate(
 				dataSource);
 
@@ -543,24 +551,26 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		int accountNumber = Integer.parseInt(getUsernameAccount);
 		int accountNumberFrom = Integer.parseInt(account);
-		
+
 		// Getting the username of the merchant
 		JdbcTemplate getMerchantUsername = new JdbcTemplate(dataSource);
 		String merchantUsernameQuery = "SELECT * FROM account WHERE accountnumber=?";
-		
+
 		// Get the username
-		String merchantUsername = getMerchantUsername.queryForObject(merchantUsernameQuery, 
-				new Object[] {accountNumberFrom}, String.class);
+		String merchantUsername = getMerchantUsername.queryForObject(
+				merchantUsernameQuery, new Object[] { accountNumberFrom },
+				String.class);
 
 		jdbcTemplateForPendingTransactions.update(
 				insertIntoPendingTransactions, new Object[] {
 						generatedFromUsername, amountToTransfer, false,
 						accountNumber, accountNumberFrom, true });
-		
+
 		// Running the insert query
-		jdbcTemplateToInsertInTxTable.update(insertIntoTxTable,
-				new Object[]{txID, generatedFromUsername, merchantUsername,
-				accountNumberFrom, accountNumber, "TX_BILLPAY_REQ", false, timeStampForTx});
+		jdbcTemplateToInsertInTxTable.update(insertIntoTxTable, new Object[] {
+				txID, generatedFromUsername, merchantUsername,
+				accountNumberFrom, accountNumber, "TX_BILLPAY_REQ", false,
+				timeStampForTx });
 		return true;
 	}
 
@@ -585,8 +595,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 			return null;
 		}
 	}
-	
-	// TODO: Write the impl for when the customer approves to pay off the merchant
+
+	// TODO: Write the impl for when the customer approves to pay off the
+	// merchant
 
 	// Debit funds from user account
 	public String debitFromUserAccount(String usernameOfCustomer,
@@ -606,37 +617,41 @@ public class CustomerDAOImpl implements CustomerDAO {
 			// Updating the account table
 			String updateAfterDebit = "UPDATE account SET accountBalance=?, debit=?"
 					+ "WHERE username=?";
-			
+
 			jdbcTemplateForGettingDebitDetails.update(updateAfterDebit,
 					new Object[] { accountBalanceAfterDebit, debitAmount,
 							usernameOfCustomer });
-			
+
 			// Generating random tx IDs
 			Random randGenerator = new Random();
 			int txID = 100000 + randGenerator.nextInt(999999);
-			
+
 			// Generating timestamp
 			Calendar calendarForTx = Calendar.getInstance();
-			Timestamp timeStampForTx = new Timestamp(calendarForTx
-					.getTime().getTime());
-			
+			Timestamp timeStampForTx = new Timestamp(calendarForTx.getTime()
+					.getTime());
+
 			// Updating the transactions table
 			String insertIntoTransactionsTable = "INSERT INTO transactions(id, usernamefrom,"
 					+ "usernameto, usernamefromaccountnumber, usernametoaccountnumber, transactiontype,userdelete,"
 					+ "transactiondate) VALUES (?,?,?,?,?,?,?,?)";
-			
+
 			// Get the accountNumber of the user
 			String getAccountNumber = "SELECT accountnumber from account where username=?";
-			JdbcTemplate jdbcTemplateToGetAccountNumber = new JdbcTemplate(dataSource);
-			
-			int accountNumber = jdbcTemplateToGetAccountNumber.queryForObject(getAccountNumber
-					, new Object[] {usernameOfCustomer}, Integer.class);
-			
-			JdbcTemplate jdbcTemplateInsertIntoTxTable = new JdbcTemplate(dataSource);
+			JdbcTemplate jdbcTemplateToGetAccountNumber = new JdbcTemplate(
+					dataSource);
+
+			int accountNumber = jdbcTemplateToGetAccountNumber.queryForObject(
+					getAccountNumber, new Object[] { usernameOfCustomer },
+					Integer.class);
+
+			JdbcTemplate jdbcTemplateInsertIntoTxTable = new JdbcTemplate(
+					dataSource);
 			jdbcTemplateInsertIntoTxTable.update(insertIntoTransactionsTable,
-					new Object[]{txID, usernameOfCustomer, usernameOfCustomer, 
-					accountNumber, accountNumber, "TX_DEBIT", false, timeStampForTx});
-			
+					new Object[] { txID, usernameOfCustomer,
+							usernameOfCustomer, accountNumber, accountNumber,
+							"TX_DEBIT", false, timeStampForTx });
+
 			System.out.println("TX table updated");
 
 			return "Account debited with: " + debitAmount + ". New balance: "
@@ -673,37 +688,39 @@ public class CustomerDAOImpl implements CustomerDAO {
 						new Object[] { usernameLoggedIn }, Float.class);
 		float accountBalanceAfterCredit = accountBalanceBeforeCredit
 				+ creditAmountFloat;
-		
+
 		// Generating random tx IDs
 		Random randGenerator = new Random();
 		int txID = 100000 + randGenerator.nextInt(999999);
-		
+
 		// Generating timestamp
 		Calendar calendarForTx = Calendar.getInstance();
-		Timestamp timeStampForTx = new Timestamp(calendarForTx
-				.getTime().getTime());
-		
+		Timestamp timeStampForTx = new Timestamp(calendarForTx.getTime()
+				.getTime());
+
 		// Updating the account table
 		String updateAfterCredit = "UPDATE account SET accountBalance=?, credit=?"
 				+ "WHERE username=?";
-		
+
 		// Get the accountNumber of the user
 		String getAccountNumber = "SELECT accountnumber from account where username=?";
-		JdbcTemplate jdbcTemplateToGetAccountNumber = new JdbcTemplate(dataSource);
-		
-		int accountNumber = jdbcTemplateToGetAccountNumber.queryForObject(getAccountNumber, 
-				new Object[] {usernameLoggedIn}, Integer.class);
-		
+		JdbcTemplate jdbcTemplateToGetAccountNumber = new JdbcTemplate(
+				dataSource);
+
+		int accountNumber = jdbcTemplateToGetAccountNumber.queryForObject(
+				getAccountNumber, new Object[] { usernameLoggedIn },
+				Integer.class);
+
 		// Insert into tx table
 		String insertIntoTxTable = "INSERT INTO transactions(id, usernamefrom,"
 				+ "usernameto, usernamefromaccountnumber, usernametoaccountnumber, transactiontype, userdelete,"
 				+ "transactiondate) VALUES (?,?,?,?,?,?,?,?)";
-		
+
 		// Inserting
 		JdbcTemplate insertIntoTxTableTemplate = new JdbcTemplate(dataSource);
-		insertIntoTxTableTemplate.update(insertIntoTxTable,
-				new Object[]{txID, usernameLoggedIn, usernameLoggedIn, 
-				accountNumber, accountNumber, "TX_CREDIT", false, timeStampForTx});
+		insertIntoTxTableTemplate.update(insertIntoTxTable, new Object[] {
+				txID, usernameLoggedIn, usernameLoggedIn, accountNumber,
+				accountNumber, "TX_CREDIT", false, timeStampForTx });
 
 		jdbcTemplateForGettingCreditDetails.update(updateAfterCredit,
 				new Object[] { accountBalanceAfterCredit, creditAmountFloat,
@@ -732,32 +749,44 @@ public class CustomerDAOImpl implements CustomerDAO {
 		JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
 				dataSource);
 
-		insertIntoTicketsTableTemplate.update(
-				insertIntoTicketsTable,
-				new Object[] { username, false,false,false, Ticket_Type_Modify});
+		insertIntoTicketsTableTemplate.update(insertIntoTicketsTable,
+				new Object[] { username, false, false, false,
+						Ticket_Type_Modify });
 
 		return "Request submitted. The internal user or admin will approve your request.";
 	}
 
 	public String removeAccountRequest(String username,
 			boolean deleteAccountOrNot) {
-		if (deleteAccountOrNot) {
-			String updateModificationRequests = "INSERT INTO deleteaccount (username, deleteaccount) VALUES (?,?)";
-			JdbcTemplate updateTemplate = new JdbcTemplate(dataSource);
-			updateTemplate.update(updateModificationRequests, new Object[] {
-					username, deleteAccountOrNot });
-			String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype)"
-					+ " VALUES (?,?,?,?,?)";
-			JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
-					dataSource);
 
-			insertIntoTicketsTableTemplate.update(
-					insertIntoTicketsTable,
-					new Object[] { username, false,false, false,Ticket_Type_Delete});
+		String getDeleteAccountColumnValueQuery = "SELECT deleteaccount FROM deleteaccount WHERE username=?";
+		JdbcTemplate jdbcTemplateForDeleteAccountValue = new JdbcTemplate(
+				dataSource);
+		boolean deleteAccountValueInDB = jdbcTemplateForDeleteAccountValue
+				.queryForObject(getDeleteAccountColumnValueQuery,
+						new Object[] { username }, Boolean.class);
 
-			return "Request submitted. The internal user of admin will approve your request.";
+		if (!deleteAccountValueInDB) {
+			if (deleteAccountOrNot) {
+				String updateModificationRequests = "INSERT INTO deleteaccount (username, deleteaccount) VALUES (?,?)";
+				JdbcTemplate updateTemplate = new JdbcTemplate(dataSource);
+				updateTemplate.update(updateModificationRequests, new Object[] {
+						username, deleteAccountOrNot });
+				String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype)"
+						+ " VALUES (?,?,?,?,?)";
+				JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
+						dataSource);
+
+				insertIntoTicketsTableTemplate.update(insertIntoTicketsTable,
+						new Object[] { username, false, false, false,
+								Ticket_Type_Delete });
+
+				return "Request submitted. The internal user of admin will approve your request.";
+			} else {
+				return "You have selected No. Your account request has not been submitted for internal review.";
+			}
 		} else {
-			return "You have selected No. Your account request has not been submitted for internal review.";
+			return "You have already submitted a request for account deletion.";
 		}
 	}
 
@@ -817,10 +846,10 @@ public class CustomerDAOImpl implements CustomerDAO {
 		}
 		return false;
 	}
-	
-	public boolean deleteAccountExternal(String username){
-		
-		if(deleteAccountRequest(username)){
+
+	public boolean deleteAccountExternal(String username) {
+
+		if (deleteAccountRequest(username)) {
 			String sql = "UPDATE deleteaccount set deleteaccount = true where username =  ?";
 			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 			int status = jdbcTemplate.update(sql, new Object[] { username });
@@ -828,8 +857,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 			JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
 					dataSource);
 
-			int status1 = insertIntoTicketsTableTemplate.update(updateIntoTicketsTable, new Object[] { username });
-			if (status == 1&& status1==1) {
+			int status1 = insertIntoTicketsTableTemplate.update(
+					updateIntoTicketsTable, new Object[] { username });
+			if (status == 1 && status1 == 1) {
 				return true;
 			}
 			return false;
@@ -837,14 +867,15 @@ public class CustomerDAOImpl implements CustomerDAO {
 		return false;
 	}
 
-	//TODO make this list only return tickets for active users not the deleted ones.
+	// TODO make this list only return tickets for active users not the deleted
+	// ones.
 	public List<TicketInformationDTO> getPendingTicketList() {
 		List<TicketInformationDTO> userList = new ArrayList<TicketInformationDTO>();
 
 		String sql = "SELECT user_tickets.id, user_tickets.username, user_tickets.requestcompleted, user_tickets.requestapproved, user_tickets.requestrejected, user_tickets.requesttype "
 				+ " from user_tickets inner join users on "
 				+ "user_tickets.username=users.username where user_tickets.requestcompleted=false and user_tickets.requestrejected=false and"
-				+" user_tickets.requestapproved=false and users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true";
+				+ " user_tickets.requestapproved=false and users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true";
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		userList = jdbcTemplate.query(sql, new TicketRowMapper());
@@ -859,7 +890,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		String sql = "SELECT user_tickets.id, user_tickets.username, user_tickets.requestcompleted, user_tickets.requestapproved, user_tickets.requestrejected, user_tickets.requesttype "
 				+ " from user_tickets inner join users on "
 				+ "user_tickets.username=users.username where user_tickets.requestcompleted=true and user_tickets.requestrejected=false and"
-				+" user_tickets.requestapproved=true";
+				+ " user_tickets.requestapproved=true";
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		userList = jdbcTemplate.query(sql, new TicketRowMapper());
@@ -874,7 +905,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		String sql = "SELECT user_tickets.id, user_tickets.username, user_tickets.requestcompleted, user_tickets.requestapproved, user_tickets.requestrejected, user_tickets.requesttype "
 				+ " from user_tickets inner join users on "
 				+ "user_tickets.username=users.username where user_tickets.requestcompleted=true and user_tickets.requestrejected=true and"
-				+" user_tickets.requestapproved=false";
+				+ " user_tickets.requestapproved=false";
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		userList = jdbcTemplate.query(sql, new TicketRowMapper());
@@ -909,7 +940,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		String insertIntoAccountTo = "UPDATE "
 				+ "account SET account.accountbalance=?, account.credit=?"
 				+ "WHERE account.username= ? ";
-		
+
 		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
 		JdbcTemplate jdbcTemplateForAccount = new JdbcTemplate(dataSource);
 
@@ -965,7 +996,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		String insertIntoPendingFrom = "INSERT INTO pendingtransactions (username,amount,pending,accountnumberfrom,accountnumberto)"
 				+ "VALUES((SELECT username from account where accountnumber=?),?,?,?,?)";
-		
+
 		// Query to insert into user_tickets table
 		String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected,requesttype)"
 				+ " VALUES (?,?,?,?,?)";
@@ -973,7 +1004,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
 		JdbcTemplate jdbcTemplateForPending = new JdbcTemplate(dataSource);
 		JdbcTemplate jdbcTemplateForUserTickets = new JdbcTemplate(dataSource);
-		
+
 		String getUsernameAccount = jdbcTemplateForAccountNumber
 				.queryForObject(getAccountDetailsFromUsernameFrom,
 						new Object[] { generatedFromUsernameFrom },
@@ -987,10 +1018,11 @@ public class CustomerDAOImpl implements CustomerDAO {
 		jdbcTemplateForPending.update(insertIntoPendingFrom, new Object[] {
 				accountNumber, amountToTransfer, " 1", accountNumber,
 				accountNumberTo });
-		
+
 		// Inserting into user_tickets
-		jdbcTemplateForUserTickets.update(insertIntoTicketsTable, new Object[]{generatedFromUsernameFrom,
-				false, false, false, Ticket_Type_Authorize});
+		jdbcTemplateForUserTickets.update(insertIntoTicketsTable, new Object[] {
+				generatedFromUsernameFrom, false, false, false,
+				Ticket_Type_Authorize });
 
 		return true;
 	}
@@ -998,10 +1030,12 @@ public class CustomerDAOImpl implements CustomerDAO {
 	public List<UserTransactionsDTO> getUserTransactionList(String username) {
 		String getTransactionsQuery = "SELECT * from transactions where usernamefrom=? AND userdelete=?";
 		List<UserTransactionsDTO> getTransactionsList = new ArrayList<UserTransactionsDTO>();
-		
-		JdbcTemplate jdbcTemplateForTransactionsTable = new JdbcTemplate(dataSource);
-		getTransactionsList = jdbcTemplateForTransactionsTable.query(getTransactionsQuery,
-				new Object[]{username, false}, new UserTransactionsMapper());
+
+		JdbcTemplate jdbcTemplateForTransactionsTable = new JdbcTemplate(
+				dataSource);
+		getTransactionsList = jdbcTemplateForTransactionsTable.query(
+				getTransactionsQuery, new Object[] { username, false },
+				new UserTransactionsMapper());
 		return getTransactionsList;
 	}
 
@@ -1009,8 +1043,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 	public boolean deleteTransaction(int txID) {
 		String updateInTxTable = "UPDATE transactions SET userdelete=? where id=?";
 		JdbcTemplate updateTxTable = new JdbcTemplate(dataSource);
-		int status = updateTxTable.update(updateInTxTable, new Object[]{true, txID});
-		if (status==1) {
+		int status = updateTxTable.update(updateInTxTable, new Object[] { true,
+				txID });
+		if (status == 1) {
 			return true;
 		} else {
 			return false;
@@ -1034,7 +1069,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 							ticketDetails.getUsername() },
 					new TicketDetailMapper());
 			return customerInformationToDisplay.get(0);
-		} else if (ticketDetails.getRequesttype().equalsIgnoreCase(Ticket_Type_Delete)) {
+		} else if (ticketDetails.getRequesttype().equalsIgnoreCase(
+				Ticket_Type_Delete)) {
 			String retrieveDetailsQuery = "SELECT user_tickets.id, user_tickets.username, user_tickets.requestcompleted, user_tickets.requestapproved, user_tickets.requestrejected, user_tickets.requesttype , users.firstname, users.lastname, users.sex, "
 					+ "users.MerchantorIndividual, users.phonenumber, users.email, "
 					+ "users.address, account.accountnumber, account.accountbalance, deleteaccount.deleteaccount  from user_tickets inner join deleteaccount on user_tickets.username=deleteaccount.username"
@@ -1047,7 +1083,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 							ticketDetails.getUsername() },
 					new TicketDetailMapper());
 			return customerInformationToDisplay.get(0);
-		} else if (ticketDetails.getRequesttype().equalsIgnoreCase(Ticket_Type_Authorize)) {
+		} else if (ticketDetails.getRequesttype().equalsIgnoreCase(
+				Ticket_Type_Authorize)) {
 			String retrieveDetailsQuery = "SELECT user_tickets.id, user_tickets.username, user_tickets.requestcompleted, user_tickets.requestapproved, user_tickets.requestrejected, user_tickets.requesttype , users.firstname, users.lastname, "
 					+ " account.accountnumber, account.accountbalance, pendingtransactions.amount, pendingtransactions.accountnumberto, pendingtransactions.billpay,pendingtransactions.id  from user_tickets inner join pendingtransactions on user_tickets.username=pendingtransactions.username"
 					+ " inner join account on pendingtransactions.username = account.username inner join users on users.username = pendingtransactions.username "
@@ -1062,9 +1099,10 @@ public class CustomerDAOImpl implements CustomerDAO {
 		}
 		return null;
 	}
+
 	public boolean rejectAuthorizeTransactions(TicketDetailDTO ticketDetailDTO) {
 		// TODO Auto-generated method stub
-		
+
 		return false;
 	}
 
@@ -1072,30 +1110,41 @@ public class CustomerDAOImpl implements CustomerDAO {
 		// TODO Auto-generated method stub
 		String updatePendingtable = "UPDATE pendingtransactions  SET pending = false where username=? and pending=true and accountnumberfrom =? and accountnumberto= ? and id = ? ";
 		JdbcTemplate updatePendingTableJDBC = new JdbcTemplate(dataSource);
-		int status = updatePendingTableJDBC.update(updatePendingtable, new Object[]{ticketDetailDTO.getUsername(), ticketDetailDTO.getAccountNumber(),ticketDetailDTO.getToAccountNumber(),ticketDetailDTO.getPendingid()});
-		if (status==1) {
-//			String sql = "Select accountnumber from account where username =?";
-//			JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
-//			String AccountNumberReceipient = jdbcTemplateForAccountNumber
-//					.queryForObject(sql,
-//							new Object[] { ticketDetailDTO.getToAccountNumber() }, String.class);
+		int status = updatePendingTableJDBC.update(
+				updatePendingtable,
+				new Object[] { ticketDetailDTO.getUsername(),
+						ticketDetailDTO.getAccountNumber(),
+						ticketDetailDTO.getToAccountNumber(),
+						ticketDetailDTO.getPendingid() });
+		if (status == 1) {
+			// String sql =
+			// "Select accountnumber from account where username =?";
+			// JdbcTemplate jdbcTemplateForAccountNumber = new
+			// JdbcTemplate(dataSource);
+			// String AccountNumberReceipient = jdbcTemplateForAccountNumber
+			// .queryForObject(sql,
+			// new Object[] { ticketDetailDTO.getToAccountNumber() },
+			// String.class);
 
-			//Trusting chaitali calling here function here.
-			if(processtransfer(ticketDetailDTO.getUsername(), ticketDetailDTO.getToAccountNumber(), ticketDetailDTO.getTransactionAmount())){
+			// Trusting chaitali calling here function here.
+			if (processtransfer(ticketDetailDTO.getUsername(),
+					ticketDetailDTO.getToAccountNumber(),
+					ticketDetailDTO.getTransactionAmount())) {
 				String updateIntoTicketsTable = "UPDATE user_tickets set requestcompleted =true, requestapproved=true, requestrejected=false where username =  ?";
 				JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
 						dataSource);
 
-				int status1 = insertIntoTicketsTableTemplate.update(updateIntoTicketsTable, new Object[] { ticketDetailDTO.getUsername() });
+				int status1 = insertIntoTicketsTableTemplate.update(
+						updateIntoTicketsTable,
+						new Object[] { ticketDetailDTO.getUsername() });
 				return true;
 			}
-			
+
 			else
 				return false;
 		} else {
 			return false;
 		}
 
-		
 	}
 }
