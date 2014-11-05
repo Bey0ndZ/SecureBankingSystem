@@ -23,9 +23,10 @@
 		<intercept-url pattern="/viewTicket*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
 		<intercept-url pattern="/modifyExternalUserByInternal*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
 		<intercept-url pattern="/authorizeTransactions*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
+		<intercept-url pattern="/deleteTransactionSuccess*" access="hasRole('ROLE_USER')" />
 		
 		<!-- These are permitAll -->
-		<intercept-url pattern="/accountSummary*" access="isAuthenticated()" />
+		<intercept-url pattern="/accountSummary*" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/transferMoney*" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/transferActivity*" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/verifyUser*" access="hasRole('ROLE_USER')" />

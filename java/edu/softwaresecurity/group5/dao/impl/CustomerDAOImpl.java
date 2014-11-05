@@ -996,20 +996,20 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 
 	public List<UserTransactionsDTO> getUserTransactionList(String username) {
-		String getTransactionsQuery = "SELECT * from transactions where usernamefrom=?";
+		String getTransactionsQuery = "SELECT * from transactions where usernamefrom=? AND userdelete=?";
 		List<UserTransactionsDTO> getTransactionsList = new ArrayList<UserTransactionsDTO>();
 		
 		JdbcTemplate jdbcTemplateForTransactionsTable = new JdbcTemplate(dataSource);
 		getTransactionsList = jdbcTemplateForTransactionsTable.query(getTransactionsQuery,
-				new Object[]{username}, new UserTransactionsMapper());
+				new Object[]{username, false}, new UserTransactionsMapper());
 		return getTransactionsList;
 	}
 
 	// update the Tx table field to NULL
 	public boolean deleteTransaction(int txID) {
-		String updateInTxTable = "UPDATE transactions SET userdelete=?";
+		String updateInTxTable = "UPDATE transactions SET userdelete=? where id=?";
 		JdbcTemplate updateTxTable = new JdbcTemplate(dataSource);
-		int status = updateTxTable.update(updateInTxTable, new Object[]{true});
+		int status = updateTxTable.update(updateInTxTable, new Object[]{true, txID});
 		if (status==1) {
 			return true;
 		} else {

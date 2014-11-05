@@ -413,30 +413,4 @@ public class ExternalUserController {
 		modelAndView.setViewName("activateAccount");
 		return modelAndView;
 	}
-	
-	// Delete transaction
-	@RequestMapping(value="/deleteTransaction", method=RequestMethod.POST)
-	public ModelAndView deleteSuccessPage(@RequestParam("deleteTransactionID") String deleteTxID) {
-		ModelAndView modelAndView = new ModelAndView();
-		
-		if (!deleteTxID.isEmpty()) {
-			// Strip HTML to prevent XSS
-			Document doc = Jsoup.parse(deleteTxID);
-			String txID = doc.text();
-			
-			Integer txIDInInt = Integer.parseInt(txID);
-			
-			// Call the tx delete method
-			if (custService.deleteTx(txIDInInt)) {
-				modelAndView.addObject("deleteInformation", "Deleted transaction.");
-			} else {
-				modelAndView.addObject("deleteInformation", "Deletion unsuccessful. Please contact the admin or employee");
-			}
-			
-		} else {
-			modelAndView.addObject("emptyBox", "You cannot leave the text-box empty");
-		}
-		modelAndView.setViewName("transactionsReview");
-		return modelAndView;
-	}
 }

@@ -42,40 +42,40 @@ public class TransactionsController {
 			int length1 = accountNumber.length();
 			int length2 = amountToBeTransferred.length();
 			int counter = 0;
-			for (char ch: accountNumber.toCharArray()) {
+			for (char ch : accountNumber.toCharArray()) {
 				if (Character.isDigit(ch) == false) {
-					counter ++;
+					counter++;
 				}
 			}
 			int counter1 = 0;
-			for (char ch: amountToBeTransferred.toCharArray()) {
+			for (char ch : amountToBeTransferred.toCharArray()) {
 				if (Character.isDigit(ch) == false) {
-					counter1 ++;
+					counter1++;
 				}
 			}
-			if (counter>0 || length1 != 10) {
-				modelAndView.addObject("errorMsg", "Please enter the correct account number and amount!");
+			if (counter > 0 || length1 != 10) {
+				modelAndView.addObject("errorMsg",
+						"Please enter the correct account number and amount!");
 				modelAndView.setViewName("billPay");
 				return modelAndView;
-			}
-			else if (counter1>0) {
-				modelAndView.addObject("errorMsg", "Please enter the correct account numebr and amount!");
+			} else if (counter1 > 0) {
+				modelAndView.addObject("errorMsg",
+						"Please enter the correct account numebr and amount!");
 				modelAndView.setViewName("billPay");
 				return modelAndView;
-			}
-			else {
-			
+			} else {
+
 				Document inputAccountNumber = Jsoup.parse(accountNumber);
 				Document inputAmountToBeTransferred = Jsoup
 						.parse(amountToBeTransferred);
-	
+
 				Authentication auth = SecurityContextHolder.getContext()
 						.getAuthentication();
 				if (!(auth instanceof AnonymousAuthenticationToken)) {
 					UserDetails userDetail = (UserDetails) auth.getPrincipal();
 					String loggedInUser = userDetail.getUsername();
 					modelAndView.addObject("username", loggedInUser);
-	
+
 					if (custService.processBillPay(loggedInUser,
 							inputAccountNumber.text(),
 							inputAmountToBeTransferred.text())) {
@@ -86,7 +86,7 @@ public class TransactionsController {
 								.addObject("submitMessage",
 										"Request cannot be proccessed. Contact employee or admin.");
 					}
-	
+
 				} else {
 					modelAndView.setViewName("permission-denied");
 				}
@@ -122,16 +122,16 @@ public class TransactionsController {
 			@RequestParam("accountNumber") String accountnumber) {
 		ModelAndView modelAndView = new ModelAndView();
 		int counter = 0;
-		for (char ch: accountnumber.toCharArray()) {
+		for (char ch : accountnumber.toCharArray()) {
 			if (Character.isDigit(ch)) {
-				counter ++;
+				counter++;
 			}
 		}
 		if (counter != 10 || accountnumber.length() != 10) {
-			modelAndView.addObject("errorMsg", "Please enter the correct account number!");
+			modelAndView.addObject("errorMsg",
+					"Please enter the correct account number!");
 			modelAndView.setViewName("transferMoney");
-		}
-		else {
+		} else {
 			CustomerInformationDTO customerDetails = new CustomerInformationDTO();
 			customerDetails = custService.getUserFromAccount(accountnumber);
 			modelAndView.addObject("customerDetails", customerDetails);
@@ -187,25 +187,79 @@ public class TransactionsController {
 		}
 		return modelAndView;
 	}
-	
+
 	// GET Transactions
-	// Transaction review does not need to have a POST method associated with it
-	// No need to write the POST controller
+	// Transactions Review
 	@RequestMapping(value = "/transactionReview", method = RequestMethod.GET)
 	public ModelAndView returnTransactionsReviewPage() {
 		ModelAndView modelAndView = new ModelAndView();
 		List<UserTransactionsDTO> userTransactions = new ArrayList<UserTransactionsDTO>();
-		
+
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			String loggedInUser = userDetail.getUsername();
 			userTransactions = custService.getUserTransactions(loggedInUser);
-			
+
 			// Add the object to model
 			modelAndView.addObject("userTransactions", userTransactions);
 			modelAndView.setViewName("transactionsReview");
+		} else {
+			modelAndView.setViewName("permission-denied");
+		}
+		return modelAndView;
+	}
+
+	// Delete Transactions
+	// POST from transactionsReview.jsp page
+	@RequestMapping(value = "/deleteTransaction", method = RequestMethod.POST)
+	public ModelAndView deleteSuccessPage(
+			@RequestParam("deleteTransactionID") String deleteTxID) {
+		ModelAndView modelAndView = new ModelAndView();
+
+		if (!deleteTxID.isEmpty()) {
+			// Strip HTML to prevent XSS
+			Document doc = Jsoup.parse(deleteTxID);
+			String txID = doc.text();
+
+			Integer txIDInInt = Integer.parseInt(txID);
+
+			// Call the tx delete method
+			if (custService.deleteTx(txIDInInt)) {
+				modelAndView.addObject("deleteInformation",
+						"Deleted transaction.");
+			} else {
+				modelAndView
+						.addObject("deleteInformation",
+								"Deletion unsuccessful. Please contact the admin or employee");
+			}
+
+		} else {
+			modelAndView.addObject("emptyBox",
+					"You cannot leave the text-box empty");
+		}
+		modelAndView.setViewName("deleteTransactionSuccess");
+		return modelAndView;
+	}
+	
+	// After a delete is processed, show the users the page
+	@RequestMapping(value="/deleteTransaction", method=RequestMethod.GET)
+	public ModelAndView returnDeleteTransactionSuccessPage() {
+		// Call the getUserTransactions method
+		ModelAndView modelAndView = new ModelAndView();
+		List<UserTransactionsDTO> userTransactions = new ArrayList<UserTransactionsDTO>();
+
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			String loggedInUser = userDetail.getUsername();
+			userTransactions = custService.getUserTransactions(loggedInUser);
+
+			// Add the object to model
+			modelAndView.addObject("userTransactions", userTransactions);
+			modelAndView.setViewName("deleteTransactionSuccess");
 		} else {
 			modelAndView.setViewName("permission-denied");
 		}
