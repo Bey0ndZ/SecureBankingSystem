@@ -9,6 +9,7 @@ import edu.softwaresecurity.group5.dao.CustomerDAO;
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.dto.EmployeeInformationDTO;
+import edu.softwaresecurity.group5.dto.TicketDetailDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.dto.UserTransactionsDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
@@ -87,6 +88,9 @@ public class CustomerServiceImpl implements CustomerService {
 	public boolean deleteAccountBYInternal(String username){
 		return custDAO.deleteAccountRequest(username);
 	}
+	public boolean deleteAccountBYExternal(String username){
+		return custDAO.deleteAccountExternal(username);
+	}
 
 	public List<TicketInformationDTO> getPendingTicketList() {
 		return custDAO.getPendingTicketList(); 
@@ -112,5 +116,10 @@ public class CustomerServiceImpl implements CustomerService {
 
 	public List<TicketInformationDTO> getRejectedTicketList() {
 		return custDAO.getRejectedTicketList();
+	}
+
+	public TicketDetailDTO fetchTicketDetail(TicketInformationDTO ticketDetails) {
+		// TODO Auto-generated method stub
+		return custDAO.fetchTicketDetail(ticketDetails);
 	}
 }

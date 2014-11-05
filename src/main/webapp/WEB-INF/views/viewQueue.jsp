@@ -121,18 +121,18 @@
 									    <td class="heading">Ticket Number</td>  
 									    <td class="heading">Invoked By</td>  
 									    <td class="heading">Type</td>    
-									    <td class="heading">Edit</td>  
-									    <td class="heading">Delete</td>  
+									    <td class="heading">Action</td> 
 									   </tr>  
 									   <c:forEach var="user" items="${userList}">  
 									    <tr>  
 									     <td>${user.id}</td>  
 									     <td>${user.username}</td>  
 									     <td>${user.requesttype}</td>   
-									     <td><a href="modifyUser?id=${user.username}">Modify</a></td>  
-									     <td> <form:form method="post" action="removeUserDB" modelAttribute="usernameSearch">					
-										 <input type="hidden" name="account" id="accountNumber_RemoveUser" value="${user.username}" style="color:#999;" /><br/> <br/>
-										 <a href="ticketRejectedSuccess"> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Remove" /></a> <br/> <br/>
+									     <td><form:form method="post" action="viewTicket" modelAttribute="ticketDetail">					
+										 <input type="hidden" name="id" id="ticketId" value="${user.id}" style="color:#999;" />
+										<input type="hidden" name="username" id="ticketId" value="${user.username}" style="color:#999;" />
+										 <input type="hidden" name="requesttype" id="ticketId" value="${user.requesttype}" style="color:#999;" />
+										 <a> <input type="submit" style="margin-right: 5%" name="viewTicket" id="viewTicketButton" value="View" /></a> <br/> <br/>
 										 </form:form></td> 
 									    </tr>  
 									   </c:forEach>

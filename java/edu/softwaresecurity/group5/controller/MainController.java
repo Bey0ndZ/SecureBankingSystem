@@ -1,7 +1,6 @@
 package edu.softwaresecurity.group5.controller;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -31,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.dto.EmployeeInformationDTO;
+import edu.softwaresecurity.group5.dto.TicketDetailDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
@@ -40,6 +40,10 @@ import edu.softwaresecurity.group5.service.CustomerService;
 public class MainController {
 	@Autowired
 	CustomerService custService;
+	
+	private final String Ticket_Type_Delete = "Delete";
+	private final String Ticket_Type_Modify = "Modify";
+	private final String Ticket_Type_Authorize = "Authorize";
 
 	@RequestMapping(value = { "/", "/index" }, method = RequestMethod.GET)
 	public ModelAndView indexPage(
@@ -184,7 +188,7 @@ public class MainController {
 //		}
 //		return modelAndView;
 //	}
-	// Remove user from db, mark user detailed expired to 0.
+	// Remove internal user from db, mark user detailed expired to 0.
 		@RequestMapping(value = "/removeUserDB", method = RequestMethod.POST)
 		public ModelAndView getremoveUserDB(
 				@RequestParam("account") String usernameSearch) {
@@ -207,6 +211,28 @@ public class MainController {
 			return modelAndView;
 		}
 		
+	// Remove external user from db, mark user detailed expired to 0.
+	@RequestMapping(value = "/removeUserExternal", method = RequestMethod.POST)
+	public ModelAndView getremoveExternalUserDB(
+			@RequestParam("account") String usernameSearch) {
+		ModelAndView modelAndView = new ModelAndView();
+
+		Document userInput = Jsoup.parse(usernameSearch);
+		String userName = userInput.text();
+
+		boolean status = custService.deleteAccountBYExternal(userName);
+		if (status) {
+			modelAndView.addObject("status", "User Deleted Succefully!");
+			modelAndView.setViewName("");
+		} else {
+			modelAndView
+					.addObject("status",
+							"Please couldnot be deleted please contact Adminstrator personally!");
+			modelAndView.setViewName("userList");
+		}
+
+		return modelAndView;
+	}
 		// Remove user from db, mark user detailed expired to 0.
 				@RequestMapping(value = "/removeUserDBSingle", method = RequestMethod.POST)
 				public ModelAndView getremoveUserDBSingle(
@@ -220,11 +246,11 @@ public class MainController {
 						boolean status = custService.deleteAccountBYInternal(userName);
 						if(status) {
 							modelAndView.addObject("status", "User Deleted Succefully!");
-							modelAndView.setViewName("removeUser");
+							modelAndView.setViewName("viewTicket");
 						}
 						else {
 							modelAndView.addObject("status", "Please couldnot be deleted please contact Adminstrator personally!");
-							modelAndView.setViewName("removeUser");
+							modelAndView.setViewName("viewTicket");
 						}
 					
 					return modelAndView;
@@ -457,4 +483,19 @@ public class MainController {
 		List<TicketInformationDTO> userList = custService.getPendingTicketList();
 		return new ModelAndView("viewQueue", "userList", userList);
 	}
+	
+	// Modify Internal employee in database, this is just for admin.
+		@RequestMapping(value = "/viewTicket", method = RequestMethod.POST)
+		public ModelAndView getviewTicketDatabase(
+				@ModelAttribute("ticketDetail") TicketInformationDTO user) {
+			ModelAndView modelAndView = new ModelAndView();
+			TicketInformationDTO ticketDetails = user;
+			TicketDetailDTO ticketDetailDTO = custService.fetchTicketDetail(ticketDetails);
+			if(ticketDetailDTO==null){
+				modelAndView.addObject("error", "Some error occured while processing please try again.");
+			}
+			modelAndView.addObject("ticketDetailDTO", ticketDetailDTO);
+			modelAndView.setViewName("ticketDetails");
+			return modelAndView;
+		}
 }

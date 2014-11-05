@@ -6,6 +6,7 @@ import java.util.List;
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.dto.EmployeeInformationDTO;
+import edu.softwaresecurity.group5.dto.TicketDetailDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.dto.UserTransactionsDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
@@ -34,6 +35,7 @@ public interface CustomerService {
 	public String genOtp(String email);
 	public boolean activateAccount(String username);
 	public boolean deleteAccountBYInternal(String username);
+	public boolean deleteAccountBYExternal(String username);
 	public List<TicketInformationDTO> getPendingTicketList();
 	public List<TicketInformationDTO> getApprovedTicketList();
 	public List<TicketInformationDTO> getRejectedTicketList();
@@ -44,5 +46,6 @@ public interface CustomerService {
 	public boolean pendingTransfer(String loggedInUser, String accountNumber,String amountToBeTransferred);
 	public List<UserTransactionsDTO> getUserTransactions(String username);
 	public boolean deleteTx(int txID);
+	public TicketDetailDTO fetchTicketDetail(TicketInformationDTO ticketDetails);
 }
 

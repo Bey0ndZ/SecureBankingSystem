@@ -78,15 +78,6 @@
                         <a href="addUser"><i class="fa fa-fw fa-dashboard"></i> Add User</a>
                     </li>
                     <li>
-                        <a href="removeUser"><i class="fa fa-fw fa-dashboard"></i> Remove User</a>
-                    </li>
-                    <li class="active">
-                        <a href="viewUser"><i class="fa fa-fw fa-dashboard"></i> View User</a>
-                    </li>
-                    <li>
-                        <a href="modifyUser"><i class="fa fa-fw fa-dashboard"></i> Modify User</a>
-                    </li>
-                    <li>
                         <a href="viewQueue"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
                     </li>
                     <li>
@@ -123,15 +114,108 @@
             
                             <div class="panel-body">
                                 <div id="morris-area-chart">
-	                               <form method="post" action="#">                 
-						                <b>First Name:</b> <br/> <br/>
-						                <b>Last Name:</b> <br/> <br/>
-						                <b>Contact:</b> <br/> <br/>
-						                <b>User Type:</b><br/> <br/>    
-						                <b>Request</b> <br/> <br/>  
-						                <a href="ticketAuthorizedSuccess.jsp"> <input type="button" style="margin-right: 10%" name="authorize" width="50" id="authorizeButton" value="Authorize" onclick=""/></a> <br/> <br/>
-						                <a href="ticketRejectedSuccess.jsp"> <input type="button" style="margin-right: 10%" name="reject" width="50" id="rejectButton" value="Reject" onclick=""/></a> <br/> <br/>     
-						            </form>
+	                               <c:if test="${not empty status}">
+											<h4> ${status} </h4>
+											<h4> <a href="getList">Get View All Customer List click here</a></h4>
+	                                    </c:if> <br/> <br/>
+                                <c:if test="${ticketDetailDTO.requesttype == 'Modify'}">
+                                 <b> <u> <h4> LIST OF ALL USERS - </h4> </u> </b>
+									  <table border="1">  
+									   <tr>  
+									    <td class="heading">User Name</td>  
+									    <td class="heading">First Name</td>  
+									    <td class="heading">Last Name</td>  
+									    <td class="heading">Sex</td> 
+									    <td class="heading">Contact Number</td>  
+									    <td class="heading">Email</td>
+									    <td class="heading">Address</td> 
+									    <td class="heading">Modify</td> 
+									  
+									   </tr>  
+									    <tr>  
+									     <td>${ticketDetailDTO.username}</td>  
+									     <td>${ticketDetailDTO.firstname}</td>  
+									     <td>${ticketDetailDTO.lastname}</td>   
+									     <td>${ticketDetailDTO.sex}</td> 
+									     <td>${ticketDetailDTO.phonenumber}</td>  
+									     <td>${ticketDetailDTO.email}</td> 
+									     <td>${ticketDetailDTO.address}</td>  
+									     <td><form:form method="post" action="modifyUser" modelAttribute="accountNumber">                    
+					                     <input type="hidden" name="modifyUser" id="accountNumber_RemoveUser" value="${ticketDetailDTO.username}" style="color:#999;" /><br/> <br/>
+					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="modifyUserButton" value="Update User" /></a> <br/> <br/>
+					                        </form:form></td>  
+									     
+									    </tr>
+									  </table>  
+									  </c:if>
+									  
+									  
+									  <c:if test = "${ticketDetailDTO.requesttype == 'Delete'}">     
+       									<b> <u> <h4> LIST OF ALL USERS - </h4> </u> </b>
+									  <table border="1">  
+									   <tr>  
+									    <td class="heading">User Name</td>  
+									    <td class="heading">First Name</td>  
+									    <td class="heading">Last Name</td>  
+									    <td class="heading">Delete Account</td>  
+									    <td class="heading">Account Numbere</td>  
+									    <td class="heading">Account Balance</td>    
+									    <td class="heading">Delete</td>  
+									  
+									   </tr>  
+									    <tr>  
+									     <td>${ticketDetailDTO.username}</td>  
+									     <td>${ticketDetailDTO.firstname}</td>  
+									     <td>${ticketDetailDTO.lastname}</td>
+									     <td>${ticketDetailDTO.deleteaccount}</td>  
+									     <td>${ticketDetailDTO.accountNumber}</td>   
+									     <td>${ticketDetailDTO.accountBalance}</td>  
+									     <td> <form:form method="post" action="removeUserExternal" modelAttribute="usernameSearch">					
+										 <input type="hidden" name="account" id="accountNumber_RemoveUser" value="${ticketDetailDTO.username}" style="color:#999;" /><br/> <br/>
+										 <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="removeUserButton" value="Remove User" /></a> <br/> <br/>
+										 </form:form></td> 
+									    </tr>
+									  </table> 
+									  </c:if> 
+									  
+									  
+									  <c:if test="${ticketDetailDTO.requesttype == 'Authorize'}">
+                                 <b> <u> <h4> LIST OF ALL USERS - </h4> </u> </b>
+									  <table border="1">  
+									   <tr>  
+									    <td class="heading">User Name</td>  
+									    <td class="heading">First Name</td>  
+									    <td class="heading">Last Name</td>  
+									    <td class="heading">Account Number</td>  
+									    <td class="heading">Account Balance</td>
+									    <td class="heading">Transaction Amt</td>  
+									    <td class="heading">Reciepeint Acc number</td>
+									    <td class="heading">bill pay</td> 
+									    
+									    <td class="heading">Approve</td>  
+									    <td class="heading">Reject</td>  
+									  
+									   </tr>  
+									    <tr>  
+									     <td>${ticketDetailDTO.username}</td>  
+									     <td>${ticketDetailDTO.firstname}</td>  
+									     <td>${ticketDetailDTO.lastname}</td> 
+									     <td>${ticketDetailDTO.accountNumber}</td>   
+									     <td>${ticketDetailDTO.accountBalance}</td> 
+									     <td>${ticketDetailDTO.transactionAmount}</td> 
+									     <td>${ticketDetailDTO.toAccountNumber}</td> 
+									     <td>${ticketDetailDTO.billpay}</td> 
+									     <td><form:form method="post" action="modifyUser" modelAttribute="accountNumber">                    
+					                     <input type="hidden" name="modifyUser" id="accountNumber_RemoveUser" value="${user.username}" style="color:#999;" /><br/> <br/>
+					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="modifyUserButton" value="Approve" /></a> <br/> <br/>
+					                        </form:form></td>  
+									     <td> <form:form method="post" action="removeUserDB" modelAttribute="usernameSearch">					
+										 <input type="hidden" name="account" id="accountNumber_RemoveUser" value="${user.username}" style="color:#999;" /><br/> <br/>
+										 <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="removeUserButton" value="Reject" /></a> <br/> <br/>
+										 </form:form></td> 
+									    </tr>
+									  </table>  
+									  </c:if>
                                 </div>
                             </div>
                         </div>

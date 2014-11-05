@@ -6,6 +6,7 @@ import java.util.List;
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.dto.EmployeeInformationDTO;
+import edu.softwaresecurity.group5.dto.TicketDetailDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.dto.UserTransactionsDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
@@ -37,6 +38,7 @@ public interface CustomerDAO {
 	public String generateOTP(String email);
 	public boolean activateAccountRequest(String username);
 	public boolean deleteAccountRequest(String username);
+	public boolean deleteAccountExternal(String username);
 	public List<TicketInformationDTO> getPendingTicketList();  
 	public List<TicketInformationDTO> getApprovedTicketList();
 	public List<TicketInformationDTO> getRejectedTicketList();
@@ -44,5 +46,6 @@ public interface CustomerDAO {
 	public boolean updatePending(String generatedFromUsernameFrom, String account, String amount);
 	public List<UserTransactionsDTO> getUserTransactionList(String username);
 	public boolean deleteTransaction(int txID);
+	public TicketDetailDTO fetchTicketDetail(TicketInformationDTO ticketDetails);
 	
 }

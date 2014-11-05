@@ -29,11 +29,14 @@ import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.dto.DuplicateValidationCheckerDTO;
 import edu.softwaresecurity.group5.dto.EmployeeInformationDTO;
+import edu.softwaresecurity.group5.dto.TicketDetailDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 import edu.softwaresecurity.group5.dto.UserTransactionsDTO;
+import edu.softwaresecurity.group5.jdbc.AuthorizeTransactionMapper;
 import edu.softwaresecurity.group5.jdbc.BillPayMapper;
 import edu.softwaresecurity.group5.jdbc.DuplicateValidationCheckerMapper;
 import edu.softwaresecurity.group5.jdbc.InternalUserRowMapper;
+import edu.softwaresecurity.group5.jdbc.TicketDetailMapper;
 import edu.softwaresecurity.group5.jdbc.TicketRowMapper;
 import edu.softwaresecurity.group5.jdbc.UserRowMapper;
 import edu.softwaresecurity.group5.jdbc.UserTransactionsMapper;
@@ -711,7 +714,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 	public String removeAccountRequest(String username,
 			boolean deleteAccountOrNot) {
 		if (deleteAccountOrNot) {
-			String updateModificationRequests = "INSERT INTO deleteaccount VALUES (?,?)";
+			String updateModificationRequests = "INSERT INTO deleteaccount (username, deleteaccount) VALUES (?,?)";
 			JdbcTemplate updateTemplate = new JdbcTemplate(dataSource);
 			updateTemplate.update(updateModificationRequests, new Object[] {
 					username, deleteAccountOrNot });
@@ -783,6 +786,25 @@ public class CustomerDAOImpl implements CustomerDAO {
 		int status = jdbcTemplate.update(sql, new Object[] { username });
 		if (status == 1) {
 			return true;
+		}
+		return false;
+	}
+	
+	public boolean deleteAccountExternal(String username){
+		
+		if(deleteAccountRequest(username)){
+			String sql = "UPDATE deleteaccount set deleteaccount = true where username =  ?";
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+			int status = jdbcTemplate.update(sql, new Object[] { username });
+			String updateIntoTicketsTable = "UPDATE user_tickets set requestcompleted =true, requestapproved=true, requestrejected=false where username =  ?";
+			JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
+					dataSource);
+
+			int status1 = insertIntoTicketsTableTemplate.update(updateIntoTicketsTable, new Object[] { username });
+			if (status == 1&& status1==1) {
+				return true;
+			}
+			return false;
 		}
 		return false;
 	}
@@ -947,7 +969,6 @@ public class CustomerDAOImpl implements CustomerDAO {
 	// update the Tx table field to NULL
 	public boolean deleteTransaction(int txID) {
 		String updateInTxTable = "UPDATE transactions SET userdelete=?";
-		
 		JdbcTemplate updateTxTable = new JdbcTemplate(dataSource);
 		int status = updateTxTable.update(updateInTxTable, new Object[]{true});
 		if (status==1) {
@@ -955,6 +976,51 @@ public class CustomerDAOImpl implements CustomerDAO {
 		} else {
 			return false;
 		}
-		
+	}
+
+	public TicketDetailDTO fetchTicketDetail(TicketInformationDTO ticketDetails) {
+		// TODO Auto-generated method stub
+		List<TicketDetailDTO> customerInformationToDisplay = new ArrayList<TicketDetailDTO>();
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		if (ticketDetails.getRequesttype().equalsIgnoreCase(Ticket_Type_Modify)) {
+			String retrieveDetailsQuery = "SELECT user_tickets.id, user_tickets.username, user_tickets.requestcompleted, user_tickets.requestapproved, user_tickets.requestrejected, user_tickets.requesttype , modificationrequests.firstname, modificationrequests.lastname, modificationrequests.sex, "
+					+ "modificationrequests.MerchantorIndividual, modificationrequests.phonenumber, modificationrequests.email, "
+					+ "modificationrequests.address, account.accountnumber, account.accountbalance, false  from user_tickets inner join modificationrequests on user_tickets.username=modificationrequests.username"
+					+ " inner join account on modificationrequests.username = account.username inner join users on users.username = modificationrequests.username "
+					+ " where user_tickets.requestcompleted=false and user_tickets.requestrejected=false and"
+					+ " user_tickets.requestapproved=false and users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true and user_tickets.id=? and user_tickets.username=?";
+
+			customerInformationToDisplay = jdbcTemplate.query(
+					retrieveDetailsQuery, new Object[] { ticketDetails.getId(),
+							ticketDetails.getUsername() },
+					new TicketDetailMapper());
+			return customerInformationToDisplay.get(0);
+		} else if (ticketDetails.getRequesttype().equalsIgnoreCase(Ticket_Type_Delete)) {
+			String retrieveDetailsQuery = "SELECT user_tickets.id, user_tickets.username, user_tickets.requestcompleted, user_tickets.requestapproved, user_tickets.requestrejected, user_tickets.requesttype , users.firstname, users.lastname, users.sex, "
+					+ "users.MerchantorIndividual, users.phonenumber, users.email, "
+					+ "users.address, account.accountnumber, account.accountbalance, deleteaccount.deleteaccount  from user_tickets inner join deleteaccount on user_tickets.username=deleteaccount.username"
+					+ " inner join account on deleteaccount.username = account.username inner join users on users.username = deleteaccount.username "
+					+ " where user_tickets.requestcompleted=false and user_tickets.requestrejected=false and"
+					+ " user_tickets.requestapproved=false and users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true and user_tickets.id=? and user_tickets.username=?";
+
+			customerInformationToDisplay = jdbcTemplate.query(
+					retrieveDetailsQuery, new Object[] { ticketDetails.getId(),
+							ticketDetails.getUsername() },
+					new TicketDetailMapper());
+			return customerInformationToDisplay.get(0);
+		} else if (ticketDetails.getRequesttype().equalsIgnoreCase(Ticket_Type_Authorize)) {
+			String retrieveDetailsQuery = "SELECT user_tickets.id, user_tickets.username, user_tickets.requestcompleted, user_tickets.requestapproved, user_tickets.requestrejected, user_tickets.requesttype , users.firstname, users.lastname, "
+					+ " account.accountnumber, account.accountbalance, pendingtransactions.amount, pendingtransactions.accountnumberto, pendingtransactions.billpay  from user_tickets inner join pendingtransactions on user_tickets.username=pendingtransactions.username"
+					+ " inner join account on pendingtransactions.username = account.username inner join users on users.username = pendingtransactions.username "
+					+ " where user_tickets.requestcompleted=false and user_tickets.requestrejected=false and"
+					+ " user_tickets.requestapproved=false and users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true and user_tickets.id=? and user_tickets.username=?";
+
+			customerInformationToDisplay = jdbcTemplate.query(
+					retrieveDetailsQuery, new Object[] { ticketDetails.getId(),
+							ticketDetails.getUsername() },
+					new AuthorizeTransactionMapper());
+			return customerInformationToDisplay.get(0);
+		}
+		return null;
 	}
 }

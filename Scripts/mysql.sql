@@ -111,9 +111,10 @@ requestcompleted TINYINT NOT NULL DEFAULT 0,
 PRIMARY KEY (id));
 
 CREATE TABLE deleteaccount (
+user_keys_id int(11) NOT NULL AUTO_INCREMENT,
 username VARCHAR(45) NOT NULL,
 deleteaccount TINYINT NOT NULL,
-PRIMARY KEY(username));
+PRIMARY KEY(user_keys_id));
 
 CREATE TABLE user_keys (
   user_keys_id int(11) NOT NULL AUTO_INCREMENT,
@@ -131,7 +132,7 @@ CREATE TABLE user_tickets (
   PRIMARY KEY (id)
 );
 
-<<<<<<< HEAD
+
 CREATE TABLE transactions (
 	id INT(11) NOT NULL,	
 	usernamefrom VARCHAR(45) NOT NULL,
@@ -150,9 +151,7 @@ CREATE TABLE otp (
 );
 
 
-INSERT into user_tickets(username, requestcompleted, requestapproved, requesttype) VALUES ("shivam",false,false,"Modify");
-=======
+INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype) VALUES ("skgarg",false,false,false,"Modify");
 INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype) VALUES ("shivam",false,false,false,"Modify");
 INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype) VALUES ("skgarg",true,false,true,"Modify");
 INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype) VALUES ("skgarg1",true,true,false,"Modify");
->>>>>>> e4b631e6f09eee73f82b7e395440b56ac154bc2f
