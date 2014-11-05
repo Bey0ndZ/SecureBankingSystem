@@ -28,7 +28,6 @@
 	<bean id="CustomerInformation" class="edu.softwaresecurity.group5.model.CustomerInformation" />
 	<bean id="CustomerInformationDTO" class="edu.softwaresecurity.group5.dto.CustomerInformationDTO" />
 	
-	
 	<mvc:resources mapping="/resources/**" location="/resources/grayscale/" />
 	<mvc:annotation-driven />
 </beans>

@@ -90,4 +90,10 @@ public class CustomerServiceImpl implements CustomerService {
 		// TODO Auto-generated method stub
 		return custDAO.getTicketList(); 
 	}
+	public boolean transfer(String loggedInUser, String accountNumber,String amountToBeTransferred) {
+		return custDAO.processtransfer(loggedInUser,accountNumber,amountToBeTransferred);
+	}
+	public boolean pendingTransfer(String loggedInUser, String accountNumber,String amountToBeTransferred) {
+		return custDAO.updatePending(loggedInUser,accountNumber,amountToBeTransferred);
+	}
 }

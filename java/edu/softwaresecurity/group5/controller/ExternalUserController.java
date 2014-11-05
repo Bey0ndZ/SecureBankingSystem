@@ -27,6 +27,7 @@ import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.model.ModifyUserInformation;
 import edu.softwaresecurity.group5.service.CustomerService;
 
+
 /*
  * ExternalUserController: accountSummary.jsp
  */
@@ -36,7 +37,7 @@ import edu.softwaresecurity.group5.service.CustomerService;
 public class ExternalUserController {
 	@Autowired
 	CustomerService custService;
-
+	
 	@RequestMapping(value = "/accountSummary", method = RequestMethod.GET)
 	public ModelAndView returnCustomerPage(HttpServletRequest session) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -86,16 +87,18 @@ public class ExternalUserController {
 	}
 
 	// Getting the userdetails
-	@RequestMapping(value = "/transferMoney", method = RequestMethod.POST)
+	@RequestMapping(value = "/transferMoney", method = RequestMethod.POST )
 	public ModelAndView getUserDetail(
-			@RequestParam("verifyUser") String accountNumber) {
+			@RequestParam("verifyUser") String accountnumber) {
 		ModelAndView modelAndView = new ModelAndView();
+		
 		CustomerInformationDTO customerDetails = new CustomerInformationDTO();
-		customerDetails = custService.getUserFromAccount(accountNumber);
+		customerDetails = custService.getUserFromAccount(accountnumber);
 		modelAndView.addObject("customerDetails", customerDetails);
 		modelAndView.setViewName("transferMoney");
 		return modelAndView;
 	}
+
 
 	// Debit funds
 	// GET Requests
@@ -126,30 +129,82 @@ public class ExternalUserController {
 			@RequestParam("debitAmount") String debitAmount) {
 		ModelAndView modelAndView = new ModelAndView();
 		if (!debitAmount.isEmpty()) {
+			
 			// Removing the html tags (if present) using JSoup library
 			Document inputText = Jsoup.parse(debitAmount);
-			
 			Float debitAmountFloat = Float.parseFloat(inputText.text());
 			Authentication auth = SecurityContextHolder.getContext()
 					.getAuthentication();
 			if (!(auth instanceof AnonymousAuthenticationToken)) {
 				UserDetails userDetail = (UserDetails) auth.getPrincipal();
-				String usernameLoggedIn = userDetail.getUsername();
-				String message = custService.debitAmountForCustomer(
-						usernameLoggedIn, debitAmountFloat);
-				modelAndView.addObject("debitMessage", message);
-				modelAndView.setViewName("debitAmount");
-			} else {
-				modelAndView.setViewName("permission-denied");
-			}
-		} else {
-			// debitAmount is empty
-			modelAndView.addObject("debitMessage",
-					"Do not leave the text-box empty!");
+
+			String usernameLoggedIn = userDetail.getUsername();
+			String message = custService.debitAmountForCustomer(
+					usernameLoggedIn, debitAmountFloat);
+			modelAndView.addObject("debitMessage", message);
 			modelAndView.setViewName("debitAmount");
+		} else {
+			modelAndView.setViewName("permission-denied");
 		}
-		return modelAndView;
+	} else {
+		// debitAmount is empty
+		modelAndView.addObject("debitMessage",
+				"Do not leave the text-box empty!");
+		modelAndView.setViewName("debitAmount");
 	}
+	return modelAndView;
+}
+			
+	// Getting the transfer/pending 
+		@RequestMapping(value = "/transferMoneyConfirmation", method = RequestMethod.POST )
+		public ModelAndView updateAccount(
+				 @RequestParam("accountNo") String accountnumber , @RequestParam("amount") String transfer, @RequestParam String action ) {
+			ModelAndView modelAndView = new ModelAndView();
+			if (action.equals("Transfer"))
+			{
+
+			Authentication auth = SecurityContextHolder.getContext()
+					.getAuthentication();
+			if (!(auth instanceof AnonymousAuthenticationToken)) {
+				UserDetails userDetail = (UserDetails) auth.getPrincipal();
+				String loggedInUser = userDetail.getUsername();
+				modelAndView.addObject("username", loggedInUser);
+			
+			if (custService.transfer(loggedInUser, accountnumber, transfer)) {
+				modelAndView.addObject("submitMessage", "Transfer Processed.");
+			}
+			else {
+				modelAndView.addObject("submitMessage", "Request cannot be proccessed. Contact employee or admin.");
+			}
+			}
+			modelAndView.setViewName("transferMoney");
+			
+		}
+			else if (action.equals("Approve Transfer"))
+			{
+
+			Authentication auth = SecurityContextHolder.getContext()
+					.getAuthentication();
+			if (!(auth instanceof AnonymousAuthenticationToken)) {
+				UserDetails userDetail = (UserDetails) auth.getPrincipal();
+				String loggedInUser = userDetail.getUsername();
+				modelAndView.addObject("username", loggedInUser);
+			
+			if (custService.pendingTransfer(loggedInUser, accountnumber, transfer)) {
+				modelAndView.addObject("submitMessage", "Request submitted.");
+			}
+			else {
+				modelAndView.addObject("submitMessage", "Request cannot be proccessed. Contact employee or admin.");
+			}
+			}
+			modelAndView.setViewName("transferMoney");
+			
+		}
+			return modelAndView;
+		}
+
+
+		
 
 	// Credit funds
 	// GET Request
@@ -309,6 +364,8 @@ public class ExternalUserController {
 					.getAuthentication();
 			if (!(auth instanceof AnonymousAuthenticationToken)) {
 				UserDetails userDetail = (UserDetails) auth.getPrincipal();
+				
+	
 				String requestedForUsername = userDetail.getUsername();
 				if (deleteAccountOption.text().equalsIgnoreCase("Yes")) {
 					deleteAccount = true;
@@ -373,4 +430,4 @@ public class ExternalUserController {
 				}
 				
 				
-}
+			}		

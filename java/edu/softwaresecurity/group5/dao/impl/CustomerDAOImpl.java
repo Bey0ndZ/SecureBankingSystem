@@ -353,7 +353,107 @@ public class CustomerDAOImpl implements CustomerDAO {
 			return "Updated account details Succesfully";
 		}
 
-		return "Databse not updated, please contact Branch Representative";
+		return "Database not updated, please contact Branch Representative";
+	}
+	
+
+	
+	public boolean processtransfer(String generatedFromUsernameFrom, String account, String amount) {
+		float amountToTransfer = Float.parseFloat(amount);	
+		CustomerInformationDTO  custinfo = getUserFromAccount(account);
+		String generatedFromUsernameTo = custinfo.getUsername();
+		String balanceFromS= "SELECT account.accountbalance from account "
+				+ " inner join users on "
+				+ "account.username=users.username "
+				+ "WHERE account.username=?";
+		String balanceToS= "SELECT account.accountbalance from account "
+				+ " inner join users on "
+				+ "account.username=users.username "
+				+ "WHERE account.username=?";
+		String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
+				+ " inner join users on "
+				+ "account.username=users.username "
+				+ "where account.username=?";
+		String debitS= "SELECT account.debit from account "
+				+ " inner join users on "
+				+ "account.username=users.username "
+				+ "WHERE account.username=?";
+		String creditS= "SELECT account.credit from account "
+				+ " inner join users on "
+				+ "account.username=users.username "
+				+ "WHERE account.username=?";
+		String insertIntoAccountFrom = "UPDATE "
+				+ "account SET account.accountbalance=?, account.debit=?"
+				+ "WHERE account.username= ? ";
+		String insertIntoAccountTo = "UPDATE "
+				+ "account SET account.accountbalance=?, account.credit=?"
+				+ "WHERE account.username= ? ";
+		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForAccount = new JdbcTemplate(dataSource);
+		
+		String getUsernameAccount = jdbcTemplateForAccountNumber.queryForObject(getAccountDetailsFromUsernameFrom,
+				new Object[] {generatedFromUsernameFrom},
+				String.class);
+
+		String balanceFromString=jdbcTemplateForAccountNumber.queryForObject(balanceFromS, 
+				new Object[]{generatedFromUsernameFrom}, 
+				String.class);
+		
+		String balanceToString=jdbcTemplateForAccountNumber.queryForObject(balanceToS, 
+				new Object[]{generatedFromUsernameTo}, 
+				String.class);
+		
+		String debitString=jdbcTemplateForAccountNumber.queryForObject(debitS, 
+				new Object[]{generatedFromUsernameFrom}, 
+				String.class);
+		
+		String creditString=jdbcTemplateForAccountNumber.queryForObject(creditS, 
+				new Object[]{generatedFromUsernameTo}, 
+				String.class);
+		
+		float balanceFrom = Float.parseFloat(balanceFromString);
+		float balanceTo = Float.parseFloat(balanceToString);
+		float credit = Float.parseFloat(creditString);
+		float debit = Float.parseFloat(debitString);
+		balanceFrom= balanceFrom- amountToTransfer;
+		balanceTo= balanceTo+ amountToTransfer;
+		credit=credit+amountToTransfer;
+		debit=debit+amountToTransfer;
+		int accountNumber = Integer.parseInt(getUsernameAccount);
+		int accountNumberFrom = Integer.parseInt(account);
+		if(accountNumber== accountNumberFrom){return false;}
+		jdbcTemplateForAccount.update(insertIntoAccountFrom,
+				new Object[]{balanceFrom,debit,generatedFromUsernameFrom});
+		jdbcTemplateForAccount.update(insertIntoAccountTo,
+				new Object[]{balanceTo,credit,generatedFromUsernameTo});
+		return true;
+	}
+	public boolean updatePending(String generatedFromUsernameFrom, String account, String amount) {
+		float amountToTransfer = Float.parseFloat(amount);	
+		//CustomerInformationDTO  custinfo = getUserFromAccount(account);
+		//String generatedFromUsernameTo = custinfo.getUsername();
+		
+		String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
+				+ " inner join users on "
+				+ "account.username=users.username "
+				+ "where account.username=?";
+		
+		String insertIntoPendingFrom = "INSERT INTO pendingtransactions (username,amount,pending,accountnumberfrom,accountnumberto)"
+				+ "VALUES((SELECT username from account where accountnumber=?),?,?,?,?)";
+		
+		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForPending = new JdbcTemplate(dataSource);
+		String getUsernameAccount = jdbcTemplateForAccountNumber.queryForObject(getAccountDetailsFromUsernameFrom,
+				new Object[] {generatedFromUsernameFrom},
+				String.class);
+
+		int accountNumber = Integer.parseInt(getUsernameAccount);
+		int accountNumberTo = Integer.parseInt(account);
+		if(accountNumber== accountNumberTo){return false;}
+		jdbcTemplateForPending.update(insertIntoPendingFrom,
+				new Object[]{accountNumber,amountToTransfer," 1", accountNumber, accountNumberTo});
+		
+		return true;
 	}
 
 	public String changeAccountPassword(ChangePassword custInfo) {

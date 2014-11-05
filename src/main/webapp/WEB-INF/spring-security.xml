@@ -26,8 +26,10 @@
 		<intercept-url pattern="/debitAmount*" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/creditAmount*" access="hasRole('ROLE_USER')" />
 
-		<!-- These are external user specific -->
-		<intercept-url pattern="/index*" access="permitAll" />
+		
+	
+        <!-- These are external user specific -->
+        <intercept-url pattern="/index*" access="permitAll"/>
 		<intercept-url pattern="/register*" access="permitAll" />
 		<intercept-url pattern="/login*" access="permitAll" />
 		<intercept-url pattern="/unlockAccount*" access="permitAll" />

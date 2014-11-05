@@ -35,4 +35,7 @@ public interface CustomerDAO {
 	public boolean activateAccountRequest(String username);
 	public boolean deleteAccountRequest(String username);
 	public List<TicketInformationDTO> getTicketList();  
+	public boolean processtransfer(String generatedFromUsername, String account, String amount);
+	public boolean updatePending(String generatedFromUsernameFrom, String account, String amount);
+	
 }

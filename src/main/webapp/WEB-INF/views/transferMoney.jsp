@@ -28,11 +28,13 @@
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/custom.js"> </script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.fancybox.js"> </script>
 
+<script src=" https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+
 
 	<script type="text/javascript">
 	jQuery(window).load(function() {
-		
-	jQuery('.slider').flexslider();
+		jQuery("#pendingButton").css("display","none");
+	//jQuery('.slider').flexslider();
 	 
 	// Create the dropdown base
 	jQuery("<select />").appendTo(".topmenu");
@@ -43,6 +45,27 @@
 	 "value"   : "",
 	 "text"    : "Menu"
 	}).appendTo(".topmenu select");
+	
+	jQuery("#transfer_amount").change(function()
+			{
+		
+		var value=jQuery("#transfer_amount").val();
+		
+		if(value<10000)
+			{
+			jQuery("#transferButton").css("display","block");
+			jQuery("#pendingButton").css("display","none");
+			//<input type="submit" name="pending" id="pendingButton" value="Approve Transfer" />
+			
+			//jQuery.append("<input type="submit" name="transfer" id="transferButton" value="Request" />")
+			}
+		else
+			{
+			jQuery("#pendingButton").css("display","block");
+			jQuery("#transferButton").css("display","none");
+			//jQuery.append("<input type="submit" name="pending" id="pendingButton" value="Approve Transfer" />")
+			}
+	});
 	
 	// Populate dropdown with menu items
 	jQuery(".topmenu a").each(function() {
@@ -57,7 +80,7 @@
 	window.location = jQuery(this).find("option:selected").val();
 	});
 	
-	jQuery('.fancybox').fancybox();	
+	//jQuery('.fancybox').fancybox();	
 		
 	});
 	
@@ -134,7 +157,11 @@
 			<div class="contentright" style="width: 100%">
 			<form:form method="post" action="transferMoney" modelAttribute="accountNumber">	
 			<i><b>Transfer Money at Bank of G5!</b></i>				
+<<<<<<< Updated upstream
 					<b>Account Number :</b> <br/> <input type="text" name="verifyUser" value="${param.verifyUser}" id="accountNumber_RemoveUser" style="color:#999;" /><br/>
+=======
+					<b>Account Number :</b> <br/> <input type="text" name="verifyUser" id="accountNumber_RemoveUser"  style="color:#999;" /><br/>
+>>>>>>> Stashed changes
 					<a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/> <br/> <br/>
 				</form:form>
 				<c:if test="${not empty customerDetails}">
@@ -144,19 +171,27 @@
 				<b>Contact:</b> ${customerDetails.phonenumber}<br/> <br/>
 				<b>Address:</b> ${customerDetails.address}<br/> <br/>
 				<b>Email Address:</b> ${customerDetails.email}<br/><br/>
-
+				<b>Account no:</b> ${param.verifyUser}<br/><br/>
 				
 			
 			<!-- commented by shivam, to enable above form temporary for chaitali to start working. -->
-				<form method="post" action="#">
+				<form:form method="post" action="transferMoneyConfirmation" modelAttribute="transfer" >
 					<i><b>Transfer Money at Bank of G5!</b></i> <br/>					
 					<p> Current Account Balance: PRINT BALANCE HERE --</p>
-					<b>Account no:</b> ${customerDetails.accountNumber}<br/><br/>
+	
+					<input type="text" name="accountNo" id="accountNo" value="${param.verifyUser}" style="color:#999" visibility:"hidden" /><br/>
 <!-- 					<h6>Transfer Money To:</h6><input type="number" name="transferTo" id="receiver" style="color:#999;" /><br/> -->
 					<h6>Amount:</h6><input type="number" name="amount" id="transfer_amount" style="color:#999;" /> <br/>
-					<input type="submit" name="transfer" id="transferButton" value="Transfer" />
-				</form>
+					<input type="submit" name="action" id="transferButton" value="Transfer" />
+					<input type="submit" name="action" id="pendingButton" value="Approve Transfer" />
+				</form:form>
+				
 				</c:if>
+				<c:if test="${not empty submitMessage}">
+											${submitMessage}
+										</c:if>
+				
+				
 			</div>
 	
 			<div class="clear"></div>

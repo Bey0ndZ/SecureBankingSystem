@@ -19,8 +19,6 @@ public interface CustomerService {
 
 	public List<CustomerInformationDTO> fetchUserDetails(String usernameSearch);
 	public List<CustomerInformationDTO> getUserList();
-	public CustomerInformationDTO getUserFromAccount(String accountNumber);  
-	public String updateAccount(CustomerInformationDTO cust);  
 	public String changeAccountPassword(ChangePassword cust);
 	public String unlockAccount(CustomerInformationDTO cust);
 	public boolean processBillPay(String loggedInUser, String accountNumber,
@@ -35,5 +33,9 @@ public interface CustomerService {
 	public boolean activateAccount(String username);
 	public boolean deleteAccountBYInternal(String username);
 	public List<TicketInformationDTO> getTicketList();
+	public CustomerInformationDTO getUserFromAccount(String accountnumber);  
+	public String updateAccount(CustomerInformationDTO cust); 
+	public boolean transfer(String loggedInUser, String accountNumber,String amountToBeTransferred);
+	public boolean pendingTransfer(String loggedInUser, String accountNumber,String amountToBeTransferred);
 }
 
