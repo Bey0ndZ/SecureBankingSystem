@@ -2,6 +2,8 @@ package edu.softwaresecurity.group5.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -208,36 +210,67 @@ public class ExternalUserController {
 
 				// Using Jsoup to parse html (if present in input)
 				Document inputFirstname = Jsoup.parse(modInfo.getFirstname());
-				modInfo.setFirstname(inputFirstname.text());
-
-				Document inputLastname = Jsoup.parse(modInfo.getLastname());
-				modInfo.setLastname(inputLastname.text());
-
 				Document inputSex = Jsoup.parse(modInfo.getSex());
-				modInfo.setSex(inputSex.text());
-
 				Document inputSelection = Jsoup.parse(modInfo.getSelection());
-				modInfo.setSelection(inputSelection.text());
-
-				Document inputPhoneNumber = Jsoup.parse(modInfo
-						.getPhonenumber());
-				modInfo.setPhonenumber(inputPhoneNumber.text());
-
+				Document inputLastname = Jsoup.parse(modInfo.getLastname());
+				Document inputPhoneNumber = Jsoup.parse(modInfo.getPhonenumber());	
 				Document inputEmail = Jsoup.parse(modInfo.getEmail());
-				modInfo.setEmail(inputEmail.text());
-
 				Document inputAddress = Jsoup.parse(modInfo.getAddress());
-				modInfo.setAddress(inputAddress.text());
-
-				String requestSubmitMessage = custService.modificationRequest(
-						requestedForUsername, modInfo);
-				modelAndView.addObject("requestSubmitMessage",
-						requestSubmitMessage);
-
-				modelAndView.setViewName("modifyUserExternal");
-			} else {
-				modelAndView.setViewName("permission-denied");
+				
+				String fn = inputFirstname.text();
+				String ln = inputLastname.text();
+				String phNum = inputPhoneNumber.text();
+				String address = inputAddress.text();
+				int count = 0;
+				for (char c: phNum.toCharArray()) {
+					if (Character.isDigit(c)) {
+						count ++;
+					}
+				}
+				
+				Pattern p = Pattern.compile("[!@#${},%^&*+_.-]");
+				Matcher match = p.matcher(fn.subSequence(0, fn.length()));
+				Matcher match1 = p.matcher(ln.subSequence(0, ln.length()));
+				Matcher match2 = p.matcher(address.subSequence(0, address.length()));
+				
+				if (fn.length()>10 || match.find() == true) {
+					modelAndView.addObject("errorMsg1", "Invalid First Name.");
+					modelAndView.setViewName("modifyUserExternal");
+				}
+				else if (ln.length()>10 || match1.find() == true) {
+					modelAndView.addObject("errorMsg2", "Invalid Last Name.");
+					modelAndView.setViewName("modifyUserExternal");
+				}
+				
+				else if (phNum.length() != 10 && count != 10) {
+					modelAndView.addObject("errorMsg3", "Invalid phone number.");
+					modelAndView.setViewName("modifyUserExternal");
+				}
+				else if (address.length()>50 || match2.find() == true) {
+					modelAndView.addObject("errorMsg4", "Invalid address.");
+					modelAndView.setViewName("modifyUserExternal");
+				}
+				else {
+				
+					modInfo.setSex(inputSex.text());
+					modInfo.setFirstname(inputFirstname.text());
+					modInfo.setLastname(inputLastname.text());
+					modInfo.setSelection(inputSelection.text());
+					modInfo.setPhonenumber(inputPhoneNumber.text());
+					modInfo.setEmail(inputEmail.text());
+					modInfo.setAddress(inputAddress.text());
+	
+					String requestSubmitMessage = custService.modificationRequest(
+							requestedForUsername, modInfo);
+					modelAndView.addObject("requestSubmitMessage",
+							requestSubmitMessage);
+	
+					modelAndView.setViewName("modifyUserExternal");
+				}
 			}
+			else {
+					modelAndView.setViewName("permission-denied");
+				}
 		} else {
 			modelAndView
 					.addObject(

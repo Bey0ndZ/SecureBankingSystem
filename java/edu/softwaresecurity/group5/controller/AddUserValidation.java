@@ -94,11 +94,12 @@ public class AddUserValidation {
 		  }
 	  }
 	  
-	  Pattern p = Pattern.compile("[!@#$%^&*+_.-]");
+	  Pattern p = Pattern.compile("[!@#${},%^&*+_.-]");
+	  Matcher match1 = p.matcher(userName.subSequence(0, userName.length()));
 	  Matcher match = p.matcher(pass.subSequence(0, pass.length()));
 	  
 	  if (pass.length()<6 || pass.length()>15 ||
-				 number<=0 || count<=0 || match.find()==false || userName.length() > 10 || userName.length()==0) {
+				 number<=0 || count<=0 || match.find()==false || userName.length() > 10 || userName.length()==0 || match1.find()==true) {
 		  errors.rejectValue("userName",
 			  "matchingPassword.AddUserInformation.userName",
 			  "User Name or Password is invalid! Please try entering again!");
