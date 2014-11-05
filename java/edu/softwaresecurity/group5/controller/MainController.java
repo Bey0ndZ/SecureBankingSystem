@@ -4,6 +4,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -333,15 +335,45 @@ public class MainController {
 			@ModelAttribute("customerDetails") ChangePassword customerDetail) {
 		ModelAndView modelAndView = new ModelAndView();
 		ChangePassword customerDetails = customerDetail;
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-		if (!(auth instanceof AnonymousAuthenticationToken)) {
-			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			customerDetail.setUsername(userDetail.getUsername());
-		}
-		String status = custService.changeAccountPassword(customerDetails);
-		modelAndView.addObject("status", status);
-		modelAndView.setViewName("changePassword");
+		
+		String pass = customerDetails.getPassword();
+		int number = 0;
+		int count = 0;
+		
+		for (char c: pass.toCharArray()) {
+			  if (Character.isDigit(c)) {
+				  number ++;
+			  }
+		  }
+
+		  for (char c: pass.toCharArray()) {
+			  if (Character.isUpperCase(c)) {
+				  count++;
+			  }
+		  }
+		  
+		  Pattern p = Pattern.compile("[!@#$%^&*+_.-]");
+		  Matcher match = p.matcher(pass.subSequence(0, pass.length()));
+		  
+		  if (pass.length()<6 || pass.length()>15 || number<=0 || count<=0 || match.find()==false) {
+			  modelAndView.addObject("errorMsg", "Entered password is not valid! Please enter again.");
+			  modelAndView.setViewName("changePassword");
+		  }
+		  else if (pass.equalsIgnoreCase(customerDetails.getConfirmPassword()) == false) {
+			  modelAndView.addObject("errorMsg", "Password and confirm password does not match.");
+			  modelAndView.setViewName("changePassword");
+		  }
+		  else {
+				Authentication auth = SecurityContextHolder.getContext()
+						.getAuthentication();
+				if (!(auth instanceof AnonymousAuthenticationToken)) {
+					UserDetails userDetail = (UserDetails) auth.getPrincipal();
+					customerDetail.setUsername(userDetail.getUsername());
+				}
+				String status = custService.changeAccountPassword(customerDetails);
+				modelAndView.addObject("status", status);
+				modelAndView.setViewName("changePassword");
+		  }
 		return modelAndView;
 	}
 
