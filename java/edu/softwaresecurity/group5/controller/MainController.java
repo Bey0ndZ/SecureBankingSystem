@@ -148,60 +148,42 @@ public class MainController {
 		model.setViewName("permission-denied");
 		return model;
 	}
-//	// for 404 access denied page
-//		@RequestMapping(value = "/404", method = RequestMethod.GET)
-//		public ModelAndView notFound() {
-//
-//			ModelAndView model = new ModelAndView();
-//
-//			// check if user is login
-//			Authentication auth = SecurityContextHolder.getContext()
-//					.getAuthentication();
-//			if (!(auth instanceof AnonymousAuthenticationToken)) {
-//				UserDetails userDetail = (UserDetails) auth.getPrincipal();
-//				System.out.println(userDetail);
-//
-//				model.addObject("username", userDetail.getUsername());
-//			}
-//			model.setViewName("page-notfound");
-//			return model;
+
+//	// Displaying the removeUser.jsp page
+//	@RequestMapping(value = "/removeUser", method = RequestMethod.GET)
+//	public ModelAndView returnRemoveUserPage() {
+//		ModelAndView modelAndView = new ModelAndView();
+//		modelAndView.setViewName("removeUser");
+//		return modelAndView;
+//	}
+
+//	// Getting the userdetails
+//	@RequestMapping(value = "/removeUser", method = RequestMethod.POST)
+//	public ModelAndView getUserDetails(
+//			@RequestParam("removeUser") String usernameSearch) {
+//		ModelAndView modelAndView = new ModelAndView();
+//		
+//		Document userInput = Jsoup.parse(usernameSearch);
+//		String userName = userInput.text();
+//		
+//		if(userName.length()==0 || userName.length()>15) {
+//			modelAndView.addObject("errorMsg", "Please enter the correct username!");
+//			modelAndView.setViewName("removeUser");
 //		}
-
-	// Displaying the removeUser.jsp page
-	@RequestMapping(value = "/removeUser", method = RequestMethod.GET)
-	public ModelAndView returnRemoveUserPage() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("removeUser");
-		return modelAndView;
-	}
-
-	// Getting the userdetails
-	@RequestMapping(value = "/removeUser", method = RequestMethod.POST)
-	public ModelAndView getUserDetails(
-			@RequestParam("removeUser") String usernameSearch) {
-		ModelAndView modelAndView = new ModelAndView();
-		
-		Document userInput = Jsoup.parse(usernameSearch);
-		String userName = userInput.text();
-		
-		if(userName.length()==0 || userName.length()>15) {
-			modelAndView.addObject("errorMsg", "Please enter the correct username!");
-			modelAndView.setViewName("removeUser");
-		}
-		else{
-			List<CustomerInformationDTO> customerDetails = new ArrayList<CustomerInformationDTO>();
-			customerDetails = custService.fetchUserDetails(userName);
-			if(customerDetails.size()==0) {
-				modelAndView.addObject("errorMsg", "Please enter the correct username!");
-				modelAndView.setViewName("removeUser");
-			}
-			else {
-				modelAndView.addObject("customerDetails", customerDetails);
-				modelAndView.setViewName("removeUser");
-			}
-		}
-		return modelAndView;
-	}
+//		else{
+//			List<CustomerInformationDTO> customerDetails = new ArrayList<CustomerInformationDTO>();
+//			customerDetails = custService.fetchUserDetails(userName);
+//			if(customerDetails.size()==0) {
+//				modelAndView.addObject("errorMsg", "Please enter the correct username!");
+//				modelAndView.setViewName("removeUser");
+//			}
+//			else {
+//				modelAndView.addObject("customerDetails", customerDetails);
+//				modelAndView.setViewName("removeUser");
+//			}
+//		}
+//		return modelAndView;
+//	}
 	// Remove user from db, mark user detailed expired to 0.
 		@RequestMapping(value = "/removeUserDB", method = RequestMethod.POST)
 		public ModelAndView getremoveUserDB(
@@ -248,41 +230,41 @@ public class MainController {
 					return modelAndView;
 				}	
 
-	// Displaying the ViewUser(SearchUser).jsp page
-	@RequestMapping(value = "/viewUser", method = RequestMethod.GET)
-	public ModelAndView returnViewUserPage() {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("viewUser");
-		return modelAndView;
-	}
+//	// Displaying the ViewUser(SearchUser).jsp page
+//	@RequestMapping(value = "/viewUser", method = RequestMethod.GET)
+//	public ModelAndView returnViewUserPage() {
+//		ModelAndView modelAndView = new ModelAndView();
+//		modelAndView.setViewName("viewUser");
+//		return modelAndView;
+//	}
 
-	// Getting the userdetails
-	@RequestMapping(value = "/viewUser", method = RequestMethod.POST)
-	public ModelAndView getUserDetail(
-			@RequestParam("viewUser") String accountNumber) {
-		ModelAndView modelAndView = new ModelAndView();
-		
-		Document userInput = Jsoup.parse(accountNumber);
-		String userAccountNumber = userInput.text();
-	
-		int chCount = 0;
-		for (char c: userAccountNumber.toCharArray()) {
-			  if(Character.isLetter(c)) {
-				  chCount++;
-			  }
-		}
-		if(userAccountNumber.length()==0 || chCount!=0 || userAccountNumber.length()>10 || userAccountNumber.length()<8) {
-			modelAndView.addObject("errorMsg", "Please enter the correct account number!");
-			modelAndView.setViewName("viewUser");
-		}
-		else {
-			CustomerInformationDTO customerDetails = new CustomerInformationDTO();
-			customerDetails = custService.getUserFromAccount(userAccountNumber);
-			modelAndView.addObject("customerDetails", customerDetails);
-			modelAndView.setViewName("viewUser");
-		}
-		return modelAndView;
-	}
+//	// Getting the userdetails
+//	@RequestMapping(value = "/viewUser", method = RequestMethod.POST)
+//	public ModelAndView getUserDetail(
+//			@RequestParam("viewUser") String accountNumber) {
+//		ModelAndView modelAndView = new ModelAndView();
+//		
+//		Document userInput = Jsoup.parse(accountNumber);
+//		String userAccountNumber = userInput.text();
+//	
+//		int chCount = 0;
+//		for (char c: userAccountNumber.toCharArray()) {
+//			  if(Character.isLetter(c)) {
+//				  chCount++;
+//			  }
+//		}
+//		if(userAccountNumber.length()==0 || chCount!=0 || userAccountNumber.length()>10 || userAccountNumber.length()<8) {
+//			modelAndView.addObject("errorMsg", "Please enter the correct account number!");
+//			modelAndView.setViewName("viewUser");
+//		}
+//		else {
+//			CustomerInformationDTO customerDetails = new CustomerInformationDTO();
+//			customerDetails = custService.getUserFromAccount(userAccountNumber);
+//			modelAndView.addObject("customerDetails", customerDetails);
+//			modelAndView.setViewName("viewUser");
+//		}
+//		return modelAndView;
+//	}
 
 	@RequestMapping("/getList")
 	public ModelAndView getUserLIst() {
