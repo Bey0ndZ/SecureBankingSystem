@@ -149,6 +149,7 @@
 					               		 <input type="hidden" name="email" id="accountNumber_RemoveUser" value="${ticketDetailDTO.email}" style="color:#999;" /><br/> <br/>
 					                     <input type="hidden" name="address" id="accountNumber_RemoveUser" value="${ticketDetailDTO.address}" style="color:#999;" /><br/> <br/>
 					                     <input type="hidden" name="requesttype" id="accountNumber_RemoveUser" value="${ticketDetailDTO.requesttype}" style="color:#999;" /><br/> <br/>
+					                     <input type="hidden" name="id" id="accountNumber_RemoveUser" value="${ticketDetailDTO.id}" style="color:#999;" /><br/> <br/>
 					                    
 					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="modifyUserButton" value="Update User" /></a> <br/> <br/>
 					                        </form:form></td>  
@@ -213,8 +214,18 @@
 									     <td>${ticketDetailDTO.transactionAmount}</td> 
 									     <td>${ticketDetailDTO.toAccountNumber}</td> 
 									     <td>${ticketDetailDTO.billpay}</td> 
-									     <td><form:form method="post" action="modifyUser" modelAttribute="accountNumber">                    
-					                     <input type="hidden" name="modifyUser" id="accountNumber_RemoveUser" value="${user.username}" style="color:#999;" /><br/> <br/>
+									     <td><form:form method="post" action="authorizeTransactions" modelAttribute="authorizeTransactions">                    
+					                     <input type="hidden" name="accountNumber" id="accountNumber_RemoveUser" value="${ticketDetailDTO.accountNumber}" style="color:#999;" /><br/> <br/>
+					                     <input type="hidden" name="username" id="accountNumber_RemoveUser" value="${ticketDetailDTO.username}" style="color:#999;" /><br/> <br/>
+					                     <input type="hidden" name="firstname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.firstname}" style="color:#999;" /><br/> <br/>
+					               		 <input type="hidden" name="lastname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.lastname}" style="color:#999;" /><br/> <br/>
+					                     <input type="hidden" name="accountBalance" id="accountNumber_RemoveUser" value="${ticketDetailDTO.accountBalance}" style="color:#999;" /><br/> <br/>
+					                     <input type="hidden" name="transactionAmount" id="accountNumber_RemoveUser" value="${ticketDetailDTO.transactionAmount}" style="color:#999;" /><br/> <br/>
+					               		 <input type="hidden" name="toAccountNumber" id="accountNumber_RemoveUser" value="${ticketDetailDTO.toAccountNumber}" style="color:#999;" /><br/> <br/>
+					                     <input type="hidden" name="billpay" id="accountNumber_RemoveUser" value="${ticketDetailDTO.billpay}" style="color:#999;" /><br/> <br/>
+					                     <input type="hidden" name="requesttype" id="accountNumber_RemoveUser" value="${ticketDetailDTO.requesttype}" style="color:#999;" /><br/> <br/>
+					                    
+					                    
 					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="modifyUserButton" value="Approve" /></a> <br/> <br/>
 					                        </form:form></td>  
 									     <td> <form:form method="post" action="removeUserDB" modelAttribute="usernameSearch">					

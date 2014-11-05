@@ -228,7 +228,7 @@ public class MainController {
 			modelAndView
 					.addObject("status",
 							"Please couldnot be deleted please contact Adminstrator personally!");
-			modelAndView.setViewName("userList");
+			modelAndView.setViewName("ticketAuthorizedSuccess");
 		}
 
 		return modelAndView;
@@ -338,17 +338,17 @@ public class MainController {
 	}
 	
 	// Modify Internal employee in database, this is just for admin.
-		@RequestMapping(value = "/modifyExternalUserByInternal", method = RequestMethod.POST)
-		public ModelAndView getmodifyExternalDatabase(
-				@ModelAttribute("modifyExternalUserByAdmin") TicketDetailDTO ticketDetailDTO) {
-			ModelAndView modelAndView = new ModelAndView();
-			TicketDetailDTO detailDTO = ticketDetailDTO;
-			String status = custService.updateExternalAccount(detailDTO);
-			modelAndView.addObject("customerDetails", detailDTO);
-			modelAndView.addObject("status", status);
-			modelAndView.setViewName("userList");
-			return modelAndView;
-		}
+	@RequestMapping(value = "/modifyExternalUserByInternal", method = RequestMethod.POST)
+	public ModelAndView getmodifyExternalDatabase(
+			@ModelAttribute("modifyExternalUserByAdmin") TicketDetailDTO ticketDetailDTO) {
+		ModelAndView modelAndView = new ModelAndView();
+		TicketDetailDTO detailDTO = ticketDetailDTO;
+		String status = custService.updateExternalAccount(detailDTO);
+		modelAndView.addObject("customerDetails", detailDTO);
+		modelAndView.addObject("status", status);
+		modelAndView.setViewName("ticketAuthorizedSuccess");
+		return modelAndView;
+	}
 
 	// change password.
 	@RequestMapping(value = "/changePassword", method = RequestMethod.GET)
@@ -511,4 +511,17 @@ public class MainController {
 			modelAndView.setViewName("ticketDetails");
 			return modelAndView;
 		}
+		
+	// Authhorize Critical transactions.
+	@RequestMapping(value = "/authorizeTransactions", method = RequestMethod.POST)
+	public ModelAndView getauthorizeTransactions(
+			@ModelAttribute("authorizeTransactions") TicketDetailDTO ticketDetailDTO) {
+		ModelAndView modelAndView = new ModelAndView();
+		TicketDetailDTO detailDTO = ticketDetailDTO;
+//		String status = custService.updateExternalAccount(detailDTO);
+//		modelAndView.addObject("customerDetails", detailDTO);
+//		modelAndView.addObject("status", status);
+		modelAndView.setViewName("ticketAuthorizedSuccess");
+		return modelAndView;
+	}
 }

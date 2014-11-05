@@ -391,7 +391,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 					dataSource);
 
 			int status2 = insertIntoTicketsTableTemplate.update(updateIntoTicketsTable, new Object[] { custInfo.getUsername(), custInfo.getId() });
-			if (status1 == 1&& status2==1) {
+			if (status1 >0 && status2>0) {
 				return "Updated account details Succesfully";
 			}
 			return "Database not updated, please contact Branch Representative!";
