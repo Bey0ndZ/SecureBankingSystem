@@ -445,7 +445,7 @@ public class MainController {
 		return modelAndView;
 	}
 	
-	// Getting the userdetails
+	//Verify whether account is actually locked or not.
 	@RequestMapping(value = "/unlockAccount", method = RequestMethod.POST)
 	public ModelAndView getVerfyUserForUnlock(
 			@ModelAttribute("customerDetails") CustomerInformationDTO customerDetail) {

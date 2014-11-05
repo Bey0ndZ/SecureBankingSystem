@@ -444,7 +444,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 			String otp = randomString.toString();
 			String hash = passwordEncoder.encode(otp);
-			String sql = "UPDATE users set password = ?,confirmpassword = ?, userLocked= false"
+			String sql = "UPDATE users set password = ?,confirmpassword = ?, userLocked= true"
 					+ " where enabled = true  and username = ?";
 
 			int status = jdbcTemplate.update(sql, new Object[] { hash, hash,
@@ -452,9 +452,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 			if (status == 1) {
 				sendEmail(email.get(0), "Your password is changed",
 						"Please login and change the password, you temp password is  : "
-								+ hash + "OTP: " + otp);
-				return "your new password is emailed to you at : " + hash + " "
-						+ email.get(0);
+								+ "OTP: " + otp);
+				return "your new password is emailed to you at : " + email.get(0)+" . Please login and change your password immediately.";
 			}
 			return "Database please contact Branch Representative";
 		}
