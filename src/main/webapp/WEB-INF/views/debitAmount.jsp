@@ -139,7 +139,10 @@
 											Amount:<br/><input type="text" name="debitAmount" /><br/><br/>
 											<input type="submit" value="Debit" name="transferMoneyButton"/>
 										</form:form>
-										
+										<c:if test="${not empty errorMsg}">
+											<b> ${errorMsg} </b>
+                                    	</c:if>
+                                    			<br/>
 										<c:if test="${not empty debitMessage}">
 											${debitMessage}
 										</c:if>

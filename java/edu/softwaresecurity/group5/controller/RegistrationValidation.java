@@ -43,24 +43,28 @@ public class RegistrationValidation {
 //      }
 	  
 	  String firstName = cinfo.getFirstname();
-	  if ((firstName.length()) > 10) {
+	  Pattern p1 = Pattern.compile("[!@#${},%^&*+_.-]");
+	  Matcher match_fn = p1.matcher(firstName.subSequence(0, firstName.length()));
+	  if ((firstName.length()) > 10 || match_fn.find() == true) {
       errors.rejectValue("firstname",
           "lengthOfFirst.CustomerInformation.firstname",
-          "First Name must not more than 10 characters.");
+          "First name is invalid");
       }
 	  
 	  String lastName = cinfo.getLastname();
-	  if ((lastName.length()) > 10) {
+	  Matcher match_ln = p1.matcher(lastName.subSequence(0, lastName.length()));
+	  if ((lastName.length()) > 10 || match_ln.find() == true) {
       errors.rejectValue("lastname",
           "lengthOfLast.CustomerInformation.lastname",
-          "Last Name must not more than 10 characters.");
+          "Last name is invalid");
       }
 	  
 	  String add = cinfo.getAddress();
-	  if ((add.length()) > 50) {
+	  Matcher match_add = p1.matcher(add.subSequence(0, add.length()));
+	  if ((add.length()) > 50 || match_add.find() == true) {
       errors.rejectValue("address",
           "lengthOfAddress.CustomerInformation.address",
-          "Address must not more than 50 characters.");
+          "Address is invalid");
       }
 	  
 	  String ssn = cinfo.getSocialSecurityNumber();
@@ -70,10 +74,10 @@ public class RegistrationValidation {
 			  ssnNum++;
 		  }
 	  }
-	  if(ssnNum != 10) {
+	  if(ssnNum != 9 || ssn.length() != 9) {
 		  errors.rejectValue("socialSecurityNumber", 
 				  "lengthOfSocialSecurityNumber.CustomerInformation.socialSecurityNumber",
-				  "SSN must contain exactly 10 digits.");
+				  "SSN is invalid");
 	  }
 	  
 	  
@@ -83,9 +87,9 @@ public class RegistrationValidation {
 			  phNum++;
 		  }
 	  }
-	  if(phNum != 10) {
+	  if(phNum != 10 || pNumber.length() != 10) {
 		  errors.rejectValue("phonenumber", "lengthOfPhoneNumber.CustomerInformation.phonenumber",
-				  "Phone number must contain exactly 10 digits.");
+				  "Phone number is invalid");
 	  }
 	  
 	  
@@ -122,14 +126,14 @@ public class RegistrationValidation {
 //		      "Password has no capital letter");
 //	  }
 	  
-	  Pattern p = Pattern.compile("[!@#$%^&*+_.,-]");
+	  Pattern p = Pattern.compile("[!@#${},%^&*+_.-]");
 	  Matcher match = p.matcher(pass.subSequence(0, pass.length()));
-	  
+	  Matcher match_1 = p.matcher(userName.subSequence(0, userName.length()));
 	  if (pass.length()<6 || pass.length()>15 ||
-				 number<=0 || count<=0 || match.find()==false || userName.length() > 10 || userName.length()==0) {
+				 number<=0 || count<=0 || match.find()==false || userName.length() > 10 || userName.length()==0 || match_1.find() == true) {
 		  errors.rejectValue("username",
 			  "matchingPassword.CustomerInformation.username",
-			  "User Name or Password is invalid! Please try entering again!");
+			  "User Name or Password is invalid!");
 	  }
 	  
 	  if (!(cinfo.getPassword()).equals(cinfo.getConfirmPassword())) {

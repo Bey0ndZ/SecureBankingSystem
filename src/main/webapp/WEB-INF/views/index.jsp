@@ -22,8 +22,14 @@
     <link href="${pageContext.request.contextPath}/resources/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="${pageContext.request.contextPath}/resources/css/keyboard.css" rel="stylesheet" type="text/css">
 </head>
-
+<script src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
+<script>
+jQuery(document).ready(function(){
+	$("#password").keydown(false);
+});
+</script>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 
     <!-- Navigation -->
@@ -85,7 +91,7 @@
 						action="<c:url value='/j_spring_security_check' />" method='POST'>
 					
 						<input type="text" name="username" size="10" class="form-control" placeholder="Username" required autofocus>
-				        <input type="password" name="password" size="10" class="form-control" placeholder="Password" required>
+				        <input type="password" name="password" id="password" size="10" class="form-control keyboardInput" placeholder="Password" required>
 				        <div class="checkbox">
 				          <label>
 				            <input type="checkbox" value="remember-me"> Remember me
@@ -113,7 +119,7 @@
             <p>Copyright &copy; SBS 2014</p>
         </div>
     </footer>
-
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/keyboard.js" charset="UTF-8"></script>
     <!-- jQuery Version 1.11.0 -->
     <script src="${pageContext.request.contextPath}/resources/js/jquery-1.11.0.js"></script>
 

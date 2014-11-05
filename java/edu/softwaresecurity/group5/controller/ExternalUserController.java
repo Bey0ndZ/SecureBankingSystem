@@ -100,24 +100,38 @@ public class ExternalUserController {
 			@RequestParam("debitAmount") String debitAmount) {
 		ModelAndView modelAndView = new ModelAndView();
 		if (!debitAmount.isEmpty()) {
-
-			// Removing the html tags (if present) using JSoup library
-			Document inputText = Jsoup.parse(debitAmount);
-			Float debitAmountFloat = Float.parseFloat(inputText.text());
-			Authentication auth = SecurityContextHolder.getContext()
-					.getAuthentication();
-			if (!(auth instanceof AnonymousAuthenticationToken)) {
-				UserDetails userDetail = (UserDetails) auth.getPrincipal();
-
-				String usernameLoggedIn = userDetail.getUsername();
-				String message = custService.debitAmountForCustomer(
-						usernameLoggedIn, debitAmountFloat);
-				modelAndView.addObject("debitMessage", message);
-				modelAndView.setViewName("debitAmount");
-			} else {
-				modelAndView.setViewName("permission-denied");
+			int counter = 0;
+			for (char ch: debitAmount.toCharArray()) {
+				if (Character.isDigit(ch) == false) {
+					counter ++;
+				}
 			}
-		} else {
+			if (counter>0) {
+				modelAndView.addObject("errorMsg", "Please enter the correct amount!");
+				modelAndView.setViewName("debitAmount");
+				return modelAndView;
+			}
+			else {
+				// Removing the html tags (if present) using JSoup library
+				Document inputText = Jsoup.parse(debitAmount);
+				Float debitAmountFloat = Float.parseFloat(inputText.text());
+				Authentication auth = SecurityContextHolder.getContext()
+						.getAuthentication();
+					if (!(auth instanceof AnonymousAuthenticationToken)) {
+						UserDetails userDetail = (UserDetails) auth.getPrincipal();
+	
+						String usernameLoggedIn = userDetail.getUsername();
+						String message = custService.debitAmountForCustomer(
+						usernameLoggedIn, debitAmountFloat);
+						modelAndView.addObject("debitMessage", message);
+						modelAndView.setViewName("debitAmount");
+					}
+					else {
+					modelAndView.setViewName("permission-denied");
+					}
+			} 
+		}
+		else {
 			// debitAmount is empty
 			modelAndView.addObject("debitMessage",
 					"Do not leave the text-box empty!");
@@ -142,20 +156,33 @@ public class ExternalUserController {
 			@RequestParam("creditAmount") String creditAmount) {
 		ModelAndView modelAndView = new ModelAndView();
 		if (!creditAmount.isEmpty()) {
-			// Removing the html tags (if present) using JSoup library
-			Document inputText = Jsoup.parse(creditAmount);
-			Float creditAmountFloat = Float.parseFloat(inputText.text());
-			Authentication auth = SecurityContextHolder.getContext()
-					.getAuthentication();
-			if (!(auth instanceof AnonymousAuthenticationToken)) {
-				UserDetails userDetail = (UserDetails) auth.getPrincipal();
-				String usernameLoggedIn = userDetail.getUsername();
-				String message = custService.creditAmountForCustomer(
-						usernameLoggedIn, creditAmountFloat);
-				modelAndView.addObject("creditMessage", message);
+			int counter = 0;
+			for (char ch: creditAmount.toCharArray()) {
+				if (Character.isDigit(ch) == false) {
+					counter ++;
+				}
+			}
+			if (counter>0) {
+				modelAndView.addObject("errorMsg", "Please enter the correct amount!");
 				modelAndView.setViewName("creditAmount");
-			} else {
-				modelAndView.setViewName("permission-denied");
+				return modelAndView;
+			}
+			else {
+			// Removing the html tags (if present) using JSoup library
+				Document inputText = Jsoup.parse(creditAmount);
+				Float creditAmountFloat = Float.parseFloat(inputText.text());
+				Authentication auth = SecurityContextHolder.getContext()
+						.getAuthentication();
+				if (!(auth instanceof AnonymousAuthenticationToken)) {
+					UserDetails userDetail = (UserDetails) auth.getPrincipal();
+					String usernameLoggedIn = userDetail.getUsername();
+					String message = custService.creditAmountForCustomer(
+							usernameLoggedIn, creditAmountFloat);
+					modelAndView.addObject("creditMessage", message);
+					modelAndView.setViewName("creditAmount");
+				} else {
+					modelAndView.setViewName("permission-denied");
+				}
 			}
 		} else {
 			modelAndView.addObject("creditMessage",

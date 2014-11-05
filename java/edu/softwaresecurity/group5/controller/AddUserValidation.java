@@ -33,26 +33,30 @@ public class AddUserValidation {
 				"Contact must not be Empty.");
 	  
 	  String userName = addinfo.getUserName();
-
+	  
 	  String firstName = addinfo.getFirstName();
-	  if ((firstName.length()) > 10) {
+	  Pattern p1 = Pattern.compile("[!@#${},%^&*+_.-]");
+	  Matcher match_fn = p1.matcher(firstName.subSequence(0, firstName.length()));
+	  if ((firstName.length()) > 10 || match_fn.find() == true) {
       errors.rejectValue("firstName",
           "lengthOfFirst.AddUserInformation.firstName",
-          "First Name must not more than 10 characters.");
+          "Invalid first name!");
       }
 	  
 	  String lastName = addinfo.getLastName();
-	  if ((lastName.length()) > 10) {
+	  Matcher match_ln = p1.matcher(lastName.subSequence(0, lastName.length()));
+	  if ((lastName.length()) > 10 || match_ln.find() == true) {
       errors.rejectValue("lastName",
           "lengthOfLast.AddUserInformation.lastName",
-          "Last Name must not more than 10 characters.");
+          "Invalid last name!");
       }
 	  
 	  String add = addinfo.getAddress();
-	  if ((add.length()) > 50) {
+	  Matcher match_add = p1.matcher(add.subSequence(0, add.length()));
+	  if ((add.length()) > 50 || match_add.find()==true) {
       errors.rejectValue("address",
           "lengthOfAddress.AddUserInformation.address",
-          "Address must not more than 50 characters.");
+          "Invalid address!");
       }
 	  
 	  String ssn = addinfo.getSocialSecurityNumber();
@@ -62,10 +66,10 @@ public class AddUserValidation {
 			  ssnNum++;
 		  }
 	  }
-	  if(ssnNum != 10) {
+	  if(ssnNum != 9 || ssn.length() != 9) {
 		  errors.rejectValue("socialSecurityNumber", 
 				  "lengthOfSocialSecurityNumber.AddUserInformation.socialSecurityNumber",
-				  "SSN must contain exactly 10 digits.");
+				  "Invalid SSN!");
 	  }
 	  
 	  
@@ -75,9 +79,9 @@ public class AddUserValidation {
 			  phNum++;
 		  }
 	  }
-	  if(phNum != 10) {
+	  if(phNum != 10 || pNumber.length() != 10) {
 		  errors.rejectValue("contactNumber", "lengthOfPhoneNumber.AddUserInformation.contactNumber",
-				  "Phone number must contain exactly 10 digits.");
+				  "Invalid phone number!");
 	  }
 	  
 	  
@@ -102,7 +106,7 @@ public class AddUserValidation {
 				 number<=0 || count<=0 || match.find()==false || userName.length() > 10 || userName.length()==0 || match1.find()==true) {
 		  errors.rejectValue("userName",
 			  "matchingPassword.AddUserInformation.userName",
-			  "User Name or Password is invalid! Please try entering again!");
+			  "User Name or Password is invalid!");
 	  }
 	  
 	  if (!(addinfo.getPassword()).equals(addinfo.getConfirmPassword())) {

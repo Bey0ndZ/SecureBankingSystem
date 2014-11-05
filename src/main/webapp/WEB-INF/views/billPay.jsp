@@ -136,7 +136,10 @@
 											Amount:<br/><input type="text" name="amountToBeTransferred" /><br/><br/>
 											<input type="submit" value="Send Request" name="transferMoneyButton"/>
 										</form:form>
-										
+										<c:if test="${not empty errorMsg}">
+											<b> ${errorMsg} </b>
+                                    	</c:if>
+                                    			<br/>
 										<c:if test="${not empty submitMessage}">
 											${submitMessage}
 										</c:if>
