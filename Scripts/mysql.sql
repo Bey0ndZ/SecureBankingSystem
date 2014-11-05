@@ -132,7 +132,6 @@ CREATE TABLE user_tickets (
   PRIMARY KEY (id)
 );
 
-
 CREATE TABLE transactions (
 	id INT(11) NOT NULL,	
 	usernamefrom VARCHAR(45) NOT NULL,
@@ -149,6 +148,7 @@ CREATE TABLE otp (
 	generateTime timestamp,
 	PRIMARY KEY (username)
 );
+
 
 
 INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype) VALUES ("skgarg",false,false,false,"Modify");

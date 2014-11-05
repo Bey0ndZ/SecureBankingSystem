@@ -881,6 +881,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		String insertIntoAccountTo = "UPDATE "
 				+ "account SET account.accountbalance=?, account.credit=?"
 				+ "WHERE account.username= ? ";
+		
 		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
 		JdbcTemplate jdbcTemplateForAccount = new JdbcTemplate(dataSource);
 
@@ -936,9 +937,15 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		String insertIntoPendingFrom = "INSERT INTO pendingtransactions (username,amount,pending,accountnumberfrom,accountnumberto)"
 				+ "VALUES((SELECT username from account where accountnumber=?),?,?,?,?)";
+		
+		// Query to insert into user_tickets table
+		String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected,requesttype)"
+				+ " VALUES (?,?,?,?,?)";
 
 		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
 		JdbcTemplate jdbcTemplateForPending = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForUserTickets = new JdbcTemplate(dataSource);
+		
 		String getUsernameAccount = jdbcTemplateForAccountNumber
 				.queryForObject(getAccountDetailsFromUsernameFrom,
 						new Object[] { generatedFromUsernameFrom },
@@ -952,6 +959,10 @@ public class CustomerDAOImpl implements CustomerDAO {
 		jdbcTemplateForPending.update(insertIntoPendingFrom, new Object[] {
 				accountNumber, amountToTransfer, " 1", accountNumber,
 				accountNumberTo });
+		
+		// Inserting into user_tickets
+		jdbcTemplateForUserTickets.update(insertIntoTicketsTable, new Object[]{generatedFromUsernameFrom,
+				false, false, false, Ticket_Type_Authorize});
 
 		return true;
 	}
