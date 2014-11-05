@@ -42,6 +42,7 @@ public interface CustomerService {
 	public CustomerInformationDTO getUserFromAccount(String accountnumber);  
 	public EmployeeInformationDTO getEmployeeFromUserName(String accountnumber);  
 	public String updateAccount(CustomerInformationDTO cust); 
+	public String updateExternalAccount(TicketDetailDTO cust);
 	public boolean transfer(String loggedInUser, String accountNumber,String amountToBeTransferred);
 	public boolean pendingTransfer(String loggedInUser, String accountNumber,String amountToBeTransferred);
 	public List<UserTransactionsDTO> getUserTransactions(String username);

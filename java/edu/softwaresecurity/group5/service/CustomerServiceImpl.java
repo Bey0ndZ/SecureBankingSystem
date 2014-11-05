@@ -45,6 +45,9 @@ public class CustomerServiceImpl implements CustomerService {
 	public String updateAccount(CustomerInformationDTO cust) {
 		return custDAO.updateAccount(cust);
 	}
+	public String updateExternalAccount(TicketDetailDTO cust) {
+		return custDAO.updateExternalAccount(cust);
+	}
 	
 	public String changeAccountPassword(ChangePassword cust) {
 		return custDAO.changeAccountPassword(cust);

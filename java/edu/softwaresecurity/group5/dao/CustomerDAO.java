@@ -22,6 +22,7 @@ public interface CustomerDAO {
 	public List<CustomerInformationDTO> retrieveUserDetails(String username);
 	public List<EmployeeInformationDTO> getUserList();  
 	public String updateAccount(CustomerInformationDTO custInfo); 
+	public String updateExternalAccount(TicketDetailDTO custInfo);
 	public CustomerInformationDTO getUserFromAccount(String accountNumber);
 	public EmployeeInformationDTO getEmployeeFromUserName(String accountNumber);  
 	public String changeAccountPassword(ChangePassword custInfo);  

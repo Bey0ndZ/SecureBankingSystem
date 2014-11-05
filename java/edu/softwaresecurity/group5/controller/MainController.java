@@ -336,6 +336,19 @@ public class MainController {
 		modelAndView.setViewName("userList");
 		return modelAndView;
 	}
+	
+	// Modify Internal employee in database, this is just for admin.
+		@RequestMapping(value = "/modifyExternalUserByInternal", method = RequestMethod.POST)
+		public ModelAndView getmodifyExternalDatabase(
+				@ModelAttribute("modifyExternalUserByAdmin") TicketDetailDTO ticketDetailDTO) {
+			ModelAndView modelAndView = new ModelAndView();
+			TicketDetailDTO detailDTO = ticketDetailDTO;
+			String status = custService.updateExternalAccount(detailDTO);
+			modelAndView.addObject("customerDetails", detailDTO);
+			modelAndView.addObject("status", status);
+			modelAndView.setViewName("userList");
+			return modelAndView;
+		}
 
 	// change password.
 	@RequestMapping(value = "/changePassword", method = RequestMethod.GET)

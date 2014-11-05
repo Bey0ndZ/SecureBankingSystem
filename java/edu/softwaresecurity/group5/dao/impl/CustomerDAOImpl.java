@@ -373,7 +373,32 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		return "Database not updated, please contact Branch Representative";
 	}
+	public String updateExternalAccount(TicketDetailDTO custInfo) {
+		// TODO Auto-generated method stub
+		String sql = "UPDATE users set firstname = ?,lastname = ?, phonenumber = ?, email = ?, address=?"
+				+ " where enabled = true  and username = ?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
+		int status = jdbcTemplate.update(sql,
+				new Object[] { custInfo.getFirstname(), custInfo.getLastname(),
+						custInfo.getPhonenumber(), custInfo.getEmail(),
+						custInfo.getAddress(), custInfo.getUsername() });
+		if (status == 1) {
+			String updateModificationTable = "UPDATE modificationrequests set requestcompleted = true where username =  ?";
+			int status1 = jdbcTemplate.update(updateModificationTable, new Object[] { custInfo.getUsername() });
+			String updateIntoTicketsTable = "UPDATE user_tickets set requestcompleted =true, requestapproved=true, requestrejected=false where username =  ? and id = ?";
+			JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
+					dataSource);
+
+			int status2 = insertIntoTicketsTableTemplate.update(updateIntoTicketsTable, new Object[] { custInfo.getUsername(), custInfo.getId() });
+			if (status1 == 1&& status2==1) {
+				return "Updated account details Succesfully";
+			}
+			return "Database not updated, please contact Branch Representative!";
+		}
+
+		return "Database not updated, please contact Branch Representative";
+	}
 	public String changeAccountPassword(ChangePassword custInfo) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hash = passwordEncoder.encode(custInfo.getPassword());
@@ -831,7 +856,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		String sql = "SELECT user_tickets.id, user_tickets.username, user_tickets.requestcompleted, user_tickets.requestapproved, user_tickets.requestrejected, user_tickets.requesttype "
 				+ " from user_tickets inner join users on "
 				+ "user_tickets.username=users.username where user_tickets.requestcompleted=true and user_tickets.requestrejected=false and"
-				+" user_tickets.requestapproved=true and users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true";
+				+" user_tickets.requestapproved=true";
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		userList = jdbcTemplate.query(sql, new TicketRowMapper());
@@ -846,7 +871,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		String sql = "SELECT user_tickets.id, user_tickets.username, user_tickets.requestcompleted, user_tickets.requestapproved, user_tickets.requestrejected, user_tickets.requesttype "
 				+ " from user_tickets inner join users on "
 				+ "user_tickets.username=users.username where user_tickets.requestcompleted=true and user_tickets.requestrejected=true and"
-				+" user_tickets.requestapproved=false and users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true";
+				+" user_tickets.requestapproved=false";
 
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		userList = jdbcTemplate.query(sql, new TicketRowMapper());
