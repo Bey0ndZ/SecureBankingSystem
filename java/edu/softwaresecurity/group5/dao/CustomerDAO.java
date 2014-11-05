@@ -19,8 +19,9 @@ public interface CustomerDAO {
 	public String addUser(AddUserInformation addInfo) throws NoSuchAlgorithmException;
 	public List<CustomerInformationDTO> retrieveUserDetails(String username);
 	public List<EmployeeInformationDTO> getUserList();  
-	public String updateAccount(CustomerInformationDTO custInfo);  
-	public CustomerInformationDTO getUserFromAccount(String accountNumber);  
+	public String updateAccount(CustomerInformationDTO custInfo); 
+	public CustomerInformationDTO getUserFromAccount(String accountNumber);
+	public EmployeeInformationDTO getEmployeeFromUserName(String accountNumber);  
 	public String changeAccountPassword(ChangePassword custInfo);  
 	public String unlockAccount(CustomerInformationDTO custInfo);
 	public boolean billPayment(String loggedInUser, String accountNumber,

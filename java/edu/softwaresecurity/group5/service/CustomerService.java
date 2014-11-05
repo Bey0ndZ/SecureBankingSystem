@@ -37,6 +37,7 @@ public interface CustomerService {
 	public List<TicketInformationDTO> getApprovedTicketList();
 	public List<TicketInformationDTO> getRejectedTicketList();
 	public CustomerInformationDTO getUserFromAccount(String accountnumber);  
+	public EmployeeInformationDTO getEmployeeFromUserName(String accountnumber);  
 	public String updateAccount(CustomerInformationDTO cust); 
 	public boolean transfer(String loggedInUser, String accountNumber,String amountToBeTransferred);
 	public boolean pendingTransfer(String loggedInUser, String accountNumber,String amountToBeTransferred);

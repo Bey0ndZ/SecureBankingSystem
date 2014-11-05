@@ -342,6 +342,18 @@ public class CustomerDAOImpl implements CustomerDAO {
 		return customerInformationToDisplay.get(0);
 
 	}
+	
+	public EmployeeInformationDTO getEmployeeFromUserName(String accountNumber) {
+		List<EmployeeInformationDTO> employeeInformationToDisplay = new ArrayList<EmployeeInformationDTO>();
+		String retrieveDetailsQuery = "SELECT users.username, users.firstname, users.lastname, users.sex, "
+				+ "users.phonenumber, users.email, "
+				+ "users.address from users inner join user_roles on users.username = user_roles.username where enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true and user_roles.role='ROLE_EMPLOYEE' and users.username=?";
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		employeeInformationToDisplay = jdbcTemplate.query(retrieveDetailsQuery,
+				new Object[] { accountNumber }, new InternalUserRowMapper());
+		return employeeInformationToDisplay.get(0);
+
+	}
 
 	public String updateAccount(CustomerInformationDTO custInfo) {
 		// TODO Auto-generated method stub

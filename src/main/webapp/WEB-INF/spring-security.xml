@@ -11,8 +11,8 @@
 		<intercept-url pattern="/welcomeAdmin**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/employee**" access="hasRole('ROLE_EMPLOYEE')" />
 		<intercept-url pattern="/addUser**" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
-		<intercept-url pattern="/removeUser*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
-		<intercept-url pattern="/viewUser*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
+<!-- 		<intercept-url pattern="/removeUser*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" /> -->
+<!-- 		<intercept-url pattern="/viewUser*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" /> -->
 		<intercept-url pattern="/getList*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
 		<intercept-url pattern="/modifyUser*" access="hasAnyRole('ROLE_USER', 'ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
         <intercept-url pattern="/viewQueue*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
@@ -27,14 +27,11 @@
 		<intercept-url pattern="/debitAmount*" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/creditAmount*" access="hasRole('ROLE_USER')" />
 
-		
-	
-        <!-- These are external user specific -->
+		<!-- These are external user specific -->
         <intercept-url pattern="/index*" access="permitAll"/>
 		<intercept-url pattern="/register*" access="permitAll" />
-		<intercept-url pattern="/login*" access="permitAll" />
 		<intercept-url pattern="/unlockAccount*" access="permitAll" />
-		<intercept-url pattern="/**" access="permitAll" />
+<!-- 		<intercept-url pattern="/**" access="permitAll" /> -->
 		<intercept-url pattern="/changePassword*" access="isAuthenticated()" />
 		<intercept-url pattern="/activateAccount*" access="permitAll" />
 		<intercept-url pattern="/activateAccount/activateAccount*" access="permitAll" />

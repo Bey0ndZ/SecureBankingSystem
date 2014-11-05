@@ -77,15 +77,6 @@
                     <li>
                         <a href="addUser"><i class="fa fa-fw fa-dashboard"></i> Add User</a>
                     </li>
-                    <li>
-                        <a href="removeUser"><i class="fa fa-fw fa-dashboard"></i> Remove User</a>
-                    </li>
-                    <li>
-                        <a href="viewUser"><i class="fa fa-fw fa-dashboard"></i> View User</a>
-                    </li>
-                    <li>
-                        <a href="modifyUser"><i class="fa fa-fw fa-dashboard"></i> Modify User</a>
-                    </li>
                     <li class="active">
                         <a href="viewQueue"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
                     </li>
@@ -144,8 +135,7 @@
 										 <a href="ticketRejectedSuccess"> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Remove" /></a> <br/> <br/>
 										 </form:form></td> 
 									    </tr>  
-									   </c:forEach>  
-									   <tr><td colspan="11"><a href="addUser">Add New User</a></td></tr>  
+									   </c:forEach>
 									  </table>
 										<br/><br/> <br/>
 									

@@ -148,6 +148,24 @@ public class MainController {
 		model.setViewName("permission-denied");
 		return model;
 	}
+//	// for 404 access denied page
+//		@RequestMapping(value = "/404", method = RequestMethod.GET)
+//		public ModelAndView notFound() {
+//
+//			ModelAndView model = new ModelAndView();
+//
+//			// check if user is login
+//			Authentication auth = SecurityContextHolder.getContext()
+//					.getAuthentication();
+//			if (!(auth instanceof AnonymousAuthenticationToken)) {
+//				UserDetails userDetail = (UserDetails) auth.getPrincipal();
+//				System.out.println(userDetail);
+//
+//				model.addObject("username", userDetail.getUsername());
+//			}
+//			model.setViewName("page-notfound");
+//			return model;
+//		}
 
 	// Displaying the removeUser.jsp page
 	@RequestMapping(value = "/removeUser", method = RequestMethod.GET)
@@ -280,7 +298,7 @@ public class MainController {
 		return modelAndView;
 	}
 
-	// Getting the userdetails
+	// First fetch the details from database for admin to edit/modify these details.
 	@RequestMapping(value = "/modifyUser", method = RequestMethod.POST)
 	public ModelAndView getmodifyUserDetail(
 			@RequestParam("modifyUser") String accountNumber) {
@@ -289,28 +307,17 @@ public class MainController {
 		Document userInput = Jsoup.parse(accountNumber);
 		String userAccountNumber = userInput.text();
 		
-		int chCount = 0;
-		for (char c: userAccountNumber.toCharArray()) {
-			  if(Character.isLetter(c)) {
-				  chCount++;
-			  }
-		}
-		if(userAccountNumber.length()==0 || chCount!=0 || userAccountNumber.length()>10 || userAccountNumber.length()<8) {
-			modelAndView.addObject("errorMsg", "Please enter the correct account number!");
-			modelAndView.setViewName("modifyUser");
-		}
-		else{
-			CustomerInformationDTO customerDetails = new CustomerInformationDTO();
-			customerDetails = custService.getUserFromAccount(userAccountNumber);
-			System.out.println("CHECKING: "+customerDetails.getAccountNumber());
-			modelAndView.addObject("customerDetails", customerDetails);
-			modelAndView.setViewName("modifyUser");
-		}
+
+		EmployeeInformationDTO employeeDetails = new EmployeeInformationDTO();
+		employeeDetails = custService.getEmployeeFromUserName(userAccountNumber);
+		modelAndView.addObject("customerDetails", employeeDetails);
+		modelAndView.setViewName("modifyUser");
+
 		return modelAndView;
 	}
 
-	// Getting the userdetails
-	@RequestMapping(value = "/modifyUserDataBase", method = RequestMethod.POST)
+	// Modify Internal employee in database, this is just for admin.
+	@RequestMapping(value = "/getList", method = RequestMethod.POST)
 	public ModelAndView getmodifyUserDatabase(
 			@ModelAttribute("customerDetails") CustomerInformationDTO customerDetail) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -318,7 +325,7 @@ public class MainController {
 		String status = custService.updateAccount(customerDetails);
 		modelAndView.addObject("customerDetails", customerDetails);
 		modelAndView.addObject("status", status);
-		modelAndView.setViewName("modifyUser");
+		modelAndView.setViewName("userList");
 		return modelAndView;
 	}
 

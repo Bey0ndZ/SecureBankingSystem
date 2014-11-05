@@ -78,15 +78,6 @@
                         <a href="addUser"><i class="fa fa-fw fa-dashboard"></i> Add User</a>
                     </li>
                     <li>
-                        <a href="removeUser"><i class="fa fa-fw fa-dashboard"></i> Remove User</a>
-                    </li>
-                    <li>
-                        <a href="viewUser"><i class="fa fa-fw fa-dashboard"></i> View User</a>
-                    </li>
-                    <li class="active">
-                        <a href="modifyUser"><i class="fa fa-fw fa-dashboard"></i> Modify User</a>
-                    </li>
-                    <li>
                         <a href="viewQueue"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
                     </li>
                     <li>
@@ -123,20 +114,20 @@
             
                             <div class="panel-body">
                                 <div id="morris-area-chart">
-	                                <form:form method="post" action="modifyUser" modelAttribute="accountNumber">                    
-					                    <b>Account Number :</b> <br/> <input type="text" name="modifyUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/> <br/>
-					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/>
-					                    <c:if test="${not empty errorMsg}">
-											<h4> ${errorMsg} </h4>
-	                                    </c:if> <br/> <br/>
-					                </form:form>
+<%-- 	                                <form:form method="post" action="modifyUser" modelAttribute="accountNumber">                     --%>
+<!-- 					                    <b>Account Number :</b> <br/> <input type="text" name="modifyUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/> <br/> -->
+<!-- 					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/> -->
+<%-- 					                    <c:if test="${not empty errorMsg}"> --%>
+<%-- 											<h4> ${errorMsg} </h4> --%>
+<%-- 	                                    </c:if> <br/> <br/> --%>
+<%-- 					                </form:form> --%>
 					                <c:if test="${not empty customerDetails}">
 					                
 						                <c:if test="${not empty status}">
 						               		<b>"${status}"</b>
 						                </c:if>
 						                      
-						                <form:form method="post" action="modifyUserDataBase" modelAttribute="customerDetails">              
+						                <form:form method="post" action="getList" modelAttribute="customerDetails">              
 							                <b>First Name:</b> <br/> <input type="text" name="firstname" id="f_name_modifyUser" value="${customerDetails.firstname}" style="color:#999;" /><br/>
 							                <b>Last Name:</b> <br/> <input type="text" name="lastname" id="l_name_modifyUser" value="${customerDetails.lastname}" style="color:#999;" /><br/>
 							                <b>Contact:</b> <br/> <input type="text" name="phonenumber" id="contact_modifyUser" value="${customerDetails.phonenumber}" style="color:#999;" /><br/>
