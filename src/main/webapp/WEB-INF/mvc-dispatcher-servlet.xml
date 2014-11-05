@@ -30,4 +30,5 @@
 	
 	<mvc:resources mapping="/resources/**" location="/resources/grayscale/" />
 	<mvc:annotation-driven />
+	<mvc:default-servlet-handler/>
 </beans>

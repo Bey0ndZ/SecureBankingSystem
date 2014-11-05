@@ -421,5 +421,11 @@ public class MainController {
 	public ModelAndView returnViewQueuePage() {
 		List<TicketInformationDTO> userList = custService.getTicketList();
 		return new ModelAndView("viewQueue", "userList", userList);
-	}	
+	}
+	
+	@RequestMapping(value = "/ticketDetails", method = RequestMethod.GET)
+	public ModelAndView returnTicketDetailsPage() {
+		List<TicketInformationDTO> userList = custService.getTicketList();
+		return new ModelAndView("viewQueue", "userList", userList);
+	}
 }
