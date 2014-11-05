@@ -6,6 +6,7 @@ import java.util.List;
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
+import edu.softwaresecurity.group5.dto.UserTransactionsDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.model.CustomerInformation;
@@ -37,5 +38,7 @@ public interface CustomerDAO {
 	public List<TicketInformationDTO> getTicketList();  
 	public boolean processtransfer(String generatedFromUsername, String account, String amount);
 	public boolean updatePending(String generatedFromUsernameFrom, String account, String amount);
+	public List<UserTransactionsDTO> getUserTransactionList(String username);
+	public boolean deleteTransaction(int txID);
 	
 }

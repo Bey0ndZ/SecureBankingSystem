@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -28,10 +29,12 @@ import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.dto.DuplicateValidationCheckerDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
+import edu.softwaresecurity.group5.dto.UserTransactionsDTO;
 import edu.softwaresecurity.group5.jdbc.BillPayMapper;
 import edu.softwaresecurity.group5.jdbc.DuplicateValidationCheckerMapper;
 import edu.softwaresecurity.group5.jdbc.TicketRowMapper;
 import edu.softwaresecurity.group5.jdbc.UserRowMapper;
+import edu.softwaresecurity.group5.jdbc.UserTransactionsMapper;
 import edu.softwaresecurity.group5.mail.EmailService;
 import edu.softwaresecurity.group5.model.AccountAttempts;
 import edu.softwaresecurity.group5.model.AddUserInformation;
@@ -80,8 +83,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hash = passwordEncoder.encode(addInfo.getPassword());
-
-		// CALL THE DTO FUNCTION---
+		
 		List<DuplicateValidationCheckerDTO> list1 = new ArrayList<DuplicateValidationCheckerDTO>();
 		list1 = checkDuplicateDetails(addInfo.getUserName(),
 				addInfo.getEmailAddress_addUser(),
@@ -107,9 +109,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 					new Object[] { addInfo.getUserName(), "ROLE_USER" });
 
 			// Generating random account numbers
-			SecureRandom secure;
-			secure = SecureRandom.getInstance("SHA1PRNG");
-			String accountNumber = new Integer(secure.nextInt()).toString();
+			Random rand = new Random();
+			int accountNumber = 10000000 + rand.nextInt(90000000);
 
 			jdbcTemplateForAccounts.update(addUserIntoAccountsTable,
 					new Object[] { addInfo.getUserName(), accountNumber,
@@ -169,10 +170,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 					new Object[] { custInfo.getUsername(), "ROLE_USER" });
 
 			// Generating random account numbers
-			SecureRandom secure;
-
-			secure = SecureRandom.getInstance("SHA1PRNG");
-			String accountNumber = new Integer(secure.nextInt()).toString();
+			Random randAccounts = new Random();
+			int accountNumber = 10000100 + randAccounts.nextInt(99999999);
 
 			jdbcTemplateForAccounts.update(insertIntoAccountsTable,
 					new Object[] { custInfo.getUsername(), accountNumber,
@@ -470,8 +469,24 @@ public class CustomerDAOImpl implements CustomerDAO {
 		String insertIntoPendingTransactions = "INSERT INTO "
 				+ "pendingtransactions(username, amount, pending, accountnumberfrom,"
 				+ "accountnumberto, billpay) " + "VALUES (?,?,?,?,?,?)";
+		
+		// Query for inserting into the transactions table
+		String insertIntoTxTable = "INSERT INTO transactions(id, usernamefrom,"
+				+ "usernameto, usernamefromaccountnumber, usernametoaccountnumber, transactiontype, userdelete"
+				+ "transactiondate) VALUES (?,?,?,?,?,?,?,?)";
+		
+		// Generating random tx IDs
+		Random randGenerator = new Random();
+		int txID = 100000 + randGenerator.nextInt(999999);
+		
+		// Generating timestamp
+		Calendar calendarForTx = Calendar.getInstance();
+		Timestamp timeStampForTx = new Timestamp(calendarForTx
+				.getTime().getTime());
 
 		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
+		// Insert into tx table
+		JdbcTemplate jdbcTemplateToInsertInTxTable = new JdbcTemplate(dataSource);
 		JdbcTemplate jdbcTemplateForPendingTransactions = new JdbcTemplate(
 				dataSource);
 
@@ -481,11 +496,24 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		int accountNumber = Integer.parseInt(getUsernameAccount);
 		int accountNumberFrom = Integer.parseInt(account);
+		
+		// Getting the username of the merchant
+		JdbcTemplate getMerchantUsername = new JdbcTemplate(dataSource);
+		String merchantUsernameQuery = "SELECT * FROM account WHERE accountnumber=?";
+		
+		// Get the username
+		String merchantUsername = getMerchantUsername.queryForObject(merchantUsernameQuery, 
+				new Object[] {accountNumberFrom}, String.class);
 
 		jdbcTemplateForPendingTransactions.update(
 				insertIntoPendingTransactions, new Object[] {
 						generatedFromUsername, amountToTransfer, false,
 						accountNumber, accountNumberFrom, true });
+		
+		// Running the insert query
+		jdbcTemplateToInsertInTxTable.update(insertIntoTxTable,
+				new Object[]{txID, generatedFromUsername, merchantUsername,
+				accountNumberFrom, accountNumber, "TX_BILLPAY_REQ", false, timeStampForTx});
 		return true;
 	}
 
@@ -510,6 +538,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 			return null;
 		}
 	}
+	
+	// TODO: Write the impl for when the customer approves to pay off the merchant
 
 	// Debit funds from user account
 	public String debitFromUserAccount(String usernameOfCustomer,
@@ -526,12 +556,41 @@ public class CustomerDAOImpl implements CustomerDAO {
 			float accountBalanceAfterDebit = accountBalanceBeforeDebit
 					- debitAmount;
 
+			// Updating the account table
 			String updateAfterDebit = "UPDATE account SET accountBalance=?, debit=?"
 					+ "WHERE username=?";
-
+			
 			jdbcTemplateForGettingDebitDetails.update(updateAfterDebit,
 					new Object[] { accountBalanceAfterDebit, debitAmount,
 							usernameOfCustomer });
+			
+			// Generating random tx IDs
+			Random randGenerator = new Random();
+			int txID = 100000 + randGenerator.nextInt(999999);
+			
+			// Generating timestamp
+			Calendar calendarForTx = Calendar.getInstance();
+			Timestamp timeStampForTx = new Timestamp(calendarForTx
+					.getTime().getTime());
+			
+			// Updating the transactions table
+			String insertIntoTransactionsTable = "INSERT INTO transactions(id, usernamefrom,"
+					+ "usernameto, usernamefromaccountnumber, usernametoaccountnumber, transactiontype,userdelete,"
+					+ "transactiondate) VALUES (?,?,?,?,?,?,?,?)";
+			
+			// Get the accountNumber of the user
+			String getAccountNumber = "SELECT accountnumber from account where username=?";
+			JdbcTemplate jdbcTemplateToGetAccountNumber = new JdbcTemplate(dataSource);
+			
+			int accountNumber = jdbcTemplateToGetAccountNumber.queryForObject(getAccountNumber
+					, new Object[] {usernameOfCustomer}, Integer.class);
+			
+			JdbcTemplate jdbcTemplateInsertIntoTxTable = new JdbcTemplate(dataSource);
+			jdbcTemplateInsertIntoTxTable.update(insertIntoTransactionsTable,
+					new Object[]{txID, usernameOfCustomer, usernameOfCustomer, 
+					accountNumber, accountNumber, "TX_DEBIT", false, timeStampForTx});
+			
+			System.out.println("TX table updated");
 
 			return "Account debited with: " + debitAmount + ". New balance: "
 					+ accountBalanceAfterDebit;
@@ -567,9 +626,37 @@ public class CustomerDAOImpl implements CustomerDAO {
 						new Object[] { usernameLoggedIn }, Float.class);
 		float accountBalanceAfterCredit = accountBalanceBeforeCredit
 				+ creditAmountFloat;
-
+		
+		// Generating random tx IDs
+		Random randGenerator = new Random();
+		int txID = 100000 + randGenerator.nextInt(999999);
+		
+		// Generating timestamp
+		Calendar calendarForTx = Calendar.getInstance();
+		Timestamp timeStampForTx = new Timestamp(calendarForTx
+				.getTime().getTime());
+		
+		// Updating the account table
 		String updateAfterCredit = "UPDATE account SET accountBalance=?, credit=?"
 				+ "WHERE username=?";
+		
+		// Get the accountNumber of the user
+		String getAccountNumber = "SELECT accountnumber from account where username=?";
+		JdbcTemplate jdbcTemplateToGetAccountNumber = new JdbcTemplate(dataSource);
+		
+		int accountNumber = jdbcTemplateToGetAccountNumber.queryForObject(getAccountNumber, 
+				new Object[] {usernameLoggedIn}, Integer.class);
+		
+		// Insert into tx table
+		String insertIntoTxTable = "INSERT INTO transactions(id, usernamefrom,"
+				+ "usernameto, usernamefromaccountnumber, usernametoaccountnumber, transactiontype, userdelete,"
+				+ "transactiondate) VALUES (?,?,?,?,?,?,?,?)";
+		
+		// Inserting
+		JdbcTemplate insertIntoTxTableTemplate = new JdbcTemplate(dataSource);
+		insertIntoTxTableTemplate.update(insertIntoTxTable,
+				new Object[]{txID, usernameLoggedIn, usernameLoggedIn, 
+				accountNumber, accountNumber, "TX_CREDIT", false, timeStampForTx});
 
 		jdbcTemplateForGettingCreditDetails.update(updateAfterCredit,
 				new Object[] { accountBalanceAfterCredit, creditAmountFloat,
@@ -768,8 +855,6 @@ public class CustomerDAOImpl implements CustomerDAO {
 	public boolean updatePending(String generatedFromUsernameFrom,
 			String account, String amount) {
 		float amountToTransfer = Float.parseFloat(amount);
-		// CustomerInformationDTO custinfo = getUserFromAccount(account);
-		// String generatedFromUsernameTo = custinfo.getUsername();
 
 		String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
 				+ " inner join users on "
@@ -796,5 +881,29 @@ public class CustomerDAOImpl implements CustomerDAO {
 				accountNumberTo });
 
 		return true;
+	}
+
+	public List<UserTransactionsDTO> getUserTransactionList(String username) {
+		String getTransactionsQuery = "SELECT * from transactions where usernamefrom=?";
+		List<UserTransactionsDTO> getTransactionsList = new ArrayList<UserTransactionsDTO>();
+		
+		JdbcTemplate jdbcTemplateForTransactionsTable = new JdbcTemplate(dataSource);
+		getTransactionsList = jdbcTemplateForTransactionsTable.query(getTransactionsQuery,
+				new Object[]{username}, new UserTransactionsMapper());
+		return getTransactionsList;
+	}
+
+	// update the Tx table field to NULL
+	public boolean deleteTransaction(int txID) {
+		String updateInTxTable = "UPDATE transactions SET userdelete=?";
+		
+		JdbcTemplate updateTxTable = new JdbcTemplate(dataSource);
+		int status = updateTxTable.update(updateInTxTable, new Object[]{true});
+		if (status==1) {
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 }

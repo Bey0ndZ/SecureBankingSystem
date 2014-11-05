@@ -9,6 +9,7 @@ import edu.softwaresecurity.group5.dao.CustomerDAO;
 import edu.softwaresecurity.group5.dto.BillPayDTO;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
+import edu.softwaresecurity.group5.dto.UserTransactionsDTO;
 import edu.softwaresecurity.group5.model.AddUserInformation;
 import edu.softwaresecurity.group5.model.ChangePassword;
 import edu.softwaresecurity.group5.model.CustomerInformation;
@@ -95,5 +96,13 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 	public boolean pendingTransfer(String loggedInUser, String accountNumber,String amountToBeTransferred) {
 		return custDAO.updatePending(loggedInUser,accountNumber,amountToBeTransferred);
+	}
+
+	public List<UserTransactionsDTO> getUserTransactions(String username) {
+		return custDAO.getUserTransactionList(username);
+	}
+
+	public boolean deleteTx(int txID) {
+		return custDAO.deleteTransaction(txID);
 	}
 }

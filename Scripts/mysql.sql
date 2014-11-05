@@ -12,8 +12,6 @@ DROP TABLE IF EXISTS `account`;
 DROP TABLE IF EXISTS `user_attempts`;
 DROP TABLE IF EXISTS `user_tickets`;
 
-
-
 CREATE  TABLE users (
   username VARCHAR(45) NOT NULL,
   password VARCHAR(60) NOT NULL,
@@ -54,7 +52,6 @@ CREATE TABLE user_roles (
   KEY fk_username_idx (username),
   CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES users (username));
   
-
 INSERT INTO user_roles (username, role)
 VALUES ('admin', 'ROLE_ADMIN');
 INSERT INTO user_roles (username, role)
@@ -63,7 +60,6 @@ INSERT INTO user_roles (username, role)
 VALUES ('skgarg', 'ROLE_USER');
 INSERT INTO user_roles (username, role)
 VALUES ('employee', 'ROLE_EMPLOYEE');
-
 
 CREATE TABLE account (
 	username VARCHAR(45) NOT NULL,
@@ -130,5 +126,23 @@ CREATE TABLE user_tickets (
   requesttype VARCHAR(10) NOT NULL, 
   PRIMARY KEY (id)
 );
+
+CREATE TABLE transactions (
+	id INT(11) NOT NULL,	
+	usernamefrom VARCHAR(45) NOT NULL,
+	usernameto VARCHAR(45) NOT NULL,
+	usernamefromaccountnumber INT(11) NOT NULL,
+	usernametoaccountnumber INT(11) NOT NULL,
+	transactiontype VARCHAR(45) NOT NULL,
+	transactiondate timestamp
+);
+
+CREATE TABLE otp (
+	username VARCHAR(45) NOT NULL,
+	otp VARCHAR(8),
+	generateTime timestamp,
+	PRIMARY KEY (username)
+);
+
 
 INSERT into user_tickets(username, requestcompleted, requestapproved, requesttype) VALUES ("shivam",false,false,"Modify");

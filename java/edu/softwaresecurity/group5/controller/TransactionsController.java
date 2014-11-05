@@ -1,5 +1,8 @@
 package edu.softwaresecurity.group5.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
+import edu.softwaresecurity.group5.dto.UserTransactionsDTO;
 import edu.softwaresecurity.group5.service.CustomerService;
 
 @Controller
@@ -67,21 +71,6 @@ public class TransactionsController {
 			modelAndView.setViewName("billPay");
 		}
 		modelAndView.setViewName("billPay");
-		return modelAndView;
-	}
-
-	@RequestMapping(value = "/transactionReview", method = RequestMethod.GET)
-	public ModelAndView returnTransactionsReviewPage() {
-		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-		if (!(auth instanceof AnonymousAuthenticationToken)) {
-			UserDetails userDetail = (UserDetails) auth.getPrincipal();
-			String loggedInUser = userDetail.getUsername();
-
-		} else {
-			modelAndView.setViewName("permission-denied");
-		}
 		return modelAndView;
 	}
 
@@ -157,7 +146,30 @@ public class TransactionsController {
 				}
 			}
 			modelAndView.setViewName("transferMoney");
-
+		}
+		return modelAndView;
+	}
+	
+	// GET Transactions
+	// Transaction review does not need to have a POST method associated with it
+	// No need to write the POST controller
+	@RequestMapping(value = "/transactionReview", method = RequestMethod.GET)
+	public ModelAndView returnTransactionsReviewPage() {
+		ModelAndView modelAndView = new ModelAndView();
+		List<UserTransactionsDTO> userTransactions = new ArrayList<UserTransactionsDTO>();
+		
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			String loggedInUser = userDetail.getUsername();
+			userTransactions = custService.getUserTransactions(loggedInUser);
+			
+			// Add the object to model
+			modelAndView.addObject("userTransactions", userTransactions);
+			modelAndView.setViewName("transactionsReview");
+		} else {
+			modelAndView.setViewName("permission-denied");
 		}
 		return modelAndView;
 	}

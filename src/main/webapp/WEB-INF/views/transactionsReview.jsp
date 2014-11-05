@@ -1,6 +1,7 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -46,17 +47,19 @@
 							class="icon-bar"></span> <span class="icon-bar"></span> <span
 							class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="index">Welcome, ${username}!</a>
+					<a class="navbar-brand" href="index">Customer</a>
 				</div>
 				<!-- Top Menu Items -->
 				<ul class="nav navbar-right top-nav">
+					
+	
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown"><i class="fa fa-user"></i> <!-- Accessing the session object -->
 							<c:if test="${pageContext.request.userPrincipal.name != null }">
                     	${pageContext.request.userPrincipal.name}
                     </c:if> <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="accountSummary"><i class="fa fa-fw fa-user"></i> Profile</a>
+							<li><a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
 							</li>
 							<li class="divider"></li>
 							<li><a href="javascript:formSubmit()"><i
@@ -114,7 +117,7 @@
 					<!-- Page Heading -->
 					<div class="row">
 						<div class="col-lg-12">
-							<h1 class="page-header">Credit Amount</h1>
+							<h1 class="page-header">Transactions Review</h1>
 						</div>
 					</div>
 					<!-- /.row -->
@@ -124,25 +127,56 @@
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h3 class="panel-title">
-										<i class="fa fa-bar-chart-o fa-fw"></i> Enter details here
+										<i class="fa fa-bar-chart-o fa-fw">Tx</i> 
 									</h3>
 								</div>
 								<div class="panel-body">
 									<div id="morris-area-chart">
-										<c:if test="${not empty balanceInformation}">
-												<c:forEach var="o" items="${balanceInformation}">
-													Your account balance is: ${o.accountBalance}
-												</c:forEach>
+										<div class="panel-body">
+
+											<!-- Bill pay information -->
+											<c:if test="${not empty userTransactions}">
+											
+											<form:form method="POST" action="deleteTransaction" >
+												Transaction ID to delete:<br/>
+												<input type="text" name="deleteTransactionID" /><br/>
+												<c:if test="${not empty emptyBox }">
+													${emptyBox }
+												</c:if>
+												<c:if test="${not empty deleteInformation }">
+													${deleteInformation }
+												</c:if>
+												<input type="submit" value="Delete Transaction" /><br/><br/><br/>
+											</form:form>
+												<table
+													class="table table-bordered table-hover table-striped">
+													<thead>
+														<tr>
+															<th>Transaction ID</th>
+															<th>By User</th>
+															<th>For User</th>
+															<th>From Account Number</th>
+															<th>By Account Number</th>
+															<th>Transaction Type</th>
+															<th>Timestamp</th>
+														</tr>
+													</thead>
+													<tbody>
+														<c:forEach var="o" items="${userTransactions}">
+															<tr>
+																<td>${o.transactionID}</td>
+																<td>${o.usernameFrom}</td>
+																<td>${o.usernameTo}</td>
+																<td>${o.usernameFromAccountNumber }</td>
+																<td>${o.usernameToAccountNumber }</td>
+																<td>${o.transactionType }</td>
+																<td>${o.currentTimeStamp }</td>
+															</tr>
+														</c:forEach>
+													</tbody>
+												</table>
 											</c:if>
-										<!-- Debit requests go here -->
-										<form:form method="POST" action="creditFunds">
-											Amount:<br/><input type="text" name="creditAmount" /><br/><br/>
-											<input type="submit" value="Credit" name="transferMoneyButton"/>
-										</form:form>
-										
-										<c:if test="${not empty creditMessage}">
-											${creditMessage}
-										</c:if>
+										</div>
 									</div>
 								</div>
 							</div>

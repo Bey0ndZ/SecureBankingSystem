@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
-import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.dto.TicketInformationDTO;
 
 public class TicketExtractor implements ResultSetExtractor<TicketInformationDTO> {
