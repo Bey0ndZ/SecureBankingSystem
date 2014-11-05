@@ -37,7 +37,11 @@ td {
 }
 
 #page-wrapper {
+<<<<<<< Updated upstream
     width: 90%;
+=======
+    width: 100%;
+>>>>>>> Stashed changes
     padding: 0;
     background-color: white;
 }
