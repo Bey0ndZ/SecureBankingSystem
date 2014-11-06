@@ -195,16 +195,16 @@ public class TransactionsController {
 										"Request cannot be proccessed.");
 					}
 				}
-				modelAndView.setViewName("transferMoney");
 			}
-		}
-			catch(Exception e)
-			{
-				modelAndView.addObject("errorMsg", " Please enter a correct amount ");
-				modelAndView.setViewName("transferMoney");
 			}
-			return modelAndView;
-		}
+				catch(Exception e)
+				{
+					modelAndView.addObject("errorMsg", " Please enter a correct amount ");
+					modelAndView.setViewName("transferMoney");
+				}
+				return modelAndView;
+				}
+
 
 	// GET Transactions
 	// Transactions Review

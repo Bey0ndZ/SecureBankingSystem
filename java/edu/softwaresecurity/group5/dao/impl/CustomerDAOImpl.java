@@ -1410,35 +1410,23 @@ public class CustomerDAOImpl implements CustomerDAO {
 						ticketDetailDTO.getAccountNumber(),
 						ticketDetailDTO.getToAccountNumber(),
 						ticketDetailDTO.getPendingid() });
-		if (status == 1) {
-			// String sql =
-			// "Select accountnumber from account where username =?";
-			// JdbcTemplate jdbcTemplateForAccountNumber = new
-			// JdbcTemplate(dataSource);
-			// String AccountNumberReceipient = jdbcTemplateForAccountNumber
-			// .queryForObject(sql,
-			// new Object[] { ticketDetailDTO.getToAccountNumber() },
-			// String.class);
+		if (processtransfer(ticketDetailDTO.getUsername(),
+				ticketDetailDTO.getToAccountNumber(),
+				ticketDetailDTO.getTransactionAmount())) {
+			String updateIntoTicketsTable = "UPDATE user_tickets set requestcompleted =true, requestapproved=true, requestrejected=false where username =  ? and id = ?";
+			JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
+					dataSource);
 
-			// Trusting chaitali calling here function here.
-			if (processtransfer(ticketDetailDTO.getUsername(),
-					ticketDetailDTO.getToAccountNumber(),
-					ticketDetailDTO.getTransactionAmount())) {
-				String updateIntoTicketsTable = "UPDATE user_tickets set requestcompleted =true, requestapproved=true, requestrejected=false where username =  ? and id = ?";
-				JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
-						dataSource);
-
-				int status1 = insertIntoTicketsTableTemplate.update(
-						updateIntoTicketsTable,
-						new Object[] { ticketDetailDTO.getUsername() ,ticketDetailDTO.getId()});
-				return true;
-			}
-
-			else
-				return false;
-		} else {
-			return false;
+			int status1 = insertIntoTicketsTableTemplate.update(
+					updateIntoTicketsTable,
+					new Object[] { ticketDetailDTO.getUsername(),
+							ticketDetailDTO.getId() });
+			return true;
 		}
+
+		else
+			return false;
+
 	}
 
 	// Reset Passwords using OTP

@@ -113,7 +113,7 @@
                                 <h4> 4. Password must be between 6 to 15 characters. Password and confirm password should be same.</h4>
                                 <h4> 5. First and last name should not exceed 10 characters and they should not be empty.</h4>
                                 <h4> 6. Phone number should not be empty. It should be exactly 10 digits, no characters allowed. Example: 1234567890 </h4>
-                                <h4> 7. Social Security Number should not be empty. It should be exactly 10 digits, no characters allowed. Example: 123456789</h4>
+                                <h4> 7. Social Security Number should not be empty. It should be exactly 9 digits, no characters allowed. Example: 123456789</h4>
                                 <h4> 8. Address should not be empty. It should not exceed 50 characters.</h4>
                                 <h4> 9. No special characters are allowed in: First name, last name, user name, address</h4>
                                 <form:form method="POST" action="register" modelAttribute="registerForm">
@@ -138,10 +138,24 @@
 									<b>Social Security Number:</b> <FONT color="red"><form:errors path="socialSecurityNumber" /> </FONT><br/><input type="text" name="socialSecurityNumber" id="socialSecurityNumber" style="color:#999;" /><br/><br/>
 									<b>Address:</b><FONT color="red"> <form:errors path="address" /></FONT><br/><input type="text" name="address" id="add" style="color:#999;" /><br/><br/>
 									<b>Captcha:</b><br/>	
-									<%
+									<%-- <%
 				          				ReCaptcha c = ReCaptchaFactory.newReCaptcha("6LelnPwSAAAAAEdizJnYFeutV2At7VHSkC9PYxZX", "6LelnPwSAAAAAEIVuVPz5_wWsq3skomEaVJ_5eZH", false);
 				          				out.print(c.createRecaptchaHtml(null, null));
-				        			%>							
+				        			%>	 --%>
+				        			
+				        			<script type="text/javascript"
+									   src="https://www.google.com/recaptcha/api/challenge?k=6LelnPwSAAAAAEdizJnYFeutV2At7VHSkC9PYxZX">
+									</script>
+									
+									<noscript>
+									   <iframe src="https://www.google.com/recaptcha/api/noscript?k=6LelnPwSAAAAAEdizJnYFeutV2At7VHSkC9PYxZX"
+									       height="300" width="500" frameborder="0"></iframe><br>
+									   <textarea name="recaptcha_challenge_field" rows="3" cols="40">
+									   </textarea>
+									   <input type="hidden" name="recaptcha_response_field"
+									       value="manual_challenge">
+									</noscript>	
+													
 									<br/><h4><input type="submit" style="margin-right: 5%" name="login" id="log_in" value="Register" /></h4>
 									
 									<c:if test="${not empty successMsg}">

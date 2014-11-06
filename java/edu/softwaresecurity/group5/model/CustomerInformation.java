@@ -23,7 +23,7 @@ public class CustomerInformation {
 	@Email(message="Your email is invalid.")
 	@NotEmpty(message="Please enter your email.")
 	private String email;
-	@Size(min = 10, max = 10, message = "")
+	@Size(min = 9, max = 9, message = "")
 	private String socialSecurityNumber;
 	@NotEmpty(message="Please enter your address.")
 	private String address;

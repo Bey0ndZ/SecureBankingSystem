@@ -126,7 +126,7 @@
 						<div class="col-lg-12">
 							<div class="panel panel-default">
 								<div class="panel-heading">
-									<h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Invalid Input </h3>
+									<h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Processed Transactions </h3>
 								</div>
 								<br/>
 								<c:if test="${not empty errorMsg }">
