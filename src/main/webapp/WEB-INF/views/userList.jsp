@@ -144,11 +144,11 @@
 									     <td>${user.address}</td>  
 									     <td><form:form method="post" action="modifyUser" modelAttribute="accountNumber">                    
 					                     <input type="hidden" name="modifyUser" id="accountNumber_RemoveUser" value="${user.username}" style="color:#999;" /><br/> <br/>
-					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="modifyUserButton" value="Search User" /></a> <br/> <br/>
+					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="modifyUserButton" value="Update User" /></a> <br/> <br/>
 					                        </form:form></td>  
 									     <td> <form:form method="post" action="removeUserDB" modelAttribute="usernameSearch">					
 										 <input type="hidden" name="account" id="accountNumber_RemoveUser" value="${user.username}" style="color:#999;" /><br/> <br/>
-										 <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="removeUserButton" value="Remove" /></a> <br/> <br/>
+										 <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="removeUserButton" value="Remove User" /></a> <br/> <br/>
 										 </form:form></td> 
 									    </tr>  
 									   </c:forEach>  

@@ -117,7 +117,8 @@
 	                                <c:if test="${not empty status}">
 					                	<b>"${status}"</b>
 					                </c:if>
-					                      
+					                      <h4> 1. Password must contain at least one capital character, one small character, one digit and one special character.</h4>
+                                
 					                <form:form method="post" action="changePassword" modelAttribute="customerDetails">              
 						                <b>Password:</b> <br/> <FONT color="red"><form:errors path="password" /></FONT> <input type="password" name="password" id="password" style="color:#999;" /><br/> <br/>
 						                <b>Confirm Password:</b> <br/> <input type="password" name="confirmPassword" id="cfrm_pwd" style="color:#999;" /><br/> <br/>
