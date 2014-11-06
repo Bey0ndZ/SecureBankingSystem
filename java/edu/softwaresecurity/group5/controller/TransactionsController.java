@@ -117,76 +117,85 @@ public class TransactionsController {
 	}
 
 	// Getting the userdetails
-	@RequestMapping(value = "/transferMoney", method = RequestMethod.POST)
-	public ModelAndView getUserDetail(
-			@RequestParam("accountNumber") String accountnumber) {
-		ModelAndView modelAndView = new ModelAndView();
-		int counter = 0;
-		for (char ch : accountnumber.toCharArray()) {
-			if (Character.isDigit(ch)) {
-				counter++;
+		@RequestMapping(value = "/transferMoney", method = RequestMethod.POST)
+		public ModelAndView getUserDetail(
+				@RequestParam("accountNumber") String accountnumber) {
+			
+			ModelAndView modelAndView = new ModelAndView();
+			int counter = 0;
+			try
+			{
+			for (char ch: accountnumber.toCharArray()) {
+				if (Character.isDigit(ch)) {
+					counter ++;
+				}
+			}
+			
+			if (counter != 8 || accountnumber.length() != 8) {
+				modelAndView.addObject("errorMsg", "Please enter the correct account number!");
+				modelAndView.setViewName("transferMoney");
+			}
+			else {
+				CustomerInformationDTO customerDetails = new CustomerInformationDTO();
+				customerDetails = custService.getUserFromAccount(accountnumber);
+				modelAndView.addObject("customerDetails", customerDetails);
+				modelAndView.setViewName("transferMoney");
 			}
 		}
-		if (counter != 10 || accountnumber.length() != 10) {
-			modelAndView.addObject("errorMsg",
-					"Please enter the correct account number!");
-			modelAndView.setViewName("transferMoney");
-		} else {
-			CustomerInformationDTO customerDetails = new CustomerInformationDTO();
-			customerDetails = custService.getUserFromAccount(accountnumber);
-			modelAndView.addObject("customerDetails", customerDetails);
-			modelAndView.setViewName("transferMoney");
+			catch(Exception e)
+			{
+				modelAndView.addObject("errorMsg", " Please enter the correct account no. ");
+				modelAndView.setViewName("transferMoney");
+			}
+			return modelAndView;
 		}
-		return modelAndView;
-	}
-
 	// Getting the transfer/pending
-	@RequestMapping(value = "/transferMoneyConfirmation", method = RequestMethod.POST)
-	public ModelAndView updateAccount(
-			@RequestParam("accountNo") String accountnumber,
-			@RequestParam("amount") String transfer, @RequestParam String action) {
-		ModelAndView modelAndView = new ModelAndView();
-		if (action.equals("Transfer")) {
-			Authentication auth = SecurityContextHolder.getContext()
-					.getAuthentication();
-			if (!(auth instanceof AnonymousAuthenticationToken)) {
-				UserDetails userDetail = (UserDetails) auth.getPrincipal();
-				String loggedInUser = userDetail.getUsername();
-				modelAndView.addObject("username", loggedInUser);
+		@RequestMapping(value = "/transferMoneyConfirmation", method = RequestMethod.POST)
+		public ModelAndView updateAccount(
+				@RequestParam("accountNo") String accountnumber,
+				@RequestParam("amount") String transfer, @RequestParam String action) {
+			ModelAndView modelAndView = new ModelAndView();
+			if (action.equals("Transfer")) {
+				Authentication auth = SecurityContextHolder.getContext()
+						.getAuthentication();
+				if (!(auth instanceof AnonymousAuthenticationToken)) {
+					UserDetails userDetail = (UserDetails) auth.getPrincipal();
+					String loggedInUser = userDetail.getUsername();
+					modelAndView.addObject("username", loggedInUser);
 
-				if (custService.transfer(loggedInUser, accountnumber, transfer)) {
-					modelAndView.addObject("submitMessage",
-							"Transfer Processed.");
-				} else {
-					modelAndView
-							.addObject("submitMessage",
-									"Request cannot be proccessed. Contact employee or admin.");
+					if (custService.transfer(loggedInUser, accountnumber, transfer)) {
+						modelAndView.addObject("submitMessage",
+								"Transfer Processed.");
+					} else {
+						modelAndView
+								.addObject("submitMessage",
+										"Request cannot be proccessed. ");
+					}
 				}
-			}
-			modelAndView.setViewName("transferMoney");
+				modelAndView.setViewName("transferMoney");
 
-		} else if (action.equals("Approve Transfer")) {
-			Authentication auth = SecurityContextHolder.getContext()
-					.getAuthentication();
-			if (!(auth instanceof AnonymousAuthenticationToken)) {
-				UserDetails userDetail = (UserDetails) auth.getPrincipal();
-				String loggedInUser = userDetail.getUsername();
-				modelAndView.addObject("username", loggedInUser);
+			} else if (action.equals("Approve Transfer")) {
+				Authentication auth = SecurityContextHolder.getContext()
+						.getAuthentication();
+				if (!(auth instanceof AnonymousAuthenticationToken)) {
+					UserDetails userDetail = (UserDetails) auth.getPrincipal();
+					String loggedInUser = userDetail.getUsername();
+					modelAndView.addObject("username", loggedInUser);
 
-				if (custService.pendingTransfer(loggedInUser, accountnumber,
-						transfer)) {
-					modelAndView.addObject("submitMessage",
-							"Request submitted.");
-				} else {
-					modelAndView
-							.addObject("submitMessage",
-									"Request cannot be proccessed. Contact employee or admin.");
+					if (custService.pendingTransfer(loggedInUser, accountnumber,
+							transfer)) {
+						modelAndView.addObject("submitMessage",
+								"Request submitted.");
+					} else {
+						modelAndView
+								.addObject("submitMessage",
+										"Request cannot be proccessed.");
+					}
 				}
+				modelAndView.setViewName("transferMoney");
 			}
-			modelAndView.setViewName("transferMoney");
+			return modelAndView;
 		}
-		return modelAndView;
-	}
 
 	// GET Transactions
 	// Transactions Review

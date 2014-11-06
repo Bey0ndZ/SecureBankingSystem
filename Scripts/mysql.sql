@@ -86,8 +86,8 @@ KEY fk_username_idx (username),
 CONSTRAINT fk_username_pending FOREIGN KEY (username) REFERENCES users (username)
 );
 
-insert into account values ("skgarg","1234567890","500","0","0");
-insert into account values ("shivam","124","500","0","0");
+insert into account values ("skgarg","12345678","500","0","0");
+insert into account values ("shivam","98765432","500","0","0");
 
 CREATE TABLE user_attempts (
   id INT(11) NOT NULL AUTO_INCREMENT,

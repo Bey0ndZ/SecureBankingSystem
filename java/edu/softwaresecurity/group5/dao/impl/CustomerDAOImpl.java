@@ -913,82 +913,87 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 
 	// Transfer money module
-	public boolean processtransfer(String generatedFromUsernameFrom,
-			String account, String amount) {
-		float amountToTransfer = Float.parseFloat(amount);
-		CustomerInformationDTO custinfo = getUserFromAccount(account);
-		String generatedFromUsernameTo = custinfo.getUsername();
-		String balanceFromS = "SELECT account.accountbalance from account "
-				+ " inner join users on " + "account.username=users.username "
-				+ "WHERE account.username=?";
-		String balanceToS = "SELECT account.accountbalance from account "
-				+ " inner join users on " + "account.username=users.username "
-				+ "WHERE account.username=?";
-		String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
-				+ " inner join users on "
-				+ "account.username=users.username "
-				+ "where account.username=?";
-		String debitS = "SELECT account.debit from account "
-				+ " inner join users on " + "account.username=users.username "
-				+ "WHERE account.username=?";
-		String creditS = "SELECT account.credit from account "
-				+ " inner join users on " + "account.username=users.username "
-				+ "WHERE account.username=?";
-		String insertIntoAccountFrom = "UPDATE "
-				+ "account SET account.accountbalance=?, account.debit=?"
-				+ "WHERE account.username= ? ";
-		String insertIntoAccountTo = "UPDATE "
-				+ "account SET account.accountbalance=?, account.credit=?"
-				+ "WHERE account.username= ? ";
+		public boolean processtransfer(String generatedFromUsernameFrom,
+				String account, String amount) {
+			float amountToTransfer = Float.parseFloat(amount);
+			CustomerInformationDTO custinfo = getUserFromAccount(account);
+			String generatedFromUsernameTo = custinfo.getUsername();
+			String balanceFromS = "SELECT account.accountbalance from account "
+					+ " inner join users on " + "account.username=users.username "
+					+ "WHERE account.username=?";
+			String balanceToS = "SELECT account.accountbalance from account "
+					+ " inner join users on " + "account.username=users.username "
+					+ "WHERE account.username=?";
+			String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
+					+ " inner join users on "
+					+ "account.username=users.username "
+					+ "where account.username=?";
+			String debitS = "SELECT account.debit from account "
+					+ " inner join users on " + "account.username=users.username "
+					+ "WHERE account.username=?";
+			String creditS = "SELECT account.credit from account "
+					+ " inner join users on " + "account.username=users.username "
+					+ "WHERE account.username=?";
+			String insertIntoAccountFrom = "UPDATE "
+					+ "account SET account.accountbalance=?, account.debit=?"
+					+ "WHERE account.username= ? ";
+			String insertIntoAccountTo = "UPDATE "
+					+ "account SET account.accountbalance=?, account.credit=?"
+					+ "WHERE account.username= ? ";
 
-		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
-		JdbcTemplate jdbcTemplateForAccount = new JdbcTemplate(dataSource);
+			JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
+			JdbcTemplate jdbcTemplateForAccount = new JdbcTemplate(dataSource);
 
-		String getUsernameAccount = jdbcTemplateForAccountNumber
-				.queryForObject(getAccountDetailsFromUsernameFrom,
-						new Object[] { generatedFromUsernameFrom },
-						String.class);
+			String getUsernameAccount = jdbcTemplateForAccountNumber
+					.queryForObject(getAccountDetailsFromUsernameFrom,
+							new Object[] { generatedFromUsernameFrom },
+							String.class);
 
-		String balanceFromString = jdbcTemplateForAccountNumber.queryForObject(
-				balanceFromS, new Object[] { generatedFromUsernameFrom },
-				String.class);
+			String balanceFromString = jdbcTemplateForAccountNumber.queryForObject(
+					balanceFromS, new Object[] { generatedFromUsernameFrom },
+					String.class);
 
-		String balanceToString = jdbcTemplateForAccountNumber.queryForObject(
-				balanceToS, new Object[] { generatedFromUsernameTo },
-				String.class);
+			String balanceToString = jdbcTemplateForAccountNumber.queryForObject(
+					balanceToS, new Object[] { generatedFromUsernameTo },
+					String.class);
 
-		String debitString = jdbcTemplateForAccountNumber.queryForObject(
-				debitS, new Object[] { generatedFromUsernameFrom },
-				String.class);
+			String debitString = jdbcTemplateForAccountNumber.queryForObject(
+					debitS, new Object[] { generatedFromUsernameFrom },
+					String.class);
 
-		String creditString = jdbcTemplateForAccountNumber
-				.queryForObject(creditS,
-						new Object[] { generatedFromUsernameTo }, String.class);
+			String creditString = jdbcTemplateForAccountNumber
+					.queryForObject(creditS,
+							new Object[] { generatedFromUsernameTo }, String.class);
 
-		float balanceFrom = Float.parseFloat(balanceFromString);
-		float balanceTo = Float.parseFloat(balanceToString);
-		float credit = Float.parseFloat(creditString);
-		float debit = Float.parseFloat(debitString);
-		balanceFrom = balanceFrom - amountToTransfer;
-		balanceTo = balanceTo + amountToTransfer;
-		credit = credit + amountToTransfer;
-		debit = debit + amountToTransfer;
-		int accountNumber = Integer.parseInt(getUsernameAccount);
-		int accountNumberFrom = Integer.parseInt(account);
-		if (accountNumber == accountNumberFrom) {
-			return false;
+			float balanceFrom = Float.parseFloat(balanceFromString);
+			float balanceTo = Float.parseFloat(balanceToString);
+			float credit = Float.parseFloat(creditString);
+			float debit = Float.parseFloat(debitString);
+			balanceFrom = balanceFrom - amountToTransfer;
+			balanceTo = balanceTo + amountToTransfer;
+			if(balanceFrom<0){
+				return false;
+			}
+			credit = credit + amountToTransfer;
+			debit = debit + amountToTransfer;
+			int accountNumber = Integer.parseInt(getUsernameAccount);
+			int accountNumberFrom = Integer.parseInt(account);
+			if (accountNumber == accountNumberFrom) {
+				return false;
+			}
+			jdbcTemplateForAccount.update(insertIntoAccountFrom, new Object[] {
+					balanceFrom, debit, generatedFromUsernameFrom });
+			jdbcTemplateForAccount.update(insertIntoAccountTo, new Object[] {
+					balanceTo, credit, generatedFromUsernameTo });
+			return true;
 		}
-		jdbcTemplateForAccount.update(insertIntoAccountFrom, new Object[] {
-				balanceFrom, debit, generatedFromUsernameFrom });
-		jdbcTemplateForAccount.update(insertIntoAccountTo, new Object[] {
-				balanceTo, credit, generatedFromUsernameTo });
-		return true;
-	}
 
 	public boolean updatePending(String generatedFromUsernameFrom,
 			String account, String amount) {
 		float amountToTransfer = Float.parseFloat(amount);
-
+		String balanceFromS = "SELECT account.accountbalance from account "
+				+ " inner join users on " + "account.username=users.username "
+				+ "WHERE account.username=?";
 		String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
 				+ " inner join users on "
 				+ "account.username=users.username "
@@ -1009,7 +1014,14 @@ public class CustomerDAOImpl implements CustomerDAO {
 				.queryForObject(getAccountDetailsFromUsernameFrom,
 						new Object[] { generatedFromUsernameFrom },
 						String.class);
-
+		String balanceFromString = jdbcTemplateForAccountNumber.queryForObject(
+				balanceFromS, new Object[] { generatedFromUsernameFrom },
+				String.class);
+		float balanceFrom = Float.parseFloat(balanceFromString);
+		balanceFrom = balanceFrom - amountToTransfer;
+		if(balanceFrom<0){
+			return false;
+		}
 		int accountNumber = Integer.parseInt(getUsernameAccount);
 		int accountNumberTo = Integer.parseInt(account);
 		if (accountNumber == accountNumberTo) {
@@ -1026,6 +1038,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		return true;
 	}
+
 
 	public List<UserTransactionsDTO> getUserTransactionList(String username) {
 		String getTransactionsQuery = "SELECT * from transactions where usernamefrom=? AND userdelete=?";
