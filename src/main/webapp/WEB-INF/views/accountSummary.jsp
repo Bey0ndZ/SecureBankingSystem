@@ -12,7 +12,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-
 <title>Welcome, ${username }</title>
 
 <!-- Bootstrap Core CSS -->
@@ -33,7 +32,6 @@
 </head>
 
 <body>
-<<<<<<< Updated upstream
 	<sec:authorize access="hasRole('ROLE_USER')">
 		<div id="wrapper">
 
@@ -59,7 +57,7 @@
                     	${pageContext.request.userPrincipal.name}
                     </c:if> <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+							<li><a href="accountSummary"><i class="fa fa-fw fa-user"></i> Profile</a>
 							</li>
 							<li class="divider"></li>
 							<li><a href="javascript:formSubmit()"><i

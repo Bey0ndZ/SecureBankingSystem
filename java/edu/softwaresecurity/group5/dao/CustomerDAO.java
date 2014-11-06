@@ -1,5 +1,6 @@
 package edu.softwaresecurity.group5.dao;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import edu.softwaresecurity.group5.dto.BillPayDTO;
@@ -15,7 +16,7 @@ import edu.softwaresecurity.group5.model.ModifyUserInformation;
 
 public interface CustomerDAO {
 
-	public String registerCustomer(CustomerInformation custInfo);
+	public String registerCustomer(CustomerInformation custInfo) throws FileNotFoundException;
 
 	public String addUser(AddUserInformation addInfo);
 	public List<CustomerInformationDTO> retrieveUserDetails(String username);

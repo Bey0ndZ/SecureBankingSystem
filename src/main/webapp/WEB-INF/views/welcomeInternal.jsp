@@ -13,7 +13,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Welcome Employee!</title>
+    <title>Welcome <sec:authentication property="principal.username" />!</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
@@ -40,12 +40,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index"><font COLOR=RED> <b>EMPLOYEE</b> </font></a>
+                <a class="navbar-brand" href="index"><font COLOR=RED> <b><sec:authentication property="principal.username" /></b> </font></a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> EMPLOYEE <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <sec:authentication property="principal.username" /> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="javascript:formSubmit()"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
@@ -108,7 +108,7 @@
                             </div>
                             <div class="panel-body">
                                 <div id="morris-area-chart">
-                                <h4><font COLOR=RED SIZE=16px> <b>Welcome EMPLOYEE!</b></font></h4>
+                                <h4><font COLOR=RED SIZE=16px> <b>Welcome <sec:authentication property="principal.username" />!</b></font></h4>
                                 </div>
                             </div>
                         </div>

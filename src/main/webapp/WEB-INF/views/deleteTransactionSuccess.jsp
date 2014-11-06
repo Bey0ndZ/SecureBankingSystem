@@ -59,7 +59,7 @@
                     	${pageContext.request.userPrincipal.name}
                     </c:if> <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+							<li><a href="accountSummary"><i class="fa fa-fw fa-user"></i> Profile</a>
 							</li>
 							<li class="divider"></li>
 							<li><a href="javascript:formSubmit()"><i

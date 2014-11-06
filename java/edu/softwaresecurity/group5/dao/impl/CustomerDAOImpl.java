@@ -2,6 +2,10 @@ package edu.softwaresecurity.group5.dao.impl;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.security.Key;
@@ -126,7 +130,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		}
 	}
 
-	public String registerCustomer(CustomerInformation custInfo) {
+	public String registerCustomer(CustomerInformation custInfo) throws FileNotFoundException {
 
 		custInfo.setEnabled(1);
 		custInfo.setEnabled(0);
@@ -195,8 +199,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 			userKey.initialize(1024);
 			KeyPair usrKey = userKey.genKeyPair();
-			Key publicKey = usrKey.getPublic();
-			Key privateKey = usrKey.getPrivate();
+			Key publicKey = usrKey.getPublic(); // Store this in file.
+			Key privateKey = usrKey.getPrivate(); 
 			String priKey = DatatypeConverter.printBase64Binary(privateKey
 					.getEncoded());
 			String pubKey = DatatypeConverter.printBase64Binary(publicKey
@@ -218,7 +222,52 @@ public class CustomerDAOImpl implements CustomerDAO {
 					e.printStackTrace();
 				}
 			}
+				
+			// ======
+			String s = "TRY STRING";
+
+			FileOutputStream fos = new FileOutputStream("ss_file_pub");
+			try {
+				fos.write(s.getBytes());;
+				fos.close();
+			}
+			catch (IOException e) {
+				
+			}
 			
+			
+			FileOutputStream fos1 = new FileOutputStream("ss_file_pri");
+			try {
+				fos1.write(s.getBytes());
+				fos1.close();
+			}
+			catch (IOException e) {
+				
+			}
+			
+			
+			
+//			DataOutputStream dos = new DataOutputStream(new FileOutputStream("ss_pub.txt"));
+//			try {
+//				dos.write(pubKey.getBytes());
+//				dos.close();
+//			}
+//			catch (IOException e) {
+//				
+//			}
+//			
+//			DataOutputStream dos1 = new DataOutputStream(new FileOutputStream("ss_pri.dat"));
+//			try {
+//				dos1.write(priKey.getBytes());
+//				dos1.close();
+//			}
+//			catch (IOException e) {
+//				
+//			}
+			
+			
+			
+			// ======
 			
 			// Stroring data into KeyTable - author shivam.
 			String insertIntoKeyTable = "INSERT into user_keys (username, userKey) "

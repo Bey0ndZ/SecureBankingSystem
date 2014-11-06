@@ -85,7 +85,7 @@ jQuery(window).load(function() {
                     	${pageContext.request.userPrincipal.name}
                     </c:if> <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+							<li><a href="accountSummary"><i class="fa fa-fw fa-user"></i> Profile</a>
 							</li>
 							<li class="divider"></li>
 							<li><a href="javascript:formSubmit()"><i
@@ -171,6 +171,7 @@ jQuery(window).load(function() {
 
 											<!-- Display user details -->
 											<c:if test="${not empty customerDetails }">
+											<b>Amount greater then 10000, requires approval</b><br />
 												<b>First Name:</b> ${customerDetails.firstname}<br />
 												<b>Last Name:</b> ${customerDetails.lastname}<br />
 												<b>Contact:</b> ${customerDetails.phonenumber}<br />
