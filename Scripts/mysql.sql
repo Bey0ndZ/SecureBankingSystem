@@ -2,6 +2,8 @@ create database if not exists `sbs`;
 
 USE `sbs`;
 
+DROP TABLE IF EXISTS `onetimepasswords`;
+DROP TABLE IF EXISTS `transactions`;
 DROP TABLE IF EXISTS `modificationrequests`;
 DROP TABLE IF EXISTS `deleteaccount`;
 DROP TABLE IF EXISTS `user_keys`;
@@ -30,21 +32,6 @@ CREATE  TABLE users (
   userDetailsExpired TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (username));
   
-  INSERT INTO users 
-  VALUES ('admin', '$2a$10$aUUBBHgMXlx.UrQLuIlK4.YX2R0hMU10tWdtF0d.Z3Dn5bHVJLrx.', '$2a$10$aUUBBHgMXlx.UrQLuIlK4.YX2R0hMU10tWdtF0d.Z3Dn5bHVJLrx.', 'admin', 'admin', 'male','Merchant', '4808452326',
-  'skulkar9@asu.edu', 'ssn', 'address', true,true,true,true);
-  INSERT INTO users 
-  VALUES ('shivam', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam','male', 'Merchant', '4804804801',
-  'shivam@asu.edu', 'ssn', 'address', true,true,true,true);
-  INSERT INTO users 
-  VALUES ('skgarg', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam','male', 'Merchant', '4804804801',
-  'shivam@asu.edu', 'ssn', 'address', true,true,true,true);
-  INSERT INTO users 
-  VALUES ('skgarg1', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam','male', 'Merchant', '4804804801',
-  'shivam@asu.edu', 'ssn', 'address', true,true,true,true);
-  INSERT INTO users 
-  VALUES ('employee', '$2a$10$G5HnxB7yjAEdxUQ4lDwkHuSPAoaITmM7O2DFp762bpytmUlisTTxa', '$2a$10$G5HnxB7yjAEdxUQ4lDwkHuSPAoaITmM7O2DFp762bpytmUlisTTxa', 'employee', 'employee','male', 'Merchant', '4804804802',
-  'employee@asu.edu', 'ssn', 'address', true,true,true,true);
 
 CREATE TABLE user_roles (
   user_role_id int(11) NOT NULL AUTO_INCREMENT,
@@ -55,14 +42,7 @@ CREATE TABLE user_roles (
   KEY fk_username_idx (username),
   CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES users (username));
   
-INSERT INTO user_roles (username, role)
-VALUES ('admin', 'ROLE_ADMIN');
-INSERT INTO user_roles (username, role)
-VALUES ('shivam', 'ROLE_USER');
-INSERT INTO user_roles (username, role)
-VALUES ('skgarg', 'ROLE_USER');
-INSERT INTO user_roles (username, role)
-VALUES ('employee', 'ROLE_EMPLOYEE');
+
 
 CREATE TABLE account (
 	username VARCHAR(45) NOT NULL,
@@ -86,8 +66,7 @@ KEY fk_username_idx (username),
 CONSTRAINT fk_username_pending FOREIGN KEY (username) REFERENCES users (username)
 );
 
-insert into account values ("skgarg","12345678","500","0","0");
-insert into account values ("shivam","98765432","500","0","0");
+
 
 CREATE TABLE user_attempts (
   id INT(11) NOT NULL AUTO_INCREMENT,
@@ -148,6 +127,35 @@ CREATE TABLE onetimepasswords (
 	otp VARCHAR(8),
 	dateandtime timestamp
 );
+
+  INSERT INTO users 
+  VALUES ('admin', '$2a$10$aUUBBHgMXlx.UrQLuIlK4.YX2R0hMU10tWdtF0d.Z3Dn5bHVJLrx.', '$2a$10$aUUBBHgMXlx.UrQLuIlK4.YX2R0hMU10tWdtF0d.Z3Dn5bHVJLrx.', 'admin', 'admin', 'male','Merchant', '4808452326',
+  'skulkar9@asu.edu', 'ssn', 'address', true,true,true,true);
+  INSERT INTO users 
+  VALUES ('shivam', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam','male', 'Merchant', '4804804801',
+  'shivam@asu.edu', 'ssn', 'address', true,true,true,true);
+  INSERT INTO users 
+  VALUES ('skgarg', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam','male', 'Merchant', '4804804801',
+  'shivam@asu.edu', 'ssn', 'address', true,true,true,true);
+  INSERT INTO users 
+  VALUES ('skgarg1', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', '$2a$10$hRzs1QvAQ.LYHRZLohvjJuCow9BKLQ0MXVuTv9YxpBvNVt87NbBDK', 'shivam', 'shivam','male', 'Merchant', '4804804801',
+  'shivam@asu.edu', 'ssn', 'address', true,true,true,true);
+  INSERT INTO users 
+  VALUES ('employee', '$2a$10$G5HnxB7yjAEdxUQ4lDwkHuSPAoaITmM7O2DFp762bpytmUlisTTxa', '$2a$10$G5HnxB7yjAEdxUQ4lDwkHuSPAoaITmM7O2DFp762bpytmUlisTTxa', 'employee', 'employee','male', 'Merchant', '4804804802',
+  'employee@asu.edu', 'ssn', 'address', true,true,true,true);
+
+  INSERT INTO user_roles (username, role)
+VALUES ('admin', 'ROLE_ADMIN');
+INSERT INTO user_roles (username, role)
+VALUES ('shivam', 'ROLE_USER');
+INSERT INTO user_roles (username, role)
+VALUES ('skgarg', 'ROLE_USER');
+INSERT INTO user_roles (username, role)
+VALUES ('employee', 'ROLE_EMPLOYEE');
+  
+insert into account values ("skgarg","12345678","500","0","0");
+insert into account values ("shivam","98765432","500","0","0");
+
 
 INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype) VALUES ("skgarg",false,false,false,"Modify");
 INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype) VALUES ("shivam",false,false,false,"Modify");

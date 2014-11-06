@@ -458,7 +458,7 @@ public class MainController {
 		Pattern p1 = Pattern.compile("[!@#$%^&*+_.-]");
 		Matcher match = p1.matcher(customerDetail.getUsername().subSequence(0, customerDetail.getUsername().length()));
 		
-		if(customerDetail.getUsername().isEmpty()||customerDetail.getUsername()==null||match.find()==true||
+		if(customerDetail==null||customerDetail.getUsername()==null||customerDetail.getUsername().isEmpty()||customerDetail.getUsername()==null||match.find()==true||
 				customerDetail.getUsername().length()>10){
 
 			modelAndView.addObject("status", "Please Enter a valid Input.");
