@@ -174,7 +174,7 @@ public class TransactionsController {
 				}
 				modelAndView.setViewName("transferMoney");
 
-			} else if (action.equals("Approve Transfer")) {
+			} else if (action.equals("Request Approval")) {
 				Authentication auth = SecurityContextHolder.getContext()
 						.getAuthentication();
 				if (!(auth instanceof AnonymousAuthenticationToken)) {
