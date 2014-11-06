@@ -2,8 +2,6 @@ package edu.softwaresecurity.group5.dao.impl;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -12,6 +10,8 @@ import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -187,95 +187,63 @@ public class CustomerDAOImpl implements CustomerDAO {
 					new Object[] { custInfo.getUsername(), accountNumber,
 							"1000", "0", "0" });
 
-			// generating keypair
-			KeyPairGenerator userKey = null;
+			
+			// PKI Infrastructure
+			// Creates a file
+			PrivateKey privateKey;
+			PublicKey publicKey;
+			
 			try {
-				userKey = KeyPairGenerator.getInstance("RSA");
-
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			userKey.initialize(1024);
-			KeyPair usrKey = userKey.genKeyPair();
-			Key publicKey = usrKey.getPublic(); // Store this in file.
-			Key privateKey = usrKey.getPrivate(); 
-			String priKey = DatatypeConverter.printBase64Binary(privateKey
-					.getEncoded());
-			String pubKey = DatatypeConverter.printBase64Binary(publicKey
-					.getEncoded());
-
-			// Generating the files
-			File file = new File("publicKey.key");
-			if (!file.exists()) {
-				try {
-					file.createNewFile();
-					FileWriter fw = new FileWriter(file.getAbsoluteFile());
-					BufferedWriter bw = new BufferedWriter(fw);
-					bw.write(pubKey);
-					bw.write(priKey);
-					bw.close();
-					
-					System.out.println("Done!");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+				keyGen.initialize(1024);
+				KeyPair pair = keyGen.generateKeyPair();
+				publicKey = pair.getPublic();
+				privateKey = pair.getPrivate();
+				
+				File publicKeyFile = new File("publicKeyFile");
+				if (!publicKeyFile.exists()) {
+					publicKeyFile.createNewFile();
 				}
-			}
 				
-			// ======
-			String s = "TRY STRING";
-
-			FileOutputStream fos = new FileOutputStream("ss_file_pub");
-			try {
-				fos.write(s.getBytes());;
-				fos.close();
-			}
-			catch (IOException e) {
+				File privateKeyFile = new File("privateKeyFile");
+				if (!privateKeyFile.exists()) {
+					privateKeyFile.createNewFile();
+				}
 				
-			}
-			
-			
-			FileOutputStream fos1 = new FileOutputStream("ss_file_pri");
-			try {
-				fos1.write(s.getBytes());
-				fos1.close();
-			}
-			catch (IOException e) {
+				FileWriter fileWriterForPublicKey = new FileWriter(publicKeyFile.getAbsoluteFile());
+				BufferedWriter bufferedWriterForPublicKey = new BufferedWriter(fileWriterForPublicKey);
 				
+				bufferedWriterForPublicKey.write(publicKey.getEncoded().toString());
+				
+				FileWriter fileWriterForPrivateKey = new FileWriter(privateKeyFile.getAbsoluteFile());
+				BufferedWriter bufferedWriterForPrivateKey = new BufferedWriter(fileWriterForPrivateKey);
+				
+				bufferedWriterForPrivateKey.write(privateKey.getEncoded().toString());
+				
+				bufferedWriterForPublicKey.close();
+				bufferedWriterForPrivateKey.close();
+				
+				// Store data into table
+				String insertIntoKeyTable = "INSERT into user_keys (username, userKey) "
+						+ "VALUES (?,?)";
+				JdbcTemplate jdbcTemplateForKeyTable = new JdbcTemplate(dataSource);
+				jdbcTemplateForKeyTable.update(insertIntoKeyTable, new Object[] {
+						custInfo.getUsername(), publicKey.getEncoded().toString()});
+				
+				sendEmail(
+						custInfo.getEmail(),
+						custInfo.getFirstname() + " Activate Your Account",
+						"Hi "
+								+ custInfo.getFirstname()
+								+ " Please click the link http://localhost:8080/SecureBankingSystem/activateAccount/"
+								+ custInfo.getUsername()
+								+ " to activate your account and your private key is "
+								+ privateKey.getEncoded().toString());
+				return "Registration Successful!! Activation link has been sent at "
+						+ custInfo.getEmail();
+			} catch (Exception ex) {
+				return "Registration could not be completed. Please try again later.";
 			}
-			
-			
-			
-//			DataOutputStream dos = new DataOutputStream(new FileOutputStream("ss_pub.txt"));
-//			try {
-//				dos.write(pubKey.getBytes());
-//				dos.close();
-//			}
-//			catch (IOException e) {
-//				
-//			}
-//			
-//			DataOutputStream dos1 = new DataOutputStream(new FileOutputStream("ss_pri.dat"));
-//			try {
-//				dos1.write(priKey.getBytes());
-//				dos1.close();
-//			}
-//			catch (IOException e) {
-//				
-//			}
-			
-			
-			
-			// ======
-			
-			// Stroring data into KeyTable - author shivam.
-			String insertIntoKeyTable = "INSERT into user_keys (username, userKey) "
-					+ "VALUES (?,?)";
-			JdbcTemplate jdbcTemplateForKeyTable = new JdbcTemplate(dataSource);
-			jdbcTemplateForKeyTable.update(insertIntoKeyTable, new Object[] {
-					custInfo.getUsername(), pubKey });
 
 			// commented for keeping backup, sunit sent this first and then
 			// changed to above code. so playing safe keeping old commented just
@@ -361,18 +329,6 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 			// email private.txt to the user and generate a //column for pub key
 			// to be stored in users table.
-
-			sendEmail(
-					custInfo.getEmail(),
-					custInfo.getFirstname() + " Activate Your Account",
-					"Hi "
-							+ custInfo.getFirstname()
-							+ " Please click the link http://localhost:8080/SecureBankingSystem/activateAccount/"
-							+ custInfo.getUsername()
-							+ " to activate your account and your private key is "
-							+ priKey);
-			return "Registration Successful!! Activation link has been sent at "
-					+ custInfo.getEmail();
 		}
 	}
 
