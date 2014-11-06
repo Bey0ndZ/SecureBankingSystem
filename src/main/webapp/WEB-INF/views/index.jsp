@@ -94,7 +94,7 @@ jQuery(document).ready(function(){
 				        <input type="password" name="password" id="password" size="10" class="form-control keyboardInput" placeholder="Password" required>
 				        <div class="checkbox">
 				          <label>
-				            <input type="checkbox" value="remember-me"> Remember me
+				            Forgot Password? Click <a href="forgotPassword">here</a>
 				          </label>
 				          <label>
 				          	Not a member? Click <a href="register">here</a>

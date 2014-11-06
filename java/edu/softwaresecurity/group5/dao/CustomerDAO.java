@@ -50,5 +50,6 @@ public interface CustomerDAO {
 	public TicketDetailDTO fetchTicketDetail(TicketInformationDTO ticketDetails);
 	public boolean rejectAuthorizeTransactions(TicketDetailDTO ticketDetailDTO);
 	public boolean approveAuthorizeTransactions(TicketDetailDTO ticketDetailDTO);
-	
+	public String resetPassword(String email, String otp, String newPassword,
+			String confirmNewPassword);
 }

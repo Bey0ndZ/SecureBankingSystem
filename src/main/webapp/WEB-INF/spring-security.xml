@@ -38,9 +38,10 @@
 		<intercept-url pattern="/register*" access="permitAll" />
 		<intercept-url pattern="/unlockAccount*" access="permitAll" />
 <!-- 		<intercept-url pattern="/**" access="permitAll" /> -->
-		<intercept-url pattern="/changePassword*" access="isAuthenticated()" />
+		<intercept-url pattern="/changePassword*" access="permitAll" />
 		<intercept-url pattern="/activateAccount*" access="permitAll" />
 		<intercept-url pattern="/activateAccount/activateAccount*" access="permitAll" />
+		<intercept-url pattern="/resetPassword*" access="permitAll" />
 
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />

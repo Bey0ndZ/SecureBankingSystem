@@ -135,4 +135,9 @@ public class CustomerServiceImpl implements CustomerService {
 		// TODO Auto-generated method stub
 		return custDAO.approveAuthorizeTransactions(ticketDetailDTO);
 	}
+	
+	public String resetPasswordService(String email, String otp, String newPassword,
+			String confirmNewPassword) {
+		return custDAO.resetPassword(email, otp, newPassword, confirmNewPassword);
+	}
 }

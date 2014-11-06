@@ -791,38 +791,51 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 
 	public String generateOTP(String emailUserInput) {
-		// generate otp
-		String sample = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,;:[]{}+-";
-		String otp = "";
-		Random rand = new Random();
-		int randomNum = 0;
-		for (int i = 0; i < 8; i++) {
-			randomNum = rand.nextInt((71 - 0) + 1) + 0;
-			otp += sample.substring(randomNum, randomNum + 1);
-		}
-		System.out.println(otp);
+		// Check whether the emailUserInput is actually present in our table
+		String checkUserEmail = "SELECT email from users where email=?";
+		JdbcTemplate jdbcTemplateToCheckIfEmailExists = new JdbcTemplate(dataSource);
+		
+		String emailExistsOrNot = jdbcTemplateToCheckIfEmailExists.queryForObject(checkUserEmail,
+				new Object[]{emailUserInput}, String.class);
+		
+		if (!emailExistsOrNot.isEmpty()) {
+			// generate otp
+			String sample = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,;:[]{}+-";
+			String otp = "";
+			Random rand = new Random();
+			int randomNum = 0;
+			for (int i = 0; i < 8; i++) {
+				randomNum = rand.nextInt((71 - 0) + 1) + 0;
+				otp += sample.substring(randomNum, randomNum + 1);
+			}
 
-		String sql = "SELECT username from users where email=?";
-		JdbcTemplate jdbcTemplateToGetUsername = new JdbcTemplate(dataSource);
-		String username = jdbcTemplateToGetUsername.queryForObject(sql,
-				new Object[] { emailUserInput }, String.class);
-
-		System.out.println(username);
-
-		// Creating a timestamp object
-		Calendar calendar = Calendar.getInstance();
-		java.sql.Timestamp timestampForOTP = new java.sql.Timestamp(calendar
-				.getTime().getTime());
-
-		if (!username.isEmpty()) {
-			String insertIntoOTPTable = "insert into otp(username,otp,generateTime) values (?,?,?)";
-			JdbcTemplate jdbcTemplateInsertIntoOTPTable = new JdbcTemplate(
-					dataSource);
-			jdbcTemplateInsertIntoOTPTable.update(insertIntoOTPTable,
-					new Object[] { username, otp, timestampForOTP });
-			return "Email sent to the user";
+			// Creating a timestamp object
+			Calendar calendar = Calendar.getInstance();
+			Timestamp timestampForOTP = new Timestamp(calendar
+					.getTime().getTime());
+			
+			String insertIntoOTPTable = "INSERT INTO onetimepasswords VALUES (?,?,?)";
+			
+			JdbcTemplate jdbcTemplateForInsertIntoOTPTable = new JdbcTemplate(dataSource);
+			
+			int status = jdbcTemplateForInsertIntoOTPTable.update(insertIntoOTPTable, new Object[]{emailUserInput,
+					otp, timestampForOTP});
+			String passwordResetLink = "localhost:8080/SecureBankingSystem/resetPassword";
+			
+			// Send the email to the user
+			String emailSubject = "Fogot Password Instructions";
+			String emailContent = "Your OTP is: "+otp+". \n\n"
+					+ "Please click this link - "+passwordResetLink+" and enter the details to reset your password.";
+			sendEmail(emailUserInput, emailSubject, emailContent);
+			
+			if(status==1) {
+				return "OTP has been sent to your email!"; 
+			} else {
+				return "An OTP cannot be sent to you at the time. Please try again later.";
+			}
 		} else {
-			return "Please enter a registered email id";
+			// Email does not exists
+			return "This email account does not exists.";
 		}
 	}
 
@@ -1145,6 +1158,81 @@ public class CustomerDAOImpl implements CustomerDAO {
 		} else {
 			return false;
 		}
-
+	}
+	
+	// Reset Passwords using OTP
+	public String resetPassword(String email, String otp, String newPassword,
+			String confirmNewPassword) {
+		
+		// To hash passwords
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		
+		String checkForEmail = "SELECT email FROM users WHERE email=?";
+		JdbcTemplate jdbcTemplateForCheckingEmail = new JdbcTemplate(dataSource);
+		
+		String checkEmail = jdbcTemplateForCheckingEmail.queryForObject(checkForEmail,
+				new Object[] {email}, String.class);
+		
+		if (!checkEmail.isEmpty()) {
+			// User exists
+			String checkOTPAssociatedWithEmail = "SELECT otp from onetimepasswords where email=?";
+			JdbcTemplate checkOTP = new JdbcTemplate(dataSource);
+			
+			// Execute query
+			String OTP = checkOTP.queryForObject(checkOTPAssociatedWithEmail, new Object[] {email}, String.class);
+			
+			// Get the current timestamp
+			Calendar calendar = Calendar.getInstance();
+			Timestamp currentTimestamp = new Timestamp(calendar.getTime().getTime());		
+			
+			// Get the timestamp stored in the table
+			String getTimeStampFromDB = "SELECT dateandtime from onetimepasswords WHERE email=?";
+			JdbcTemplate templateToGetTimeStamp = new JdbcTemplate(dataSource);
+			
+			Timestamp storedTimestamp = templateToGetTimeStamp.queryForObject(getTimeStampFromDB, new Object[]{email}, Timestamp.class);
+			
+			// Get the times
+			Long currentTimeStampInMilliSeconds = currentTimestamp.getTime();
+			Long storedTimeStampInMillSeconds = storedTimestamp.getTime();
+			
+			Long differenceBetweenTimeStamps = currentTimeStampInMilliSeconds - storedTimeStampInMillSeconds;
+			
+			// Difference 
+			Long differenceInHours = differenceBetweenTimeStamps / (60*60*1000);
+			System.out.println(differenceInHours);
+			
+			// Check OTP
+			if ((differenceInHours > 1)) {
+				String removeFromOTPTable = "DELETE FROM onetimepasswords where email=?";
+				
+				JdbcTemplate jdbcTemplateToRemove = new JdbcTemplate(dataSource);
+				
+				jdbcTemplateToRemove.update(removeFromOTPTable, new Object[] {email});
+				return "The OTP has expired. Please request another OTP.";	
+			} else {
+				if (otp.equals(OTP)) {
+					// Update the password in users table
+					String updatePasswordsQuery = "UPDATE users SET password=? AND confirmpassword=? WHERE email=?";
+					String deleteFromOTPTable = "DELETE FROM onetimepasswords where email=?";
+					
+					JdbcTemplate updatePasswordTemplate = new JdbcTemplate(dataSource);
+					JdbcTemplate deleteOTPTemplate = new JdbcTemplate(dataSource);
+					
+					// Call the hash function
+					String newPasswordHash = passwordEncoder.encode(newPassword);
+					String confirmNewPasswordHash = passwordEncoder.encode(confirmNewPassword);
+					
+					updatePasswordTemplate.update(updatePasswordsQuery, new Object[]{newPasswordHash,
+							confirmNewPasswordHash, email});
+					deleteOTPTemplate.update(deleteFromOTPTable, new Object[] {email});
+					
+					return "Your password has been updated.";
+				} else {
+					return "Please enter the correct OTP.";
+				}
+			}
+		} else {
+			return "Your password could not be updated. OTP expired or you have entered incorrect OTP.";
+		}
 	}
 }

@@ -139,17 +139,15 @@ CREATE TABLE transactions (
 	usernamefromaccountnumber INT(11) NOT NULL,
 	usernametoaccountnumber INT(11) NOT NULL,
 	transactiontype VARCHAR(45) NOT NULL,
+	userdelete TINYINT NOT NULL,
 	transactiondate timestamp
 );
 
-CREATE TABLE otp (
-	username VARCHAR(45) NOT NULL,
+CREATE TABLE onetimepasswords (
+	email VARCHAR(45) NOT NULL,
 	otp VARCHAR(8),
-	generateTime timestamp,
-	PRIMARY KEY (username)
+	dateandtime timestamp
 );
-
-
 
 INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype) VALUES ("skgarg",false,false,false,"Modify");
 INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype) VALUES ("shivam",false,false,false,"Modify");

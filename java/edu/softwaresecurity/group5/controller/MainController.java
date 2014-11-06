@@ -11,6 +11,7 @@ import javax.validation.Valid;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -149,64 +150,65 @@ public class MainController {
 		return model;
 	}
 
-//	// Displaying the removeUser.jsp page
-//	@RequestMapping(value = "/removeUser", method = RequestMethod.GET)
-//	public ModelAndView returnRemoveUserPage() {
-//		ModelAndView modelAndView = new ModelAndView();
-//		modelAndView.setViewName("removeUser");
-//		return modelAndView;
-//	}
+	// // Displaying the removeUser.jsp page
+	// @RequestMapping(value = "/removeUser", method = RequestMethod.GET)
+	// public ModelAndView returnRemoveUserPage() {
+	// ModelAndView modelAndView = new ModelAndView();
+	// modelAndView.setViewName("removeUser");
+	// return modelAndView;
+	// }
 
-//	// Getting the userdetails
-//	@RequestMapping(value = "/removeUser", method = RequestMethod.POST)
-//	public ModelAndView getUserDetails(
-//			@RequestParam("removeUser") String usernameSearch) {
-//		ModelAndView modelAndView = new ModelAndView();
-//		
-//		Document userInput = Jsoup.parse(usernameSearch);
-//		String userName = userInput.text();
-//		
-//		if(userName.length()==0 || userName.length()>15) {
-//			modelAndView.addObject("errorMsg", "Please enter the correct username!");
-//			modelAndView.setViewName("removeUser");
-//		}
-//		else{
-//			List<CustomerInformationDTO> customerDetails = new ArrayList<CustomerInformationDTO>();
-//			customerDetails = custService.fetchUserDetails(userName);
-//			if(customerDetails.size()==0) {
-//				modelAndView.addObject("errorMsg", "Please enter the correct username!");
-//				modelAndView.setViewName("removeUser");
-//			}
-//			else {
-//				modelAndView.addObject("customerDetails", customerDetails);
-//				modelAndView.setViewName("removeUser");
-//			}
-//		}
-//		return modelAndView;
-//	}
+	// // Getting the userdetails
+	// @RequestMapping(value = "/removeUser", method = RequestMethod.POST)
+	// public ModelAndView getUserDetails(
+	// @RequestParam("removeUser") String usernameSearch) {
+	// ModelAndView modelAndView = new ModelAndView();
+	//
+	// Document userInput = Jsoup.parse(usernameSearch);
+	// String userName = userInput.text();
+	//
+	// if(userName.length()==0 || userName.length()>15) {
+	// modelAndView.addObject("errorMsg", "Please enter the correct username!");
+	// modelAndView.setViewName("removeUser");
+	// }
+	// else{
+	// List<CustomerInformationDTO> customerDetails = new
+	// ArrayList<CustomerInformationDTO>();
+	// customerDetails = custService.fetchUserDetails(userName);
+	// if(customerDetails.size()==0) {
+	// modelAndView.addObject("errorMsg", "Please enter the correct username!");
+	// modelAndView.setViewName("removeUser");
+	// }
+	// else {
+	// modelAndView.addObject("customerDetails", customerDetails);
+	// modelAndView.setViewName("removeUser");
+	// }
+	// }
+	// return modelAndView;
+	// }
 	// Remove internal user from db, mark user detailed expired to 0.
-		@RequestMapping(value = "/removeUserDB", method = RequestMethod.POST)
-		public ModelAndView getremoveUserDB(
-				@RequestParam("account") String usernameSearch) {
-			ModelAndView modelAndView = new ModelAndView();
-			
-			Document userInput = Jsoup.parse(usernameSearch);
-			String userName = userInput.text();
-			
+	@RequestMapping(value = "/removeUserDB", method = RequestMethod.POST)
+	public ModelAndView getremoveUserDB(
+			@RequestParam("account") String usernameSearch) {
+		ModelAndView modelAndView = new ModelAndView();
 
-				boolean status = custService.deleteAccountBYInternal(userName);
-				if(status) {
-					modelAndView.addObject("status", "User Deleted Succefully!");
-					modelAndView.setViewName("userList");
-				}
-				else {
-					modelAndView.addObject("status", "Please couldnot be deleted please contact Adminstrator personally!");
-					modelAndView.setViewName("userList");
-				}
-			
-			return modelAndView;
+		Document userInput = Jsoup.parse(usernameSearch);
+		String userName = userInput.text();
+
+		boolean status = custService.deleteAccountBYInternal(userName);
+		if (status) {
+			modelAndView.addObject("status", "User Deleted Succefully!");
+			modelAndView.setViewName("userList");
+		} else {
+			modelAndView
+					.addObject("status",
+							"Please couldnot be deleted please contact Adminstrator personally!");
+			modelAndView.setViewName("userList");
 		}
-		
+
+		return modelAndView;
+	}
+
 	// Remove external user from db, mark user detailed expired to 0.
 	@RequestMapping(value = "/removeUserExternal", method = RequestMethod.POST)
 	public ModelAndView getremoveExternalUserDB(
@@ -253,41 +255,43 @@ public class MainController {
 		return modelAndView;
 	}
 
-//	// Displaying the ViewUser(SearchUser).jsp page
-//	@RequestMapping(value = "/viewUser", method = RequestMethod.GET)
-//	public ModelAndView returnViewUserPage() {
-//		ModelAndView modelAndView = new ModelAndView();
-//		modelAndView.setViewName("viewUser");
-//		return modelAndView;
-//	}
+	// // Displaying the ViewUser(SearchUser).jsp page
+	// @RequestMapping(value = "/viewUser", method = RequestMethod.GET)
+	// public ModelAndView returnViewUserPage() {
+	// ModelAndView modelAndView = new ModelAndView();
+	// modelAndView.setViewName("viewUser");
+	// return modelAndView;
+	// }
 
-//	// Getting the userdetails
-//	@RequestMapping(value = "/viewUser", method = RequestMethod.POST)
-//	public ModelAndView getUserDetail(
-//			@RequestParam("viewUser") String accountNumber) {
-//		ModelAndView modelAndView = new ModelAndView();
-//		
-//		Document userInput = Jsoup.parse(accountNumber);
-//		String userAccountNumber = userInput.text();
-//	
-//		int chCount = 0;
-//		for (char c: userAccountNumber.toCharArray()) {
-//			  if(Character.isLetter(c)) {
-//				  chCount++;
-//			  }
-//		}
-//		if(userAccountNumber.length()==0 || chCount!=0 || userAccountNumber.length()>10 || userAccountNumber.length()<8) {
-//			modelAndView.addObject("errorMsg", "Please enter the correct account number!");
-//			modelAndView.setViewName("viewUser");
-//		}
-//		else {
-//			CustomerInformationDTO customerDetails = new CustomerInformationDTO();
-//			customerDetails = custService.getUserFromAccount(userAccountNumber);
-//			modelAndView.addObject("customerDetails", customerDetails);
-//			modelAndView.setViewName("viewUser");
-//		}
-//		return modelAndView;
-//	}
+	// // Getting the userdetails
+	// @RequestMapping(value = "/viewUser", method = RequestMethod.POST)
+	// public ModelAndView getUserDetail(
+	// @RequestParam("viewUser") String accountNumber) {
+	// ModelAndView modelAndView = new ModelAndView();
+	//
+	// Document userInput = Jsoup.parse(accountNumber);
+	// String userAccountNumber = userInput.text();
+	//
+	// int chCount = 0;
+	// for (char c: userAccountNumber.toCharArray()) {
+	// if(Character.isLetter(c)) {
+	// chCount++;
+	// }
+	// }
+	// if(userAccountNumber.length()==0 || chCount!=0 ||
+	// userAccountNumber.length()>10 || userAccountNumber.length()<8) {
+	// modelAndView.addObject("errorMsg",
+	// "Please enter the correct account number!");
+	// modelAndView.setViewName("viewUser");
+	// }
+	// else {
+	// CustomerInformationDTO customerDetails = new CustomerInformationDTO();
+	// customerDetails = custService.getUserFromAccount(userAccountNumber);
+	// modelAndView.addObject("customerDetails", customerDetails);
+	// modelAndView.setViewName("viewUser");
+	// }
+	// return modelAndView;
+	// }
 
 	@RequestMapping("/getList")
 	public ModelAndView getUserLIst() {
@@ -303,18 +307,19 @@ public class MainController {
 		return modelAndView;
 	}
 
-	// First fetch the details from database for admin to edit/modify these details.
+	// First fetch the details from database for admin to edit/modify these
+	// details.
 	@RequestMapping(value = "/modifyUser", method = RequestMethod.POST)
 	public ModelAndView getmodifyUserDetail(
 			@RequestParam("modifyUser") String accountNumber) {
 		ModelAndView modelAndView = new ModelAndView();
-		
+
 		Document userInput = Jsoup.parse(accountNumber);
 		String userAccountNumber = userInput.text();
-		
 
 		EmployeeInformationDTO employeeDetails = new EmployeeInformationDTO();
-		employeeDetails = custService.getEmployeeFromUserName(userAccountNumber);
+		employeeDetails = custService
+				.getEmployeeFromUserName(userAccountNumber);
 		modelAndView.addObject("customerDetails", employeeDetails);
 		modelAndView.setViewName("modifyUser");
 
@@ -333,7 +338,7 @@ public class MainController {
 		modelAndView.setViewName("userList");
 		return modelAndView;
 	}
-	
+
 	// Modify Internal employee in database, this is just for admin.
 	@RequestMapping(value = "/modifyExternalUserByInternal", method = RequestMethod.POST)
 	public ModelAndView getmodifyExternalDatabase(
@@ -361,45 +366,46 @@ public class MainController {
 			@ModelAttribute("customerDetails") ChangePassword customerDetail) {
 		ModelAndView modelAndView = new ModelAndView();
 		ChangePassword customerDetails = customerDetail;
-		
+
 		String pass = customerDetails.getPassword();
 		int number = 0;
 		int count = 0;
-		
-		for (char c: pass.toCharArray()) {
-			  if (Character.isDigit(c)) {
-				  number ++;
-			  }
-		  }
 
-		  for (char c: pass.toCharArray()) {
-			  if (Character.isUpperCase(c)) {
-				  count++;
-			  }
-		  }
-		  
-		  Pattern p = Pattern.compile("[!@#$%^&*+_.-]");
-		  Matcher match = p.matcher(pass.subSequence(0, pass.length()));
-		  
-		  if (pass.length()<6 || pass.length()>15 || number<=0 || count<=0 || match.find()==false) {
-			  modelAndView.addObject("errorMsg", "Entered password is not valid! Please enter again.");
-			  modelAndView.setViewName("changePassword");
-		  }
-		  else if (pass.equalsIgnoreCase(customerDetails.getConfirmPassword()) == false) {
-			  modelAndView.addObject("errorMsg", "Password and confirm password does not match.");
-			  modelAndView.setViewName("changePassword");
-		  }
-		  else {
-				Authentication auth = SecurityContextHolder.getContext()
-						.getAuthentication();
-				if (!(auth instanceof AnonymousAuthenticationToken)) {
-					UserDetails userDetail = (UserDetails) auth.getPrincipal();
-					customerDetail.setUsername(userDetail.getUsername());
-				}
-				String status = custService.changeAccountPassword(customerDetails);
-				modelAndView.addObject("status", status);
-				modelAndView.setViewName("changePassword");
-		  }
+		for (char c : pass.toCharArray()) {
+			if (Character.isDigit(c)) {
+				number++;
+			}
+		}
+
+		for (char c : pass.toCharArray()) {
+			if (Character.isUpperCase(c)) {
+				count++;
+			}
+		}
+
+		Pattern p = Pattern.compile("[!@#$%^&*+_.-]");
+		Matcher match = p.matcher(pass.subSequence(0, pass.length()));
+
+		if (pass.length() < 6 || pass.length() > 15 || number <= 0
+				|| count <= 0 || match.find() == false) {
+			modelAndView.addObject("errorMsg",
+					"Entered password is not valid! Please enter again.");
+			modelAndView.setViewName("changePassword");
+		} else if (pass.equalsIgnoreCase(customerDetails.getConfirmPassword()) == false) {
+			modelAndView.addObject("errorMsg",
+					"Password and confirm password does not match.");
+			modelAndView.setViewName("changePassword");
+		} else {
+			Authentication auth = SecurityContextHolder.getContext()
+					.getAuthentication();
+			if (!(auth instanceof AnonymousAuthenticationToken)) {
+				UserDetails userDetail = (UserDetails) auth.getPrincipal();
+				customerDetail.setUsername(userDetail.getUsername());
+			}
+			String status = custService.changeAccountPassword(customerDetails);
+			modelAndView.addObject("status", status);
+			modelAndView.setViewName("changePassword");
+		}
 		return modelAndView;
 	}
 
@@ -423,45 +429,116 @@ public class MainController {
 			return modelAndView;
 		} else {
 			String error = custService.insertAddUserInformation(addUserInfo);
-			if (error.equalsIgnoreCase("UserName, Email and SSN must be unique!")) {
+			if (error
+					.equalsIgnoreCase("UserName, Email and SSN must be unique!")) {
 				modelAndView.addObject("errorMsg", error);
 				modelAndView.setViewName("addUser");
-			}
-			else {
+			} else {
 				modelAndView.addObject("successMsg", error);
 				modelAndView.setViewName("addUser");
 			}
 			return modelAndView;
 		}
 	}
-	
+
 	@RequestMapping(value = "/unlockAccount", method = RequestMethod.GET)
 	public ModelAndView returnUnlockAccountPage() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("unlockAccount");
 		return modelAndView;
 	}
-	
-	//Verify whether account is actually locked or not.
+
+	// Verify whether account is actually locked or not.
 	@RequestMapping(value = "/unlockAccount", method = RequestMethod.POST)
 	public ModelAndView getVerfyUserForUnlock(
 			@ModelAttribute("customerDetails") CustomerInformationDTO customerDetail) {
 		ModelAndView modelAndView = new ModelAndView();
 		Document userInput = Jsoup.parse(customerDetail.getUsername());
 		customerDetail.setUsername(userInput.text());
-		if(customerDetail.getUsername().isEmpty()||customerDetail.getUsername()==null){
+		if (customerDetail.getUsername().isEmpty()
+				|| customerDetail.getUsername() == null) {
 			modelAndView.addObject("status", "Please Enter a valid Input.");
-		}
-		else{
+		} else {
 			CustomerInformationDTO customerDetails = customerDetail;
 			String status = custService.unlockAccount(customerDetails);
 			modelAndView.addObject("status", status);
 		}
-		
+
 		modelAndView.setViewName("unlockAccount");
 		return modelAndView;
 	}
-	
+
+	@RequestMapping(value = "/viewQueue", method = RequestMethod.GET)
+	public ModelAndView returnViewQueuePage() {
+		ModelAndView modelAndView = new ModelAndView();
+		List<TicketInformationDTO> userList = custService
+				.getPendingTicketList();
+		List<TicketInformationDTO> approvedList = custService
+				.getApprovedTicketList();
+		List<TicketInformationDTO> rejectedList = custService
+				.getRejectedTicketList();
+		modelAndView.addObject("userList", userList);
+		modelAndView.addObject("approvedList", approvedList);
+		modelAndView.addObject("rejectedList", rejectedList);
+		modelAndView.setViewName("viewQueue");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/ticketDetails", method = RequestMethod.GET)
+	public ModelAndView returnTicketDetailsPage() {
+		List<TicketInformationDTO> userList = custService
+				.getPendingTicketList();
+		return new ModelAndView("viewQueue", "userList", userList);
+	}
+
+	// Modify Internal employee in database, this is just for admin.
+	@RequestMapping(value = "/viewTicket", method = RequestMethod.POST)
+	public ModelAndView getviewTicketDatabase(
+			@ModelAttribute("ticketDetail") TicketInformationDTO user) {
+		ModelAndView modelAndView = new ModelAndView();
+		TicketInformationDTO ticketDetails = user;
+		TicketDetailDTO ticketDetailDTO = custService
+				.fetchTicketDetail(ticketDetails);
+		if (ticketDetailDTO == null) {
+			modelAndView.addObject("error",
+					"Some error occured while processing please try again.");
+		}
+		modelAndView.addObject("ticketDetailDTO", ticketDetailDTO);
+		modelAndView.setViewName("ticketDetails");
+		return modelAndView;
+	}
+
+	// Authhorize Critical transactions.
+	@RequestMapping(value = "/authorizeTransactionsApprove", method = RequestMethod.POST)
+	public ModelAndView getauthorizeTransactionsApprove(
+			@ModelAttribute("authorizeTransactions") TicketDetailDTO ticketDetailDTO) {
+		ModelAndView modelAndView = new ModelAndView();
+		TicketDetailDTO detailDTO = ticketDetailDTO;
+		boolean result = custService.approveAuthorizeTransactions(detailDTO);
+		if (result) {
+			modelAndView
+					.addObject("status", "Success, Authorization Approved!");
+		} else {
+			modelAndView.addObject("status",
+					"Error Occured, Please contact admin!");
+		}
+		modelAndView.setViewName("ticketAuthorizedSuccess");
+		return modelAndView;
+	}
+
+	// Reject Critical transactions.
+	@RequestMapping(value = "/authorizeTransactionsReject", method = RequestMethod.POST)
+	public ModelAndView getauthorizeTransactionsReject(
+			@ModelAttribute("authorizeTransactions") TicketDetailDTO ticketDetailDTO) {
+		ModelAndView modelAndView = new ModelAndView();
+		TicketDetailDTO detailDTO = ticketDetailDTO;
+		// String status = custService.updateExternalAccount(detailDTO);
+		// modelAndView.addObject("customerDetails", detailDTO);
+		// modelAndView.addObject("status", status);
+		modelAndView.setViewName("ticketAuthorizedSuccess");
+		return modelAndView;
+	}
+
 	// forgotPassword module
 	// GET Requests
 	@RequestMapping(value = "/forgotPassword", method = RequestMethod.GET)
@@ -470,79 +547,55 @@ public class MainController {
 		model.setViewName("forgotPassword");
 		return model;
 	}
-	
+
 	// POST Requests
 	@RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)
-	public ModelAndView getOtp(
-			@RequestParam("email") String emailOtp) {
+	public ModelAndView getOtp(@RequestParam("email") String emailOtp) {
 		ModelAndView modelAndView = new ModelAndView();
-		String emailReset="";
-		emailReset = custService.genOtp(emailOtp);
-		modelAndView.addObject("emailReset", emailReset);
+		if (!emailOtp.isEmpty()) {
+			Document emailOtpDoc = Jsoup.parse(emailOtp);
+			String emailReset = "";
+			emailReset = custService.genOtp(emailOtpDoc.text());
+			modelAndView.addObject("emailReset", emailReset);
+		} else {
+			modelAndView.addObject("emailReset", "Text-box cannot be left empty.");
+		}
+
 		modelAndView.setViewName("forgotPassword");
 		return modelAndView;
 	}
-		
-	@RequestMapping(value = "/viewQueue", method = RequestMethod.GET)
-	public ModelAndView returnViewQueuePage() {
+	
+	// Reset Password
+	// GET Request
+	@RequestMapping(value="/resetPassword", method=RequestMethod.GET)
+	public ModelAndView returnResetPasswordPage() {
 		ModelAndView modelAndView = new ModelAndView();
-		List<TicketInformationDTO> userList = custService.getPendingTicketList();
-		List<TicketInformationDTO> approvedList = custService.getApprovedTicketList();
-		List<TicketInformationDTO> rejectedList = custService.getRejectedTicketList();
-		modelAndView.addObject("userList", userList);
-		modelAndView.addObject("approvedList", approvedList);
-		modelAndView.addObject("rejectedList", rejectedList);
-		modelAndView.setViewName("viewQueue");
+		modelAndView.setViewName("resetPassword");
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "/ticketDetails", method = RequestMethod.GET)
-	public ModelAndView returnTicketDetailsPage() {
-		List<TicketInformationDTO> userList = custService.getPendingTicketList();
-		return new ModelAndView("viewQueue", "userList", userList);
-	}
-	
-	// Modify Internal employee in database, this is just for admin.
-		@RequestMapping(value = "/viewTicket", method = RequestMethod.POST)
-		public ModelAndView getviewTicketDatabase(
-				@ModelAttribute("ticketDetail") TicketInformationDTO user) {
-			ModelAndView modelAndView = new ModelAndView();
-			TicketInformationDTO ticketDetails = user;
-			TicketDetailDTO ticketDetailDTO = custService.fetchTicketDetail(ticketDetails);
-			if(ticketDetailDTO==null){
-				modelAndView.addObject("error", "Some error occured while processing please try again.");
-			}
-			modelAndView.addObject("ticketDetailDTO", ticketDetailDTO);
-			modelAndView.setViewName("ticketDetails");
-			return modelAndView;
-		}
-		
-	// Authhorize Critical transactions.
-	@RequestMapping(value = "/authorizeTransactionsApprove", method = RequestMethod.POST)
-	public ModelAndView getauthorizeTransactionsApprove(
-			@ModelAttribute("authorizeTransactions") TicketDetailDTO ticketDetailDTO) {
+	// Reset Password
+	// POST Requet
+	@RequestMapping(value="/resetPassword", method=RequestMethod.POST)
+	public ModelAndView processResetPassword(@RequestParam("email") String email,
+			@RequestParam("otp") String otp, @RequestParam("newPassword") String newPassword,
+			@RequestParam("confirmNewPassword") String confirmNewPassword) {
 		ModelAndView modelAndView = new ModelAndView();
-		TicketDetailDTO detailDTO = ticketDetailDTO;
-		boolean result = custService.approveAuthorizeTransactions(detailDTO);
-		if(result){
-			modelAndView.addObject("status", "Success, Authorization Approved!");
+		
+		if (!(email.isEmpty() && otp.isEmpty() && newPassword.isEmpty() && confirmNewPassword.isEmpty())) {
+			// All inputs should be sanitized
+			String emailInput = Jsoup.clean(email, Whitelist.basic());
+			String otpInput = Jsoup.clean(otp, Whitelist.basic());
+			String newPasswordInput = Jsoup.clean(newPassword, Whitelist.basic());
+			String confirmNewPasswordInput = Jsoup.clean(confirmNewPassword, Whitelist.basic());
+			
+			String resetInformation = custService.resetPasswordService(emailInput, otpInput, newPasswordInput, confirmNewPasswordInput);
+			modelAndView.addObject("resetInformation", resetInformation);
+		} else {
+			modelAndView.addObject("resetInformation", "Do not leave any text-boxes empty");
 		}
-		else{
-			modelAndView.addObject("status", "Error Occured, Please contact admin!");
-		}
-		modelAndView.setViewName("ticketAuthorizedSuccess");
+		modelAndView.setViewName("resetPassword");
 		return modelAndView;
 	}
-	// Reject Critical transactions.
-		@RequestMapping(value = "/authorizeTransactionsReject", method = RequestMethod.POST)
-		public ModelAndView getauthorizeTransactionsReject(
-				@ModelAttribute("authorizeTransactions") TicketDetailDTO ticketDetailDTO) {
-			ModelAndView modelAndView = new ModelAndView();
-			TicketDetailDTO detailDTO = ticketDetailDTO;
-//			String status = custService.updateExternalAccount(detailDTO);
-//			modelAndView.addObject("customerDetails", detailDTO);
-//			modelAndView.addObject("status", status);
-			modelAndView.setViewName("ticketAuthorizedSuccess");
-			return modelAndView;
-		}
+
 }

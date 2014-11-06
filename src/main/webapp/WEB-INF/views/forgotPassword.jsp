@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ page import="net.tanesha.recaptcha.ReCaptcha" %>
-<%@ page import="net.tanesha.recaptcha.ReCaptchaFactory" %>
+<%@page session="true"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,21 +41,10 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Register</a>
+                <a class="navbar-brand" href="register">Register</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">About</a>
-                    </li>
-                    <li>
-                        <a href="#">Services</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                </ul>
             </div>
             <!-- /.navbar-collapse -->
         </div>
@@ -66,16 +55,16 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-lg-12 text-center">
-                <h1>Enter the email ID registered with the account</h1>
-                <c:if test="${not empty emailReset }">
-                	${emailReset }
-                </c:if>
-                
+            <div class="col-lg-12 text-center">   
+                <br/><br/>
+                <h4>Forgot Password?</h4>
                 <form:form method="POST" action="forgotPassword" >
 					<b>Email Address:</b> <input type="email" name="email" id="email" style="color:#999;" /><br/>
-					<br/> <br/> <input type="submit" style="margin-right: 5%" name="genOtp" id="genOtp" value="Reset!" />
+					<br/><input type="submit" name="genOtp" id="genOtp" value="Get OTP" />
 				</form:form>
+				 <c:if test="${not empty emailReset }">
+                	${emailReset }
+                </c:if>
             </div>
         </div>
         <!-- /.row -->

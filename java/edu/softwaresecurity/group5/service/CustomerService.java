@@ -50,5 +50,7 @@ public interface CustomerService {
 	public TicketDetailDTO fetchTicketDetail(TicketInformationDTO ticketDetails);
 	public boolean rejectAuthorizeTransactions(TicketDetailDTO ticketDetailDTO);
 	public boolean approveAuthorizeTransactions(TicketDetailDTO ticketDetailDTO);
+	public String resetPasswordService(String email, String otp, String newPassword,
+			String confirmNewPassword);
 }
 
