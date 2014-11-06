@@ -527,7 +527,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			int status = jdbcTemplate.update(sql, new Object[] { hash, hash,
 					custInfo.getUsername() });
 			if (status == 1) {
-				sendEmail(email.get(0), "Your password is changed",
+				sendEmail(email.get(0), custInfo.getFirstname()+"Your password is changed",
 						"Please login and change the password, you temp password is  : "
 								+ "OTP: " + otp);
 				return "your new password is emailed to you at : "
@@ -1357,7 +1357,47 @@ public class CustomerDAOImpl implements CustomerDAO {
 	public boolean rejectAuthorizeTransactions(TicketDetailDTO ticketDetailDTO) {
 		// TODO Auto-generated method stub
 
-		return false;
+		String updatePendingtable = "UPDATE pendingtransactions  SET pending = false where username=? and pending=true and accountnumberfrom =? and accountnumberto= ? and id = ? ";
+		JdbcTemplate updatePendingTableJDBC = new JdbcTemplate(dataSource);
+		int status = updatePendingTableJDBC.update(
+				updatePendingtable,
+				new Object[] { ticketDetailDTO.getUsername(),
+						ticketDetailDTO.getAccountNumber(),
+						ticketDetailDTO.getToAccountNumber(),
+						ticketDetailDTO.getPendingid() });
+			String updateIntoTicketsTable = "UPDATE user_tickets set requestcompleted =true, requestapproved=false, requestrejected=true where username =  ? and id = ?";
+			JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
+					dataSource);
+
+			int status1 = insertIntoTicketsTableTemplate.update(
+					updateIntoTicketsTable,
+					new Object[] { ticketDetailDTO.getUsername(),ticketDetailDTO.getId() });
+			if (status1 == 1) {
+				float newBalance = ticketDetailDTO.getAccountBalance() + ticketDetailDTO.getTransactionamountInfloat();
+				// Get the accountNumber of the user
+				String getAccountNumber = "SELECT debit from account where username=?";
+				JdbcTemplate jdbcTemplateToGetAccountNumber = new JdbcTemplate(
+						dataSource);
+
+				float debit = jdbcTemplateToGetAccountNumber.queryForObject(
+						getAccountNumber, new Object[] { ticketDetailDTO.getUsername() },
+						Float.class);
+				float newDebit= debit - ticketDetailDTO.getTransactionamountInfloat();
+				 
+				String update = "UPDATE account set accountbalance= ? and debit = ? where username = ?";
+				JdbcTemplate updateaccountTableJDBC = new JdbcTemplate(dataSource);
+				int status2 = updateaccountTableJDBC.update(
+						update,
+						new Object[] { newBalance, newDebit,ticketDetailDTO.getUsername()});
+				if(status2>0){
+					return true;
+				}
+				else{
+					return false;
+				}
+			
+		}
+			return false;
 	}
 
 	public boolean approveAuthorizeTransactions(TicketDetailDTO ticketDetailDTO) {
@@ -1384,13 +1424,13 @@ public class CustomerDAOImpl implements CustomerDAO {
 			if (processtransfer(ticketDetailDTO.getUsername(),
 					ticketDetailDTO.getToAccountNumber(),
 					ticketDetailDTO.getTransactionAmount())) {
-				String updateIntoTicketsTable = "UPDATE user_tickets set requestcompleted =true, requestapproved=true, requestrejected=false where username =  ?";
+				String updateIntoTicketsTable = "UPDATE user_tickets set requestcompleted =true, requestapproved=true, requestrejected=false where username =  ? and id = ?";
 				JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
 						dataSource);
 
 				int status1 = insertIntoTicketsTableTemplate.update(
 						updateIntoTicketsTable,
-						new Object[] { ticketDetailDTO.getUsername() });
+						new Object[] { ticketDetailDTO.getUsername() ,ticketDetailDTO.getId()});
 				return true;
 			}
 
