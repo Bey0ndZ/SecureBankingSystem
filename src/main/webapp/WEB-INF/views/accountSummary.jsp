@@ -12,7 +12,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-
 <title>Welcome, ${username }</title>
 
 <!-- Bootstrap Core CSS -->
@@ -33,7 +32,6 @@
 </head>
 
 <body>
-<<<<<<< Updated upstream
 	<sec:authorize access="hasRole('ROLE_USER')">
 		<div id="wrapper">
 
