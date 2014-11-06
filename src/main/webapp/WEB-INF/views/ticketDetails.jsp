@@ -231,6 +231,7 @@
 					                     <input type="hidden" name="requesttype" id="accountNumber_RemoveUser" value="${ticketDetailDTO.requesttype}" style="color:#999;" />
 					                     <input type="hidden" name="pendingid" id="accountNumber_RemoveUser" value="${ticketDetailDTO.pendingid}" style="color:#999;" />
 					                     <input type="hidden" name="transactionamountInfloat" id="accountNumber_RemoveUser" value="${ticketDetailDTO.transactionamountInfloat}" style="color:#999;" />
+					                     <input type="hidden" name="id" id="accountNumber_RemoveUser" value="${ticketDetailDTO.id}" style="color:#999;" />
 					                    
 					                    
 					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="modifyUserButton" value="Approve" /></a>
@@ -247,6 +248,7 @@
 					                     <input type="hidden" name="requesttype" id="accountNumber_RemoveUser" value="${ticketDetailDTO.requesttype}" style="color:#999;" />
 					                     <input type="hidden" name="pendingid" id="accountNumber_RemoveUser" value="${ticketDetailDTO.pendingid}" style="color:#999;" />
 					                     <input type="hidden" name="transactionamountInfloat" id="accountNumber_RemoveUser" value="${ticketDetailDTO.transactionamountInfloat}" style="color:#999;" />
+					                     <input type="hidden" name="id" id="accountNumber_RemoveUser" value="${ticketDetailDTO.id}" style="color:#999;" />
 					                     <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="removeUserButton" value="Reject" /></a>
 										 </form:form></td> 
 									    </tr>
