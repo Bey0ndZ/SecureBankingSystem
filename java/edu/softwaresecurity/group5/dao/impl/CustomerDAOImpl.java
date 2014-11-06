@@ -215,6 +215,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 					BufferedWriter bw = new BufferedWriter(fw);
 					bw.write(pubKey);
 					bw.write(priKey);
+					bw.close();
 					
 					System.out.println("Done!");
 				} catch (IOException e) {
@@ -595,7 +596,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		// Query for inserting into the transactions table
 		String insertIntoTxTable = "INSERT INTO transactions(id, usernamefrom,"
-				+ "usernameto, usernamefromaccountnumber, usernametoaccountnumber, transactiontype, userdelete"
+				+ "usernameto, usernamefromaccountnumber, usernametoaccountnumber, transactiontype, userdelete,"
 				+ "transactiondate) VALUES (?,?,?,?,?,?,?,?)";
 
 		// Generating random tx IDs
@@ -623,7 +624,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		// Getting the username of the merchant
 		JdbcTemplate getMerchantUsername = new JdbcTemplate(dataSource);
-		String merchantUsernameQuery = "SELECT * FROM account WHERE accountnumber=?";
+		String merchantUsernameQuery = "SELECT username FROM account WHERE accountnumber=?";
 
 		// Get the username
 		String merchantUsername = getMerchantUsername.queryForObject(
@@ -652,7 +653,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 					+ "pendingtransactions.username, pendingtransactions.amount,"
 					+ "pendingtransactions.accountnumberfrom from pendingtransactions "
 					+ "inner join account on pendingtransactions.accountnumberto=account.accountnumber"
-					+ " where account.username=?";
+					+ " where account.username=? AND pendingtransactions.billpay=true";
 			JdbcTemplate jdbcTemplateForBillPayDetails = new JdbcTemplate(
 					dataSource);
 			billPayDetails = jdbcTemplateForBillPayDetails.query(
@@ -1516,5 +1517,58 @@ public class CustomerDAOImpl implements CustomerDAO {
 		} else {
 			return "Your password could not be updated. OTP expired or you have entered incorrect OTP.";
 		}
+	}
+	
+	// Check whether a username is a merchant or individual
+	public boolean returnSelectionType(String username) {
+		String getSelectionType = "SELECT MerchantorIndividual from users WHERE username=?";
+		JdbcTemplate templateForSelectionType = new JdbcTemplate(dataSource);
+		
+		String getSelection = templateForSelectionType.queryForObject(getSelectionType, 
+				new Object[] {username}, String.class);
+		
+		if (getSelection.equalsIgnoreCase("Merchant")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public String approveBillPay(String merchantUsername, String individualUsername) {
+		// Set the billpay column as 1 
+		String checkPendingTransactionsTableForBillPay = "UPDATE pendingtransactions "
+				+ "SET billpay=false WHERE username=?";
+		JdbcTemplate jdbcTemplateForApproveBillPay = new JdbcTemplate(dataSource);
+		jdbcTemplateForApproveBillPay.update(checkPendingTransactionsTableForBillPay, new Object[] {merchantUsername});
+		
+		// Call the processtransfer and updatependingmethods
+		// Get the other persons' account information
+		String checkMerchants = "SELECT accountnumber from account where username=?";
+		String checkAmount = "SELECT amount from pendingtransactions where username=?";
+		
+		JdbcTemplate getAccountNumberFromDB = new JdbcTemplate(dataSource);
+		JdbcTemplate getAmountFromDB = new JdbcTemplate(dataSource);
+		
+		String accountNumberOfMerchant = getAccountNumberFromDB.queryForObject(checkMerchants, 
+				new Object[] {merchantUsername}, String.class);
+		List<String> amountToBePaid = getAmountFromDB.query(checkAmount,
+				new Object[] {merchantUsername}, new RowMapper<String>() {
+			public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getString(1);
+			}});
+		
+		for (String amount : amountToBePaid) {
+			processtransfer(individualUsername, accountNumberOfMerchant, 
+					amount);
+			
+			Float amountInFloat = Float.parseFloat(amount);
+			if (amountInFloat >= 10000) {
+				updatePending(individualUsername, accountNumberOfMerchant,
+						amount);
+			} else {
+				// Nothing
+			}
+		}
+		return "Processed Bill Pay.";
 	}
 }

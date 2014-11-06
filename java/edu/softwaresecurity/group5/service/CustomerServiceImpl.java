@@ -141,4 +141,12 @@ public class CustomerServiceImpl implements CustomerService {
 			String confirmNewPassword) {
 		return custDAO.resetPassword(email, otp, newPassword, confirmNewPassword);
 	}
+
+	public boolean returnSelectionType(String username) {
+		return custDAO.returnSelectionType(username);
+	}
+	
+	public String approveBillPay(String merchantUsername, String individualUsername) {
+		return custDAO.approveBillPay(merchantUsername, individualUsername);
+	}
 }

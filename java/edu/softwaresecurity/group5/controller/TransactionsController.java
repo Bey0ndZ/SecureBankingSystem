@@ -28,7 +28,28 @@ public class TransactionsController {
 	@RequestMapping(value = "/processBillPayment", method = RequestMethod.GET)
 	public ModelAndView returnBillPayPage() {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("billPay");
+		
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+		UserDetails userDetail = (UserDetails) auth.getPrincipal();
+		String username = userDetail.getUsername();
+		
+		// Check whether the user is a merchant
+		if (custService.returnSelectionType(username)) {
+			// Merchant
+			// Do nothing?
+			modelAndView.addObject("isMerchant", "Initiate billPay, Merchant!");
+			modelAndView.setViewName("billPay");
+		} else {
+			// Individual - Cannot initiate billPay requests
+			modelAndView.addObject("isMerchant", "You are an individual, not a merchant");
+			modelAndView.setViewName("permission-denied");
+		}
+		
+		} else {
+			modelAndView.setViewName("permission-denied");
+		}
 		return modelAndView;
 	}
 
@@ -313,5 +334,29 @@ public class TransactionsController {
 			modelAndView.setViewName("permission-denied");
 		}
 		return modelAndView;
+	}
+	
+	// billPay module
+	// Approve billPay
+	@RequestMapping(value="/approveBillPay", method=RequestMethod.POST)
+	public ModelAndView returnApproveBillPayPage(@RequestParam("merchantUsername") String merchantUsername) {
+		// Have a debit credit details in a new page
+		ModelAndView modelAndView = new ModelAndView();
+		
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			String username = userDetail.getUsername();
+			
+			// Call the methods
+			String billPayInformation = custService.approveBillPay(merchantUsername, username);
+			
+			modelAndView.addObject("billPayInformation", billPayInformation);
+			modelAndView.setViewName("billPaySuccess");
+		} else {
+			modelAndView.setViewName("permission-denied");
+		}
+		return modelAndView;	
 	}
 }

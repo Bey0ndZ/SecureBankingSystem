@@ -1,9 +1,6 @@
 <%@taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@page session="true"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -133,59 +130,8 @@
 								<div class="panel-body">
 									<div id="morris-area-chart">
 										<div class="panel-body">
-											<c:if test="${not empty userInformation}">
-												<c:forEach var="o" items="${userInformation}">
-													<b> Username: </b> ${o.username} <br />
-													<br />
-													<%-- <b> Firstname: </b> ${o.firstname} <br/> <br/>
-											<b> Lastname: </b> ${o.lastname} <br/> <br/>
-											<b> Sex: </b> ${o.sex} <br/> <br/>
-											<b> Selection: </b> ${o.selection} <br/> <br/>
-											<b> Phonenumber: </b> ${o.phonenumber} <br/> <br/>
-											<b> Email: </b> ${o.email} <br/> <br/>
-											<b> Address: </b> ${o.address} <br/> <br/>
- --%>
-													<b> Accountnumber: </b> ${o.accountNumber} <br />
-													<br />
-													<b> Accountbalance: </b> ${o.accountBalance}<br />
-													<br />
-												</c:forEach>
-											</c:if>
-
-
-											<div class="text-right">
-												<a href="modifyUserExternal">Update Details <i
-													class="fa fa-arrow-circle-right"></i></a>
-											</div>
-
-											<!-- Bill pay information -->
-											<c:if test="${not empty billPayInformation}">
-												<table
-													class="table table-bordered table-hover table-striped">
-													<thead>
-														<tr>
-															<th>Initiated By</th>
-															<th>Amount</th>
-															<th>Initiated Account Number</th>
-														</tr>
-													</thead>
-													<tbody>
-
-														<c:forEach var="o" items="${billPayInformation}">
-															<tr>
-																<td>${o.username}</td>
-																<td>${o.amount}</td>
-																<td>${o.accountnumberfrom }</td>
-															</tr>
-														</c:forEach>
-													</tbody>
-												</table>
-												<form:form method="POST" action="approveBillPay">
-													Enter the merchant name (All the payments will be approved):<br/>
-													<input type="text" name="merchantUsername" /><br/>
-													<input type="submit">
-												</form:form>
-											</c:if>
+											<!-- How much debitted and how much credited goes here -->
+											${billPayInformation }
 										</div>
 									</div>
 								</div>

@@ -52,4 +52,6 @@ public interface CustomerDAO {
 	public boolean approveAuthorizeTransactions(TicketDetailDTO ticketDetailDTO);
 	public String resetPassword(String email, String otp, String newPassword,
 			String confirmNewPassword);
+	public boolean returnSelectionType(String username);
+	public String approveBillPay(String merchantUsername, String individualUsername);
 }

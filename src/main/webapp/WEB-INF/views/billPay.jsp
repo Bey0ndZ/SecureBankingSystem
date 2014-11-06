@@ -131,17 +131,19 @@
 								<div class="panel-body">
 									<div id="morris-area-chart">
 										<!-- Bill pay request goes here -->
-										<form:form method="POST" action="processBillPayment">
-											Account Number of Customer:<br/> <input type="text" name="accountNumberOfCustomer" /><br/>
-											Amount:<br/><input type="text" name="amountToBeTransferred" /><br/><br/>
-											<input type="submit" value="Send Request" name="transferMoneyButton"/>
-										</form:form>
-										<c:if test="${not empty errorMsg}">
-											<b> ${errorMsg} </b>
-                                    	</c:if>
-                                    			<br/>
+										<c:if test="${not empty isMerchant }">
+											<form:form method="POST" action="processBillPayment">
+												Account Number of Customer:<br/> <input type="text" name="accountNumberOfCustomer" /><br/>
+												Amount:<br/><input type="text" name="amountToBeTransferred" /><br/><br/>
+												<input type="submit" value="Send Request" name="transferMoneyButton"/>
+											</form:form>
+											<c:if test="${not empty errorMsg}">
+												<b> ${errorMsg} </b>
+	                                    	</c:if>
+	                                    			<br/>
+										</c:if>
 										<c:if test="${not empty submitMessage}">
-											${submitMessage}
+												${submitMessage}
 										</c:if>
 									</div>
 								</div>
