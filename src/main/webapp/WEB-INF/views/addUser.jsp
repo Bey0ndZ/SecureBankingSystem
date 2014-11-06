@@ -125,7 +125,7 @@
                                 <h4> 4. Password must be between 6 to 15 characters. Password and confirm password should be same.</h4>
                                 <h4> 5. First and last name should not exceed 10 characters and they should not be empty.</h4>
                                 <h4> 6. Phone number should not be empty. It should be exactly 10 digits, no characters allowed. Example: 1234567890 </h4>
-                                <h4> 7. Social Security Number should not be empty. It should be exactly 9 digits, no characters allowed. Example: 123456789</h4>
+                                <h4> 7. Social Security Number should not be empty. It should be exactly 10 digits, no characters allowed. Example: 123456789</h4>
                                 <h4> 8. Address should not be empty. It should not exceed 50 characters.</h4>
                                 <h4> 9. No special characters are allowed in: First name, last name, user name, address</h4>
                                 <br/> <br/>
