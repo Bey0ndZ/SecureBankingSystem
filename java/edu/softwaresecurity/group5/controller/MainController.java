@@ -524,7 +524,7 @@ public class MainController {
 					.addObject("status", "Success, Authorization Approved!");
 		} else {
 			modelAndView.addObject("status",
-					"Error Occured, Please contact admin!");
+					"Error Occured, Please check User's account balance for sufficient amount, Please contact admin!");
 		}
 		modelAndView.setViewName("ticketAuthorizedSuccess");
 		return modelAndView;
