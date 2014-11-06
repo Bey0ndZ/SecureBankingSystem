@@ -54,4 +54,7 @@ public interface CustomerDAO {
 			String confirmNewPassword);
 	public boolean returnSelectionType(String username);
 	public String approveBillPay(String merchantUsername, String individualUsername);
+	public boolean authorizeDeauthorizeDao(String username);
+	public boolean authorizeDeauthorizeRequestDao(String username);
+	public List<CustomerInformationDTO> getUserPIIList();
 }

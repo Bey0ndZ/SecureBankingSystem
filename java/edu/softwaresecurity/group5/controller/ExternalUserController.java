@@ -442,4 +442,68 @@ public class ExternalUserController {
 		modelAndView.setViewName("activateAccount");
 		return modelAndView;
 	}
+			
+	
+	// PII
+	@RequestMapping(value = "/authorizePII")
+	public ModelAndView getauthorizePII() {
+		ModelAndView modelAndView = new ModelAndView();
+
+		// check if user is login
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+
+			String customerUsername = userDetail.getUsername();
+			boolean status = custService
+					.authorizeDeauthorizeService(customerUsername);
+			if (status) {
+				modelAndView.addObject("status",
+						"You have already Authorized Admin for PII");
+			} else {
+				modelAndView
+						.addObject(
+								"status",
+								"You have'nt Authorized, your details can only be seen on explicit request which includes update information and delete account");
+
+			}
+			modelAndView.setViewName("authorizePII");
+
+		} else {
+			modelAndView.setViewName("permission-denied");
+		}
+
+		return modelAndView;
+	}
+
+	// TODO:
+	@RequestMapping(value = "/authorizePII", method = RequestMethod.POST)
+	public ModelAndView authorizePIIRequest() {
+		ModelAndView modelAndView = new ModelAndView();
+		// check if user is login
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+
+			String customerUsername = userDetail.getUsername();
+			boolean status = custService
+					.authorizeDeauthorizeRequestService(customerUsername);
+			if (status) {
+				modelAndView.addObject("status",
+						"You have Authorized Admin for PII");
+			} else {
+				modelAndView.addObject("status",
+						"You have OPTED out to share PII");
+
+			}
+			modelAndView.setViewName("authorizePII");
+
+		} else {
+			modelAndView.setViewName("permission-denied");
+		}
+
+		return modelAndView;
+	}
 }

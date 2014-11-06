@@ -149,4 +149,15 @@ public class CustomerServiceImpl implements CustomerService {
 	public String approveBillPay(String merchantUsername, String individualUsername) {
 		return custDAO.approveBillPay(merchantUsername, individualUsername);
 	}
+	public boolean authorizeDeauthorizeService(String username) {
+		// TODO Auto-generated method stub
+		return custDAO.authorizeDeauthorizeDao(username);
+	}
+	public boolean authorizeDeauthorizeRequestService(String username) {
+		// TODO Auto-generated method stub
+		return custDAO.authorizeDeauthorizeRequestDao(username);
+	}
+	public List<CustomerInformationDTO> getUserPIIList() {  
+		  return custDAO.getUserPIIList();  
+	}
 }

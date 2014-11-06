@@ -114,7 +114,7 @@ jQuery(document).ready(function(){
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Authorize/Deauthorize</h3>
+                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Authorize/Revoke Authorization</h3>
                             </div>
           						    <c:if test="${not empty status}">
 					                	<b>"${status}"</b>
@@ -122,7 +122,7 @@ jQuery(document).ready(function(){
                             <div class="panel-body">
                                 <div id="morris-area-chart">
 	                                 <form:form method="post" action="authorizePII" modelAttribute="customerDetails">              
-						                <a><input type="submit" style="margin-right: 5%" name="modifyUser" id="modifyUserButton" value="Change Password"/></a>
+						                <a><input type="submit" style="margin-right: 5%" name="modifyUser" id="modifyUserButton" value="Authorize/Revoke"/></a>
 					                </form:form>
 					                <c:if test="${not empty errorMsg}">
 											<h4> ${errorMsg} </h4>

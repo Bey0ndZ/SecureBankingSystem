@@ -92,6 +92,9 @@ function disableclick(event)
                     <li>
                         <a href="changePassword"><i class="fa fa-fw fa-dashboard"></i>Change Password (SELF)</a>
                     </li>
+                    <li>
+                        <a href="viewPII"><i class="fa fa-fw fa-dashboard"></i>View CUST info who authorized PII</a>
+                    </li>
                  </ul>
             </div>
             <!-- /.navbar-collapse -->

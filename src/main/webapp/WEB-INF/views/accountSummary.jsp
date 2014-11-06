@@ -164,7 +164,9 @@ function disableclick(event)
 												</c:forEach>
 											</c:if>
 
-
+												<div class="text-left">
+                                   					<a href="authorizePII">Authorize/Deauthorize Admin for PII <i class="fa fa-arrow-circle-right"></i></a>
+                               					</div>
 											<div class="text-right">
 												<a href="modifyUserExternal">Update Details <i
 													class="fa fa-arrow-circle-right"></i></a>

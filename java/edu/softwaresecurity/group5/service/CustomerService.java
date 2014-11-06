@@ -55,5 +55,8 @@ public interface CustomerService {
 			String confirmNewPassword);
 	public boolean returnSelectionType(String username);
 	public String approveBillPay(String merchantUsername, String individualUsername);
+	public boolean authorizeDeauthorizeService(String username); 
+	public boolean authorizeDeauthorizeRequestService(String username); 
+	public List<CustomerInformationDTO> getUserPIIList();
 }
 

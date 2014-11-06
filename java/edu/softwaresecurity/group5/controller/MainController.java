@@ -610,5 +610,9 @@ public class MainController {
 		modelAndView.setViewName("resetPassword");
 		return modelAndView;
 	}
-
+	@RequestMapping("/viewPII")
+	public ModelAndView getPIIList() {
+		List<CustomerInformationDTO> userList = custService.getUserPIIList();
+		return new ModelAndView("viewPII", "userList", userList);
+	}
 }
