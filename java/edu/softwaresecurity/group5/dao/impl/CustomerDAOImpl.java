@@ -1128,7 +1128,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		
 		// Query for inserting into the transactions table
 		String insertIntoTxTable = "INSERT INTO transactions(id, usernamefrom,"
-				+ "usernameto, usernamefromaccountnumber, usernametoaccountnumber, transactiontype, userdelete"
+				+ "usernameto, usernamefromaccountnumber, usernametoaccountnumber, transactiontype, userdelete,"
 				+ "transactiondate) VALUES (?,?,?,?,?,?,?,?)";
 
 		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
@@ -1221,7 +1221,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		
 		// Query for inserting into the transactions table
 		String insertIntoTxTable = "INSERT INTO transactions(id, usernamefrom,"
-				+ "usernameto, usernamefromaccountnumber, usernametoaccountnumber, transactiontype, userdelete"
+				+ "usernameto, usernamefromaccountnumber, usernametoaccountnumber, transactiontype, userdelete,"
 				+ "transactiondate) VALUES (?,?,?,?,?,?,?,?)";		
 
 		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);

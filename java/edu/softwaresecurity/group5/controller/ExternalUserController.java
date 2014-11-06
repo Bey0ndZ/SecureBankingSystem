@@ -145,7 +145,20 @@ public class ExternalUserController {
 	@RequestMapping(value = "/creditFunds", method = RequestMethod.GET)
 	public ModelAndView returnCreditFundsPage() {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("creditAmount");
+		List<CustomerInformationDTO> custInfoFromDTO = new ArrayList<CustomerInformationDTO>();
+		Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			String usernameLoggedIn = userDetail.getUsername();
+			custInfoFromDTO = custService.fetchUserDetails(usernameLoggedIn);
+			System.out.println(custInfoFromDTO);
+			modelAndView.addObject("balanceInformation", custInfoFromDTO);
+
+			modelAndView.setViewName("creditAmount");
+		} else {
+			modelAndView.setViewName("permission-denied");
+		}
 		return modelAndView;
 	}
 
