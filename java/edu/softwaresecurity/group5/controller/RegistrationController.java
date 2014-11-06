@@ -59,7 +59,7 @@ public class RegistrationController {
 			        "Please try again.");
 			    result.addError(fieldError);
 		}
-		
+		System.out.println(result);
         if (result.hasErrors()) {
         	modelAndView.setViewName("register"); // This prints errors
                 return modelAndView;

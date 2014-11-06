@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -61,8 +62,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 	private final String Ticket_Type_Modify = "Modify";
 	private final String Ticket_Type_Authorize = "Authorize";
 
-	public String addUser(AddUserInformation addInfo)
-			throws NoSuchAlgorithmException {
+	public String addUser(AddUserInformation addInfo) {
 		addInfo.setEnabled(1);
 		addInfo.setUserLocked(1);
 		addInfo.setUserExpired(1);
@@ -124,8 +124,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		}
 	}
 
-	public String registerCustomer(CustomerInformation custInfo)
-			throws NoSuchAlgorithmException {
+	public String registerCustomer(CustomerInformation custInfo) {
 
 		custInfo.setEnabled(1);
 		custInfo.setEnabled(0);
@@ -731,29 +730,62 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 	public String modifyUserInformationRequest(String username,
 			ModifyUserInformation modInfo) {
+		try {
+			String checkWhetherUserHasSubmittedRequest = "SELECT username from modificationrequests "
+					+ "WHERE username=?";
+			JdbcTemplate checkUsernameTemplate = new JdbcTemplate(dataSource);
 
-		String insertIntoModifyRequestsTable = "INSERT INTO modificationrequests(username,"
-				+ "firstname, lastname, sex, MerchantorIndividual, phonenumber, "
-				+ "email,"
-				+ "address, requestcompleted)	 VALUES (?,?,?,?,?,?,?,?,?)";
-		JdbcTemplate insertIntoModifyRequestsTableTemplate = new JdbcTemplate(
-				dataSource);
-		insertIntoModifyRequestsTableTemplate.update(
-				insertIntoModifyRequestsTable,
-				new Object[] { username, modInfo.getFirstname(),
-						modInfo.getLastname(), modInfo.getSex(),
-						modInfo.getSelection(), modInfo.getPhonenumber(),
-						modInfo.getEmail(), modInfo.getAddress(), false });
-		String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected,requesttype)"
-				+ " VALUES (?,?,?,?,?)";
-		JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
-				dataSource);
+			// This will throw an exception if the rows are NULL
+			String userName = checkUsernameTemplate.queryForObject(
+					checkWhetherUserHasSubmittedRequest,
+					new Object[] { username }, String.class);
 
-		insertIntoTicketsTableTemplate.update(insertIntoTicketsTable,
-				new Object[] { username, false, false, false,
-						Ticket_Type_Modify });
+			if (!userName.isEmpty() && userName != null) {
+				// Update the user
+				String updateModificationRequests = "UPDATE modificationrequests SET "
+						+ "firstname=?, lastname=?, sex=?, MerchantorIndividual=?, phonenumber=?,"
+						+ "email=?, address=?, requestcompleted=? where username=?";
 
-		return "Request submitted. The internal user or admin will approve your request.";
+				JdbcTemplate jdbcTemplateToUpdate = new JdbcTemplate(dataSource);
+				jdbcTemplateToUpdate.update(
+						updateModificationRequests,
+						new Object[] { modInfo.getFirstname(),
+								modInfo.getLastname(), modInfo.getSex(),
+								modInfo.getSelection(),
+								modInfo.getPhonenumber(), modInfo.getEmail(),
+								modInfo.getAddress(), false, username });
+
+				return "Your request has been updated with this new information. It will be approved by the administrator or employee soon.";
+			} else {
+				// If the user isn't present, an exception would be raised anyway
+				// So ignoring this block
+				return "This block will not get called.";
+			}
+		} catch (IncorrectResultSizeDataAccessException dataAccessException) {
+			// Insert the user
+			String insertIntoModifyRequestsTable = "INSERT INTO modificationrequests(username,"
+					+ "firstname, lastname, sex, MerchantorIndividual, phonenumber, "
+					+ "email,"
+					+ "address, requestcompleted)	 VALUES (?,?,?,?,?,?,?,?,?)";
+			JdbcTemplate insertIntoModifyRequestsTableTemplate = new JdbcTemplate(
+					dataSource);
+			insertIntoModifyRequestsTableTemplate.update(
+					insertIntoModifyRequestsTable, new Object[] { username,
+							modInfo.getFirstname(), modInfo.getLastname(),
+							modInfo.getSex(), modInfo.getSelection(),
+							modInfo.getPhonenumber(), modInfo.getEmail(),
+							modInfo.getAddress(), false });
+			String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected,requesttype)"
+					+ " VALUES (?,?,?,?,?)";
+			JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
+					dataSource);
+
+			insertIntoTicketsTableTemplate.update(insertIntoTicketsTable,
+					new Object[] { username, false, false, false,
+							Ticket_Type_Modify });
+
+			return "Request submitted. The internal user or admin will approve your request.";
+		}
 	}
 
 	public String removeAccountRequest(String username,
@@ -814,6 +846,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 
 	public String generateOTP(String emailUserInput) {
+		try {
 		// Check whether the emailUserInput is actually present in our table
 		String checkUserEmail = "SELECT email from users where email=?";
 		JdbcTemplate jdbcTemplateToCheckIfEmailExists = new JdbcTemplate(dataSource);
@@ -859,6 +892,43 @@ public class CustomerDAOImpl implements CustomerDAO {
 		} else {
 			// Email does not exists
 			return "This email account does not exists.";
+		}
+		} catch (IncorrectResultSizeDataAccessException dataAccessException) {
+			// The user is not present in the onetimepasswords table
+			// So, insert the user
+			// generate otp
+			String sample = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,;:[]{}+-";
+			String otp = "";
+			Random rand = new Random();
+			int randomNum = 0;
+			for (int i = 0; i < 8; i++) {
+				randomNum = rand.nextInt((71 - 0) + 1) + 0;
+				otp += sample.substring(randomNum, randomNum + 1);
+			}
+			
+			String insertIntoOTPTable = "INSERT INTO onetimepasswords VALUES (?,?,?)";
+			JdbcTemplate jdbcTemplateForInsertIntoOTPTable = new JdbcTemplate(dataSource);
+			
+			// Creating a timestamp object
+			Calendar calendar = Calendar.getInstance();
+			Timestamp timestampForOTP = new Timestamp(calendar
+					.getTime().getTime());
+			
+			int status = jdbcTemplateForInsertIntoOTPTable.update(insertIntoOTPTable, new Object[]{emailUserInput,
+					otp, timestampForOTP});
+			String passwordResetLink = "localhost:8080/SecureBankingSystem/resetPassword";
+			
+			// Send the email to the user
+			String emailSubject = "Fogot Password Instructions";
+			String emailContent = "Your OTP is: "+otp+". \n\n"
+					+ "Please click this link - "+passwordResetLink+" and enter the details to reset your password.";
+			sendEmail(emailUserInput, emailSubject, emailContent);
+			
+			if(status==1) {
+				return "OTP has been sent to your email!"; 
+			} else {
+				return "An OTP cannot be sent to you at the time. Please try again later.";
+			}
 		}
 	}
 

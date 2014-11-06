@@ -74,12 +74,12 @@ public class RegistrationValidation {
 			  ssnNum++;
 		  }
 	  }
-	  if(ssnNum != 9 || ssn.length() != 9) {
+	  System.out.println(ssnNum);
+	  if(ssnNum < 9 || ssnNum > 9) {
 		  errors.rejectValue("socialSecurityNumber", 
 				  "lengthOfSocialSecurityNumber.CustomerInformation.socialSecurityNumber",
 				  "SSN is invalid");
 	  }
-	  
 	  
 	  String pNumber = cinfo.getPhonenumber();
 	  for (char c: pNumber.toCharArray()) {

@@ -221,13 +221,13 @@ public class ExternalUserController {
 	public ModelAndView processModifyRequest(
 			@ModelAttribute("modifyUserRequestAttributes") ModifyUserInformation modInfo) {
 		ModelAndView modelAndView = new ModelAndView();
-
+	
 		if (!(modInfo.getFirstname().isEmpty()
-				|| modInfo.getLastname().isEmpty()
-				|| modInfo.getPhonenumber().isEmpty()
-				|| modInfo.getAddress().isEmpty()
-				|| modInfo.getSelection().isEmpty()
-				|| modInfo.getSex().isEmpty() || modInfo.getEmail().isEmpty())) {
+				&& modInfo.getLastname().isEmpty()
+				&& modInfo.getPhonenumber().isEmpty()
+				&& modInfo.getAddress().isEmpty()
+				&& modInfo.getSelection().isEmpty()
+				&& modInfo.getSex().isEmpty() && modInfo.getEmail().isEmpty())) {
 			// check if user is login
 			Authentication auth = SecurityContextHolder.getContext()
 					.getAuthentication();
@@ -304,7 +304,7 @@ public class ExternalUserController {
 							"requestSubmitMessage",
 							"Do not leave any of the fields empty. If you do not want to change the value, please input previous value.");
 			modelAndView.setViewName("modifyUserExternal");
-		}
+		} 
 		return modelAndView;
 	}
 
