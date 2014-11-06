@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -64,10 +64,12 @@ public class TransactionsController {
 				modelAndView.setViewName("billPay");
 				return modelAndView;
 			} else {
-
-				Document inputAccountNumber = Jsoup.parse(accountNumber);
-				Document inputAmountToBeTransferred = Jsoup
-						.parse(amountToBeTransferred);
+				
+				
+				
+				
+				String inputAccountNumber = Jsoup.clean(accountNumber, Whitelist.basic());
+				String inputAmountToBeTransferred = Jsoup.clean(amountToBeTransferred, Whitelist.basic());
 
 				Authentication auth = SecurityContextHolder.getContext()
 						.getAuthentication();
@@ -77,8 +79,8 @@ public class TransactionsController {
 					modelAndView.addObject("username", loggedInUser);
 
 					if (custService.processBillPay(loggedInUser,
-							inputAccountNumber.text(),
-							inputAmountToBeTransferred.text())) {
+							inputAccountNumber,
+							inputAmountToBeTransferred)) {
 						modelAndView.addObject("submitMessage",
 								"Request submitted.");
 					} else {
@@ -269,8 +271,8 @@ public class TransactionsController {
 		
 		else if (!deleteTxID.isEmpty()) {
 			// Strip HTML to prevent XSS
-			Document doc = Jsoup.parse(deleteTxID);
-			String txID = doc.text();
+			String txID = Jsoup.clean(deleteTxID, Whitelist.basic());
+			
 
 			Integer txIDInInt = Integer.parseInt(txID);
 
