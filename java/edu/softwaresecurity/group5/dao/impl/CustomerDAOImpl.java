@@ -1,5 +1,9 @@
 package edu.softwaresecurity.group5.dao.impl;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -57,7 +61,7 @@ import edu.softwaresecurity.group5.model.ModifyUserInformation;
 public class CustomerDAOImpl implements CustomerDAO {
 	@Autowired
 	DataSource dataSource;
-	
+
 	private final String Ticket_Type_Delete = "Delete";
 	private final String Ticket_Type_Modify = "Modify";
 	private final String Ticket_Type_Authorize = "Authorize";
@@ -197,6 +201,25 @@ public class CustomerDAOImpl implements CustomerDAO {
 					.getEncoded());
 			String pubKey = DatatypeConverter.printBase64Binary(publicKey
 					.getEncoded());
+
+			// Generating the files
+			File file = new File("publicKey.key");
+			if (!file.exists()) {
+				try {
+					file.createNewFile();
+					FileWriter fw = new FileWriter(file.getAbsoluteFile());
+					BufferedWriter bw = new BufferedWriter(fw);
+					bw.write(pubKey);
+					bw.write(priKey);
+					
+					System.out.println("Done!");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			
 			// Stroring data into KeyTable - author shivam.
 			String insertIntoKeyTable = "INSERT into user_keys (username, userKey) "
 					+ "VALUES (?,?)";
@@ -755,7 +778,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 				return "Your request has been updated with this new information. It will be approved by the administrator or employee soon.";
 			} else {
-				// If the user isn't present, an exception would be raised anyway
+				// If the user isn't present, an exception would be raised
+				// anyway
 				// So ignoring this block
 				return "This block will not get called.";
 			}
@@ -768,11 +792,11 @@ public class CustomerDAOImpl implements CustomerDAO {
 			JdbcTemplate insertIntoModifyRequestsTableTemplate = new JdbcTemplate(
 					dataSource);
 			insertIntoModifyRequestsTableTemplate.update(
-					insertIntoModifyRequestsTable, new Object[] { username,
-							modInfo.getFirstname(), modInfo.getLastname(),
-							modInfo.getSex(), modInfo.getSelection(),
-							modInfo.getPhonenumber(), modInfo.getEmail(),
-							modInfo.getAddress(), false });
+					insertIntoModifyRequestsTable,
+					new Object[] { username, modInfo.getFirstname(),
+							modInfo.getLastname(), modInfo.getSex(),
+							modInfo.getSelection(), modInfo.getPhonenumber(),
+							modInfo.getEmail(), modInfo.getAddress(), false });
 			String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected,requesttype)"
 					+ " VALUES (?,?,?,?,?)";
 			JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
@@ -789,35 +813,35 @@ public class CustomerDAOImpl implements CustomerDAO {
 	public String removeAccountRequest(String username,
 			boolean deleteAccountOrNot) {
 		try {
-		String getDeleteAccountColumnValueQuery = "SELECT deleteaccount FROM deleteaccount WHERE username=?";
-		JdbcTemplate jdbcTemplateForDeleteAccountValue = new JdbcTemplate(
-				dataSource);
-		boolean deleteAccountValueInDB = jdbcTemplateForDeleteAccountValue
-				.queryForObject(getDeleteAccountColumnValueQuery,
-						new Object[] { username }, Boolean.class);
+			String getDeleteAccountColumnValueQuery = "SELECT deleteaccount FROM deleteaccount WHERE username=?";
+			JdbcTemplate jdbcTemplateForDeleteAccountValue = new JdbcTemplate(
+					dataSource);
+			boolean deleteAccountValueInDB = jdbcTemplateForDeleteAccountValue
+					.queryForObject(getDeleteAccountColumnValueQuery,
+							new Object[] { username }, Boolean.class);
 
-		if (!deleteAccountValueInDB) {
-			if (deleteAccountOrNot) {
-				String updateModificationRequests = "INSERT INTO deleteaccount (username, deleteaccount) VALUES (?,?)";
-				JdbcTemplate updateTemplate = new JdbcTemplate(dataSource);
-				updateTemplate.update(updateModificationRequests, new Object[] {
-						username, deleteAccountOrNot });
-				String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype)"
-						+ " VALUES (?,?,?,?,?)";
-				JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
-						dataSource);
+			if (!deleteAccountValueInDB) {
+				if (deleteAccountOrNot) {
+					String updateModificationRequests = "INSERT INTO deleteaccount (username, deleteaccount) VALUES (?,?)";
+					JdbcTemplate updateTemplate = new JdbcTemplate(dataSource);
+					updateTemplate.update(updateModificationRequests,
+							new Object[] { username, deleteAccountOrNot });
+					String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype)"
+							+ " VALUES (?,?,?,?,?)";
+					JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
+							dataSource);
 
-				insertIntoTicketsTableTemplate.update(insertIntoTicketsTable,
-						new Object[] { username, false, false, false,
-								Ticket_Type_Delete });
+					insertIntoTicketsTableTemplate.update(
+							insertIntoTicketsTable, new Object[] { username,
+									false, false, false, Ticket_Type_Delete });
 
-				return "Request submitted. The internal user of admin will approve your request.";
+					return "Request submitted. The internal user of admin will approve your request.";
+				} else {
+					return "You have selected No. Your account request has not been submitted for internal review.";
+				}
 			} else {
-				return "You have selected No. Your account request has not been submitted for internal review.";
+				return "You have already submitted a request for account deletion.";
 			}
-		} else {
-			return "You have already submitted a request for account deletion.";
-		}
 		} catch (EmptyResultDataAccessException dataAccessException) {
 			// Meaning, the user has not asked for a deleteAccount request
 			// Hence, they are not present in the deleteaccount table
@@ -845,52 +869,57 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 	public String generateOTP(String emailUserInput) {
 		try {
-		// Check whether the emailUserInput is actually present in our table
-		String checkUserEmail = "SELECT email from users where email=?";
-		JdbcTemplate jdbcTemplateToCheckIfEmailExists = new JdbcTemplate(dataSource);
-		
-		String emailExistsOrNot = jdbcTemplateToCheckIfEmailExists.queryForObject(checkUserEmail,
-				new Object[]{emailUserInput}, String.class);
-		
-		if (!emailExistsOrNot.isEmpty()) {
-			// generate otp
-			String sample = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,;:[]{}+-";
-			String otp = "";
-			Random rand = new Random();
-			int randomNum = 0;
-			for (int i = 0; i < 8; i++) {
-				randomNum = rand.nextInt((71 - 0) + 1) + 0;
-				otp += sample.substring(randomNum, randomNum + 1);
-			}
+			// Check whether the emailUserInput is actually present in our table
+			String checkUserEmail = "SELECT email from users where email=?";
+			JdbcTemplate jdbcTemplateToCheckIfEmailExists = new JdbcTemplate(
+					dataSource);
 
-			// Creating a timestamp object
-			Calendar calendar = Calendar.getInstance();
-			Timestamp timestampForOTP = new Timestamp(calendar
-					.getTime().getTime());
-			
-			String insertIntoOTPTable = "INSERT INTO onetimepasswords VALUES (?,?,?)";
-			
-			JdbcTemplate jdbcTemplateForInsertIntoOTPTable = new JdbcTemplate(dataSource);
-			
-			int status = jdbcTemplateForInsertIntoOTPTable.update(insertIntoOTPTable, new Object[]{emailUserInput,
-					otp, timestampForOTP});
-			String passwordResetLink = "localhost:8080/SecureBankingSystem/resetPassword";
-			
-			// Send the email to the user
-			String emailSubject = "Fogot Password Instructions";
-			String emailContent = "Your OTP is: "+otp+". \n\n"
-					+ "Please click this link - "+passwordResetLink+" and enter the details to reset your password.";
-			sendEmail(emailUserInput, emailSubject, emailContent);
-			
-			if(status==1) {
-				return "OTP has been sent to your email!"; 
+			String emailExistsOrNot = jdbcTemplateToCheckIfEmailExists
+					.queryForObject(checkUserEmail,
+							new Object[] { emailUserInput }, String.class);
+
+			if (!emailExistsOrNot.isEmpty()) {
+				// generate otp
+				String sample = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,;:[]{}+-";
+				String otp = "";
+				Random rand = new Random();
+				int randomNum = 0;
+				for (int i = 0; i < 8; i++) {
+					randomNum = rand.nextInt((71 - 0) + 1) + 0;
+					otp += sample.substring(randomNum, randomNum + 1);
+				}
+
+				// Creating a timestamp object
+				Calendar calendar = Calendar.getInstance();
+				Timestamp timestampForOTP = new Timestamp(calendar.getTime()
+						.getTime());
+
+				String insertIntoOTPTable = "INSERT INTO onetimepasswords VALUES (?,?,?)";
+
+				JdbcTemplate jdbcTemplateForInsertIntoOTPTable = new JdbcTemplate(
+						dataSource);
+
+				int status = jdbcTemplateForInsertIntoOTPTable.update(
+						insertIntoOTPTable, new Object[] { emailUserInput, otp,
+								timestampForOTP });
+				String passwordResetLink = "localhost:8080/SecureBankingSystem/resetPassword";
+
+				// Send the email to the user
+				String emailSubject = "Fogot Password Instructions";
+				String emailContent = "Your OTP is: " + otp + ". \n\n"
+						+ "Please click this link - " + passwordResetLink
+						+ " and enter the details to reset your password.";
+				sendEmail(emailUserInput, emailSubject, emailContent);
+
+				if (status == 1) {
+					return "OTP has been sent to your email!";
+				} else {
+					return "An OTP cannot be sent to you at the time. Please try again later.";
+				}
 			} else {
-				return "An OTP cannot be sent to you at the time. Please try again later.";
+				// Email does not exists
+				return "This email account does not exists.";
 			}
-		} else {
-			// Email does not exists
-			return "This email account does not exists.";
-		}
 		} catch (IncorrectResultSizeDataAccessException dataAccessException) {
 			// The user is not present in the onetimepasswords table
 			// So, insert the user
@@ -903,27 +932,30 @@ public class CustomerDAOImpl implements CustomerDAO {
 				randomNum = rand.nextInt((71 - 0) + 1) + 0;
 				otp += sample.substring(randomNum, randomNum + 1);
 			}
-			
+
 			String insertIntoOTPTable = "INSERT INTO onetimepasswords VALUES (?,?,?)";
-			JdbcTemplate jdbcTemplateForInsertIntoOTPTable = new JdbcTemplate(dataSource);
-			
+			JdbcTemplate jdbcTemplateForInsertIntoOTPTable = new JdbcTemplate(
+					dataSource);
+
 			// Creating a timestamp object
 			Calendar calendar = Calendar.getInstance();
-			Timestamp timestampForOTP = new Timestamp(calendar
-					.getTime().getTime());
-			
-			int status = jdbcTemplateForInsertIntoOTPTable.update(insertIntoOTPTable, new Object[]{emailUserInput,
-					otp, timestampForOTP});
+			Timestamp timestampForOTP = new Timestamp(calendar.getTime()
+					.getTime());
+
+			int status = jdbcTemplateForInsertIntoOTPTable.update(
+					insertIntoOTPTable, new Object[] { emailUserInput, otp,
+							timestampForOTP });
 			String passwordResetLink = "localhost:8080/SecureBankingSystem/resetPassword";
-			
+
 			// Send the email to the user
 			String emailSubject = "Fogot Password Instructions";
-			String emailContent = "Your OTP is: "+otp+". \n\n"
-					+ "Please click this link - "+passwordResetLink+" and enter the details to reset your password.";
+			String emailContent = "Your OTP is: " + otp + ". \n\n"
+					+ "Please click this link - " + passwordResetLink
+					+ " and enter the details to reset your password.";
 			sendEmail(emailUserInput, emailSubject, emailContent);
-			
-			if(status==1) {
-				return "OTP has been sent to your email!"; 
+
+			if (status == 1) {
+				return "OTP has been sent to your email!";
 			} else {
 				return "An OTP cannot be sent to you at the time. Please try again later.";
 			}
@@ -1017,145 +1049,188 @@ public class CustomerDAOImpl implements CustomerDAO {
 	}
 
 	// Transfer money module
-		public boolean processtransfer(String generatedFromUsernameFrom,
-				String account, String amount) {
-			float amountToTransfer = Float.parseFloat(amount);
-			CustomerInformationDTO custinfo = getUserFromAccount(account);
-			String generatedFromUsernameTo = custinfo.getUsername();
-			String balanceFromS = "SELECT account.accountbalance from account "
-					+ " inner join users on " + "account.username=users.username "
-					+ "WHERE account.username=?";
-			String balanceToS = "SELECT account.accountbalance from account "
-					+ " inner join users on " + "account.username=users.username "
-					+ "WHERE account.username=?";
-			String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
-					+ " inner join users on "
-					+ "account.username=users.username "
-					+ "where account.username=?";
-			String debitS = "SELECT account.debit from account "
-					+ " inner join users on " + "account.username=users.username "
-					+ "WHERE account.username=?";
-			String creditS = "SELECT account.credit from account "
-					+ " inner join users on " + "account.username=users.username "
-					+ "WHERE account.username=?";
-			String insertIntoAccountFrom = "UPDATE "
-					+ "account SET account.accountbalance=?, account.debit=?"
-					+ "WHERE account.username= ? ";
-			String insertIntoAccountTo = "UPDATE "
-					+ "account SET account.accountbalance=?, account.credit=?"
-					+ "WHERE account.username= ? ";
+	public boolean processtransfer(String generatedFromUsernameFrom,
+			String account, String amount) {
+		float amountToTransfer = Float.parseFloat(amount);
+		CustomerInformationDTO custinfo = getUserFromAccount(account);
+		String generatedFromUsernameTo = custinfo.getUsername();
+		String balanceFromS = "SELECT account.accountbalance from account "
+				+ " inner join users on " + "account.username=users.username "
+				+ "WHERE account.username=?";
+		String balanceToS = "SELECT account.accountbalance from account "
+				+ " inner join users on " + "account.username=users.username "
+				+ "WHERE account.username=?";
+		String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
+				+ " inner join users on "
+				+ "account.username=users.username "
+				+ "where account.username=?";
+		String debitS = "SELECT account.debit from account "
+				+ " inner join users on " + "account.username=users.username "
+				+ "WHERE account.username=?";
+		String creditS = "SELECT account.credit from account "
+				+ " inner join users on " + "account.username=users.username "
+				+ "WHERE account.username=?";
+		String insertIntoAccountFrom = "UPDATE "
+				+ "account SET account.accountbalance=?, account.debit=?"
+				+ "WHERE account.username= ? ";
+		String insertIntoAccountTo = "UPDATE "
+				+ "account SET account.accountbalance=?, account.credit=?"
+				+ "WHERE account.username= ? ";
+		
+		// Query for inserting into the transactions table
+		String insertIntoTxTable = "INSERT INTO transactions(id, usernamefrom,"
+				+ "usernameto, usernamefromaccountnumber, usernametoaccountnumber, transactiontype, userdelete"
+				+ "transactiondate) VALUES (?,?,?,?,?,?,?,?)";
 
-			JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
-			JdbcTemplate jdbcTemplateForAccount = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForAccount = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateToInsertIntoTxTable = new JdbcTemplate(dataSource);
 
-			String getUsernameAccount = jdbcTemplateForAccountNumber
-					.queryForObject(getAccountDetailsFromUsernameFrom,
-							new Object[] { generatedFromUsernameFrom },
-							String.class);
+		String getUsernameAccount = jdbcTemplateForAccountNumber
+				.queryForObject(getAccountDetailsFromUsernameFrom,
+						new Object[] { generatedFromUsernameFrom },
+						String.class);
 
-			String balanceFromString = jdbcTemplateForAccountNumber.queryForObject(
-					balanceFromS, new Object[] { generatedFromUsernameFrom },
-					String.class);
+		String balanceFromString = jdbcTemplateForAccountNumber.queryForObject(
+				balanceFromS, new Object[] { generatedFromUsernameFrom },
+				String.class);
 
-			String balanceToString = jdbcTemplateForAccountNumber.queryForObject(
-					balanceToS, new Object[] { generatedFromUsernameTo },
-					String.class);
+		String balanceToString = jdbcTemplateForAccountNumber.queryForObject(
+				balanceToS, new Object[] { generatedFromUsernameTo },
+				String.class);
 
-			String debitString = jdbcTemplateForAccountNumber.queryForObject(
-					debitS, new Object[] { generatedFromUsernameFrom },
-					String.class);
+		String debitString = jdbcTemplateForAccountNumber.queryForObject(
+				debitS, new Object[] { generatedFromUsernameFrom },
+				String.class);
 
-			String creditString = jdbcTemplateForAccountNumber
-					.queryForObject(creditS,
-							new Object[] { generatedFromUsernameTo }, String.class);
+		String creditString = jdbcTemplateForAccountNumber
+				.queryForObject(creditS,
+						new Object[] { generatedFromUsernameTo }, String.class);
+		
+		// Generating random tx IDs
+		Random randGenerator = new Random();
+		int txID = 100000 + randGenerator.nextInt(999999);
+		
+		// Get the current timestamp
+		Calendar calendar = Calendar.getInstance();
+		Timestamp currentTimestamp = new Timestamp(calendar.getTime()
+				.getTime());
+		
+		// Inserting into tx table
+		jdbcTemplateToInsertIntoTxTable.update(insertIntoTxTable, new Object[] {
+		txID, generatedFromUsernameFrom, generatedFromUsernameTo,
+		getUsernameAccount, account, "TX_DEBIT_CREDIT", false,
+		currentTimestamp });
 
-			float balanceFrom = Float.parseFloat(balanceFromString);
-			float balanceTo = Float.parseFloat(balanceToString);
-			float credit = Float.parseFloat(creditString);
-			float debit = Float.parseFloat(debitString);
-			balanceFrom = balanceFrom - amountToTransfer;
-			balanceTo = balanceTo + amountToTransfer;
-			if(balanceFrom<0){
-				return false;
-			}
-			credit = credit + amountToTransfer;
-			debit = debit + amountToTransfer;
-			int accountNumber = Integer.parseInt(getUsernameAccount);
-			int accountNumberFrom = Integer.parseInt(account);
-			if (accountNumber == accountNumberFrom) {
-				return false;
-			}
-			jdbcTemplateForAccount.update(insertIntoAccountFrom, new Object[] {
-					balanceFrom, debit, generatedFromUsernameFrom });
-			jdbcTemplateForAccount.update(insertIntoAccountTo, new Object[] {
-					balanceTo, credit, generatedFromUsernameTo });
-			return true;
+		float balanceFrom = Float.parseFloat(balanceFromString);
+		float balanceTo = Float.parseFloat(balanceToString);
+		float credit = Float.parseFloat(creditString);
+		float debit = Float.parseFloat(debitString);
+		balanceFrom = balanceFrom - amountToTransfer;
+		balanceTo = balanceTo + amountToTransfer;
+		if (balanceFrom < 0) {
+			return false;
 		}
-
-		public boolean updatePending(String generatedFromUsernameFrom,
-				String account, String amount) {
-			float amountToTransfer = Float.parseFloat(amount);
-			String balanceFromS = "SELECT account.accountbalance from account "
-					+ " inner join users on " + "account.username=users.username "
-					+ "WHERE account.username=?";
-			String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
-					+ " inner join users on "
-					+ "account.username=users.username "
-					+ "where account.username=?";
-			String debitS = "SELECT account.debit from account "
-					+ " inner join users on " + "account.username=users.username "
-					+ "WHERE account.username=?";
-			String insertIntoPendingFrom = "INSERT INTO pendingtransactions (username,amount,pending,accountnumberfrom,accountnumberto)"
-					+ "VALUES((SELECT username from account where accountnumber=?),?,?,?,?)";
-			String insertIntoAccountFrom = "UPDATE "
-					+ "account SET account.accountbalance=?, account.debit=?"
-					+ "WHERE account.username= ? ";
-			// Query to insert into user_tickets table
-			String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected,requesttype)"
-					+ " VALUES (?,?,?,?,?)";
-
-			JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
-			JdbcTemplate jdbcTemplateForAccount = new JdbcTemplate(dataSource);
-			JdbcTemplate jdbcTemplateForPending = new JdbcTemplate(dataSource);
-			JdbcTemplate jdbcTemplateForUserTickets = new JdbcTemplate(dataSource);
-
-			String getUsernameAccount = jdbcTemplateForAccountNumber
-					.queryForObject(getAccountDetailsFromUsernameFrom,
-							new Object[] { generatedFromUsernameFrom },
-							String.class);
-			String balanceFromString = jdbcTemplateForAccountNumber.queryForObject(
-					balanceFromS, new Object[] { generatedFromUsernameFrom },
-					String.class);
-			String debitString = jdbcTemplateForAccountNumber.queryForObject(
-					debitS, new Object[] { generatedFromUsernameFrom },
-					String.class);
-
-			float balanceFrom = Float.parseFloat(balanceFromString);
-			float debit = Float.parseFloat(debitString);
-			balanceFrom = balanceFrom - amountToTransfer;
-			debit=debit+amountToTransfer;
-			if(balanceFrom<0){
-				return false;
-			}
-			int accountNumber = Integer.parseInt(getUsernameAccount);
-			int accountNumberTo = Integer.parseInt(account);
-			if (accountNumber == accountNumberTo) {
-				return false;
-			}
-			jdbcTemplateForPending.update(insertIntoPendingFrom, new Object[] {
-					accountNumber, amountToTransfer, " 1", accountNumber,
-					accountNumberTo });
-			jdbcTemplateForAccount.update(insertIntoAccountFrom, new Object[] {
-					balanceFrom, debit, generatedFromUsernameFrom });
-			
-			// Inserting into user_tickets
-			jdbcTemplateForUserTickets.update(insertIntoTicketsTable, new Object[] {
-					generatedFromUsernameFrom, false, false, false,
-					Ticket_Type_Authorize });
-
-			return true;
+		credit = credit + amountToTransfer;
+		debit = debit + amountToTransfer;
+		int accountNumber = Integer.parseInt(getUsernameAccount);
+		int accountNumberFrom = Integer.parseInt(account);
+		if (accountNumber == accountNumberFrom) {
+			return false;
 		}
+		jdbcTemplateForAccount.update(insertIntoAccountFrom, new Object[] {
+				balanceFrom, debit, generatedFromUsernameFrom });
+		jdbcTemplateForAccount.update(insertIntoAccountTo, new Object[] {
+				balanceTo, credit, generatedFromUsernameTo });
+		return true;
+	}
 
+	public boolean updatePending(String generatedFromUsernameFrom,
+			String account, String amount) {
+		float amountToTransfer = Float.parseFloat(amount);
+		CustomerInformationDTO custinfo = getUserFromAccount(account);
+		String generatedFromUsernameTo = custinfo.getUsername();
+		
+		String balanceFromS = "SELECT account.accountbalance from account "
+				+ " inner join users on " + "account.username=users.username "
+				+ "WHERE account.username=?";
+		String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
+				+ " inner join users on "
+				+ "account.username=users.username "
+				+ "where account.username=?";
+		String debitS = "SELECT account.debit from account "
+				+ " inner join users on " + "account.username=users.username "
+				+ "WHERE account.username=?";
+		String insertIntoPendingFrom = "INSERT INTO pendingtransactions (username,amount,pending,accountnumberfrom,accountnumberto)"
+				+ "VALUES((SELECT username from account where accountnumber=?),?,?,?,?)";
+		String insertIntoAccountFrom = "UPDATE "
+				+ "account SET account.accountbalance=?, account.debit=?"
+				+ "WHERE account.username= ? ";
+		// Query to insert into user_tickets table
+		String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected,requesttype)"
+				+ " VALUES (?,?,?,?,?)";
+		
+		// Query for inserting into the transactions table
+		String insertIntoTxTable = "INSERT INTO transactions(id, usernamefrom,"
+				+ "usernameto, usernamefromaccountnumber, usernametoaccountnumber, transactiontype, userdelete"
+				+ "transactiondate) VALUES (?,?,?,?,?,?,?,?)";		
+
+		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForAccount = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForPending = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForUserTickets = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForTransactionsTable = new JdbcTemplate(dataSource);
+
+		String getUsernameAccount = jdbcTemplateForAccountNumber
+				.queryForObject(getAccountDetailsFromUsernameFrom,
+						new Object[] { generatedFromUsernameFrom },
+						String.class);
+		String balanceFromString = jdbcTemplateForAccountNumber.queryForObject(
+				balanceFromS, new Object[] { generatedFromUsernameFrom },
+				String.class);
+		String debitString = jdbcTemplateForAccountNumber.queryForObject(
+				debitS, new Object[] { generatedFromUsernameFrom },
+				String.class);
+		
+		// Generating random tx IDs
+		Random randGenerator = new Random();
+		int txID = 100000 + randGenerator.nextInt(999999);
+		
+		// Get the current timestamp
+		Calendar calendar = Calendar.getInstance();
+		Timestamp currentTimestamp = new Timestamp(calendar.getTime()
+				.getTime());
+		
+		jdbcTemplateForTransactionsTable.update(insertIntoTxTable, new Object[] {
+				txID, generatedFromUsernameFrom, generatedFromUsernameTo,
+				getUsernameAccount, account, "TX_DEBIT_CREDIT", false,
+				currentTimestamp });
+				
+		float balanceFrom = Float.parseFloat(balanceFromString);
+		float debit = Float.parseFloat(debitString);
+		balanceFrom = balanceFrom - amountToTransfer;
+		debit = debit + amountToTransfer;
+		if (balanceFrom < 0) {
+			return false;
+		}
+		int accountNumber = Integer.parseInt(getUsernameAccount);
+		int accountNumberTo = Integer.parseInt(account);
+		if (accountNumber == accountNumberTo) {
+			return false;
+		}
+		jdbcTemplateForPending.update(insertIntoPendingFrom, new Object[] {
+				accountNumber, amountToTransfer, " 1", accountNumber,
+				accountNumberTo });
+		jdbcTemplateForAccount.update(insertIntoAccountFrom, new Object[] {
+				balanceFrom, debit, generatedFromUsernameFrom });
+
+		// Inserting into user_tickets
+		jdbcTemplateForUserTickets.update(insertIntoTicketsTable, new Object[] {
+				generatedFromUsernameFrom, false, false, false,
+				Ticket_Type_Authorize });
+
+		return true;
+	}
 
 	public List<UserTransactionsDTO> getUserTransactionList(String username) {
 		String getTransactionsQuery = "SELECT * from transactions where usernamefrom=? AND userdelete=?";
@@ -1276,73 +1351,86 @@ public class CustomerDAOImpl implements CustomerDAO {
 			return false;
 		}
 	}
-	
+
 	// Reset Passwords using OTP
 	public String resetPassword(String email, String otp, String newPassword,
 			String confirmNewPassword) {
-		
+
 		// To hash passwords
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		
+
 		String checkForEmail = "SELECT email FROM users WHERE email=?";
 		JdbcTemplate jdbcTemplateForCheckingEmail = new JdbcTemplate(dataSource);
-		
-		String checkEmail = jdbcTemplateForCheckingEmail.queryForObject(checkForEmail,
-				new Object[] {email}, String.class);
-		
+
+		String checkEmail = jdbcTemplateForCheckingEmail.queryForObject(
+				checkForEmail, new Object[] { email }, String.class);
+
 		if (!checkEmail.isEmpty()) {
 			// User exists
 			String checkOTPAssociatedWithEmail = "SELECT otp from onetimepasswords where email=?";
 			JdbcTemplate checkOTP = new JdbcTemplate(dataSource);
-			
+
 			// Execute query
-			String OTP = checkOTP.queryForObject(checkOTPAssociatedWithEmail, new Object[] {email}, String.class);
-			
+			String OTP = checkOTP.queryForObject(checkOTPAssociatedWithEmail,
+					new Object[] { email }, String.class);
+
 			// Get the current timestamp
 			Calendar calendar = Calendar.getInstance();
-			Timestamp currentTimestamp = new Timestamp(calendar.getTime().getTime());		
-			
+			Timestamp currentTimestamp = new Timestamp(calendar.getTime()
+					.getTime());
+
 			// Get the timestamp stored in the table
 			String getTimeStampFromDB = "SELECT dateandtime from onetimepasswords WHERE email=?";
 			JdbcTemplate templateToGetTimeStamp = new JdbcTemplate(dataSource);
-			
-			Timestamp storedTimestamp = templateToGetTimeStamp.queryForObject(getTimeStampFromDB, new Object[]{email}, Timestamp.class);
-			
+
+			Timestamp storedTimestamp = templateToGetTimeStamp
+					.queryForObject(getTimeStampFromDB, new Object[] { email },
+							Timestamp.class);
+
 			// Get the times
 			Long currentTimeStampInMilliSeconds = currentTimestamp.getTime();
 			Long storedTimeStampInMillSeconds = storedTimestamp.getTime();
-			
-			Long differenceBetweenTimeStamps = currentTimeStampInMilliSeconds - storedTimeStampInMillSeconds;
-			
-			// Difference 
-			Long differenceInHours = differenceBetweenTimeStamps / (60*60*1000);
+
+			Long differenceBetweenTimeStamps = currentTimeStampInMilliSeconds
+					- storedTimeStampInMillSeconds;
+
+			// Difference
+			Long differenceInHours = differenceBetweenTimeStamps
+					/ (60 * 60 * 1000);
 			System.out.println(differenceInHours);
-			
+
 			// Check OTP
 			if ((differenceInHours > 1)) {
 				String removeFromOTPTable = "DELETE FROM onetimepasswords where email=?";
-				
+
 				JdbcTemplate jdbcTemplateToRemove = new JdbcTemplate(dataSource);
-				
-				jdbcTemplateToRemove.update(removeFromOTPTable, new Object[] {email});
-				return "The OTP has expired. Please request another OTP.";	
+
+				jdbcTemplateToRemove.update(removeFromOTPTable,
+						new Object[] { email });
+				return "The OTP has expired. Please request another OTP.";
 			} else {
-				if (otp.equals(OTP)) {
+				if (otp.equals(OTP) && newPassword.equals(confirmNewPassword)) {
 					// Update the password in users table
-					String updatePasswordsQuery = "UPDATE users SET password=? AND confirmpassword=? WHERE email=?";
+					String updatePasswordsQuery = "UPDATE users SET password=?,confirmpassword=? WHERE email=?";
 					String deleteFromOTPTable = "DELETE FROM onetimepasswords where email=?";
-					
-					JdbcTemplate updatePasswordTemplate = new JdbcTemplate(dataSource);
-					JdbcTemplate deleteOTPTemplate = new JdbcTemplate(dataSource);
-					
+
+					JdbcTemplate updatePasswordTemplate = new JdbcTemplate(
+							dataSource);
+					JdbcTemplate deleteOTPTemplate = new JdbcTemplate(
+							dataSource);
+
 					// Call the hash function
-					String newPasswordHash = passwordEncoder.encode(newPassword);
-					String confirmNewPasswordHash = passwordEncoder.encode(confirmNewPassword);
-					
-					updatePasswordTemplate.update(updatePasswordsQuery, new Object[]{newPasswordHash,
-							confirmNewPasswordHash, email});
-					deleteOTPTemplate.update(deleteFromOTPTable, new Object[] {email});
-					
+					String newPasswordHash = passwordEncoder
+							.encode(newPassword);
+					String confirmNewPasswordHash = passwordEncoder
+							.encode(confirmNewPassword);
+
+					updatePasswordTemplate.update(updatePasswordsQuery,
+							new Object[] { newPasswordHash,
+									confirmNewPasswordHash, email });
+					deleteOTPTemplate.update(deleteFromOTPTable,
+							new Object[] { email });
+
 					return "Your password has been updated.";
 				} else {
 					return "Please enter the correct OTP.";
