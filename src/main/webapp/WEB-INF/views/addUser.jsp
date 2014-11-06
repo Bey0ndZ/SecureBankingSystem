@@ -6,6 +6,8 @@
     prefix="c"
     uri="http://java.sun.com/jsp/jstl/core" 
 %>
+<%@taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,9 +82,11 @@
                     <li>
                         <a href="viewQueue"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
                     </li>
+                    <sec:authorize access="hasRole('ROLE_ADMIN')">
                     <li>
                         <a href="getList"><i class="fa fa-fw fa-dashboard"></i>View All</a>
                     </li>
+                    </sec:authorize>
                     <li>
                         <a href="changePassword"><i class="fa fa-fw fa-dashboard"></i>Change Password (SELF)</a>
                     </li>
@@ -131,7 +135,7 @@
                                     </c:if>
 									<b>First Name:</b> <FONT color="red"> <form:errors path="firstName" /> </FONT> <br/> <input type="text" name="firstName" id="f_name_addUser" style="color:#999;" /><br/> <br/>
 									<b>Last Name:</b> <FONT color="red"> <form:errors path="lastName" /> </FONT> <br/> <input type="text" name="lastName" id="l_name_addUser" style="color:#999;" /><br/> <br/>
-									<b>Sex: </b><br/> <input type="radio" name="sex" value="Male" id="male"/> Male <br/>
+									<b>Sex: </b><br/> <input type="radio" name="sex" value="Male" id="male" checked/> Male <br/>
 									<input type="radio" name="sex" value="Female" id="male"/> Female <br/> <br/>
 									<b>Contact:</b> <FONT color="red"> <form:errors path="contactNumber" /> </FONT> <br/> <input type="text" name="contactNumber" id="contact_addUser" style="color:#999;" /><br/> <br/>
 									<b>Address:</b> <FONT color="red"> <form:errors path="address" /> </FONT> <br/> <input type="text" name="address" id="add_addUser" style="color:#999;" /><br/> <br/>

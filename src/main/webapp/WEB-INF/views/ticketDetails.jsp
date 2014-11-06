@@ -6,6 +6,9 @@
     prefix="c"
     uri="http://java.sun.com/jsp/jstl/core" 
 %>
+
+<%@taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,9 +83,11 @@
                     <li>
                         <a href="viewQueue"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
                     </li>
+                    <sec:authorize access="hasRole('ROLE_ADMIN')">
                     <li>
                         <a href="getList"><i class="fa fa-fw fa-dashboard"></i>View All</a>
                     </li>
+                    </sec:authorize>
                     <li>
                         <a href="changePassword"><i class="fa fa-fw fa-dashboard"></i>Change Password (SELF)</a>
                     </li>
@@ -225,6 +230,7 @@
 					                     <input type="hidden" name="billpay" id="accountNumber_RemoveUser" value="${ticketDetailDTO.billpay}" style="color:#999;" />
 					                     <input type="hidden" name="requesttype" id="accountNumber_RemoveUser" value="${ticketDetailDTO.requesttype}" style="color:#999;" />
 					                     <input type="hidden" name="pendingid" id="accountNumber_RemoveUser" value="${ticketDetailDTO.pendingid}" style="color:#999;" />
+					                     <input type="hidden" name="transactionamountInfloat" id="accountNumber_RemoveUser" value="${ticketDetailDTO.transactionamountInfloat}" style="color:#999;" />
 					                    
 					                    
 					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="modifyUserButton" value="Approve" /></a>
@@ -240,7 +246,7 @@
 					                     <input type="hidden" name="billpay" id="accountNumber_RemoveUser" value="${ticketDetailDTO.billpay}" style="color:#999;" />
 					                     <input type="hidden" name="requesttype" id="accountNumber_RemoveUser" value="${ticketDetailDTO.requesttype}" style="color:#999;" />
 					                     <input type="hidden" name="pendingid" id="accountNumber_RemoveUser" value="${ticketDetailDTO.pendingid}" style="color:#999;" />
-					                    
+					                     <input type="hidden" name="transactionamountInfloat" id="accountNumber_RemoveUser" value="${ticketDetailDTO.transactionamountInfloat}" style="color:#999;" />
 					                     <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="removeUserButton" value="Reject" /></a>
 										 </form:form></td> 
 									    </tr>

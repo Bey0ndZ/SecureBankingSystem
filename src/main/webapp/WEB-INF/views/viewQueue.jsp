@@ -6,6 +6,9 @@
     prefix="c"
     uri="http://java.sun.com/jsp/jstl/core" 
 %>
+
+<%@taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,9 +83,11 @@
                     <li class="active">
                         <a href="viewQueue"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
                     </li>
+                    <sec:authorize access="hasRole('ROLE_ADMIN')">
                     <li>
                         <a href="getList"><i class="fa fa-fw fa-dashboard"></i>View All</a>
                     </li>
+                    </sec:authorize>
                     <li>
                         <a href="changePassword"><i class="fa fa-fw fa-dashboard"></i>Change Password (SELF)</a>
                     </li>

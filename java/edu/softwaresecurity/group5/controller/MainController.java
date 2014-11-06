@@ -536,9 +536,14 @@ public class MainController {
 			@ModelAttribute("authorizeTransactions") TicketDetailDTO ticketDetailDTO) {
 		ModelAndView modelAndView = new ModelAndView();
 		TicketDetailDTO detailDTO = ticketDetailDTO;
-		// String status = custService.updateExternalAccount(detailDTO);
-		// modelAndView.addObject("customerDetails", detailDTO);
-		// modelAndView.addObject("status", status);
+		boolean result = custService.rejectAuthorizeTransactions(detailDTO);
+		if (result) {
+			modelAndView
+					.addObject("status", "Authorization Rejected!");
+		} else {
+			modelAndView.addObject("status",
+					"Error Occured, Please contact admin!");
+		}
 		modelAndView.setViewName("ticketAuthorizedSuccess");
 		return modelAndView;
 	}

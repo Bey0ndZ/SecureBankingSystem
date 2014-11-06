@@ -149,53 +149,60 @@ public class TransactionsController {
 			}
 			return modelAndView;
 		}
-	// Getting the transfer/pending
-		@RequestMapping(value = "/transferMoneyConfirmation", method = RequestMethod.POST)
-		public ModelAndView updateAccount(
-				@RequestParam("accountNo") String accountnumber,
-				@RequestParam("amount") String transfer, @RequestParam String action) {
-			ModelAndView modelAndView = new ModelAndView();
-			if (action.equals("Transfer")) {
-				Authentication auth = SecurityContextHolder.getContext()
-						.getAuthentication();
-				if (!(auth instanceof AnonymousAuthenticationToken)) {
-					UserDetails userDetail = (UserDetails) auth.getPrincipal();
-					String loggedInUser = userDetail.getUsername();
-					modelAndView.addObject("username", loggedInUser);
+		// Getting the transfer/pending
+				@RequestMapping(value = "/transferMoneyConfirmation", method = RequestMethod.POST)
+				public ModelAndView updateAccount(
+						@RequestParam("accountNo") String accountnumber,
+						@RequestParam("amount") String transfer, @RequestParam String action) {
+					ModelAndView modelAndView = new ModelAndView();
+					try{
+					if (action.equals("Transfer")) {
+						Authentication auth = SecurityContextHolder.getContext()
+								.getAuthentication();
+						if (!(auth instanceof AnonymousAuthenticationToken)) {
+							UserDetails userDetail = (UserDetails) auth.getPrincipal();
+							String loggedInUser = userDetail.getUsername();
+							modelAndView.addObject("username", loggedInUser);
 
-					if (custService.transfer(loggedInUser, accountnumber, transfer)) {
-						modelAndView.addObject("submitMessage",
-								"Transfer Processed.");
-					} else {
-						modelAndView
-								.addObject("submitMessage",
-										"Request cannot be proccessed. ");
+							if (custService.transfer(loggedInUser, accountnumber, transfer)) {
+								modelAndView.addObject("submitMessage",
+										"Transfer Processed.");
+							} else {
+								modelAndView
+										.addObject("submitMessage",
+												"Request cannot be proccessed. ");
+							}
+						}
+						modelAndView.setViewName("transferMoney");
+
+					} else if (action.equals("Request Approval")) {
+						Authentication auth = SecurityContextHolder.getContext()
+								.getAuthentication();
+						if (!(auth instanceof AnonymousAuthenticationToken)) {
+							UserDetails userDetail = (UserDetails) auth.getPrincipal();
+							String loggedInUser = userDetail.getUsername();
+							modelAndView.addObject("username", loggedInUser);
+
+							if (custService.pendingTransfer(loggedInUser, accountnumber,
+									transfer)) {
+								modelAndView.addObject("submitMessage",
+										"Request submitted.");
+							} else {
+								modelAndView
+										.addObject("submitMessage",
+												"Request cannot be proccessed.");
+							}
+						}
+						modelAndView.setViewName("transferMoney");
 					}
 				}
-				modelAndView.setViewName("transferMoney");
-
-			} else if (action.equals("Request Approval")) {
-				Authentication auth = SecurityContextHolder.getContext()
-						.getAuthentication();
-				if (!(auth instanceof AnonymousAuthenticationToken)) {
-					UserDetails userDetail = (UserDetails) auth.getPrincipal();
-					String loggedInUser = userDetail.getUsername();
-					modelAndView.addObject("username", loggedInUser);
-
-					if (custService.pendingTransfer(loggedInUser, accountnumber,
-							transfer)) {
-						modelAndView.addObject("submitMessage",
-								"Request submitted.");
-					} else {
-						modelAndView
-								.addObject("submitMessage",
-										"Request cannot be proccessed.");
+					catch(Exception e)
+					{
+						modelAndView.addObject("errorMsg", " Please enter a correct amount ");
+						modelAndView.setViewName("transferMoney");
 					}
+					return modelAndView;
 				}
-				modelAndView.setViewName("transferMoney");
-			}
-			return modelAndView;
-		}
 
 	// GET Transactions
 	// Transactions Review

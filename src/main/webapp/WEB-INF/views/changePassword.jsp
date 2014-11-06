@@ -6,6 +6,8 @@
     prefix="c"
     uri="http://java.sun.com/jsp/jstl/core" 
 %>
+<%@taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,6 +26,7 @@
 
     <!-- Custom CSS -->
     <link href="${pageContext.request.contextPath}/resources/css/sb-admin.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/keyboard.css" rel="stylesheet" type="text/css">
 
     <!-- Custom Fonts -->
     <link href="${pageContext.request.contextPath}/resources/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -36,7 +39,17 @@
     </script>
 
 </head>
-
+<script src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
+<script>
+jQuery(document).ready(function(){
+	$("#password").keydown(false);
+});
+</script>
+<script>
+jQuery(document).ready(function(){
+	$("#confirmPassword").keydown(false);
+});
+</script>
 <body>
 
     <div id="wrapper">
@@ -80,9 +93,11 @@
                     <li>
                         <a href="viewQueue"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
                     </li>
+                    <sec:authorize access="hasRole('ROLE_ADMIN')">
                     <li>
                         <a href="getList"><i class="fa fa-fw fa-dashboard"></i>View All</a>
                     </li>
+                    </sec:authorize>
                     <li class="active">
                         <a href="changePassword"><i class="fa fa-fw fa-dashboard"></i>Change Password (SELF)</a>
                     </li>
@@ -120,8 +135,8 @@
 					                      <h4> 1. Password must contain at least one capital character, one small character, one digit and one special character.</h4>
                                 
 					                <form:form method="post" action="changePassword" modelAttribute="customerDetails">              
-						                <b>Password:</b> <br/> <FONT color="red"><form:errors path="password" /></FONT> <input type="password" name="password" id="password" style="color:#999;" /><br/> <br/>
-						                <b>Confirm Password:</b> <br/> <input type="password" name="confirmPassword" id="cfrm_pwd" style="color:#999;" /><br/> <br/>
+						                <b>Password:</b> <br/> <FONT color="red"><form:errors path="password" /></FONT> <input type="password" name="password" id="password" class="keyboardInput form-control " id="password" style="color:#999;" /><br/> <br/>
+						                <b>Confirm Password:</b> <br/> <input type="password" name="confirmPassword" id="confirmPassword" class="keyboardInput form-control " id="cfrm_pwd" style="color:#999;" /><br/> <br/>
 						                <a><input type="submit" style="margin-right: 5%" name="modifyUser" id="modifyUserButton" value="Change Password"/></a>
 					                </form:form>
 					                <c:if test="${not empty errorMsg}">
@@ -148,7 +163,8 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
-
+    
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/keyboard.js" charset="UTF-8"></script>
 </body>
 
 </html>

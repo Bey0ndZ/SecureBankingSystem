@@ -168,7 +168,7 @@
 												<h4> ${errorMsg2} </h4>
                                     		</c:if>
 											<b> Last name: </b> <br/><input type="text" name="lastname" /><br/><br/>
-											<b> Sex: </b> <br/> <input type="radio" name="sex" value="Male" id="male"/> Male <br/>
+											<b> Sex: </b> <br/> <input type="radio" name="sex" value="Male" id="male" checked/> Male <br/>
 											<input type="radio" name="sex" value="Female" id="male"/> Female <br/><br/>
 											<b>Individual or Merchant:</b><br/>
 											<select name="selection">

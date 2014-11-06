@@ -68,6 +68,7 @@ public class RegistrationValidation {
       }
 	  
 	  String ssn = cinfo.getSocialSecurityNumber();
+	  System.out.println("SSN CHECK: "+ssn);
 	  
 	  for (char c: ssn.toCharArray()) {
 		  if(Character.isDigit(c)) {
@@ -75,7 +76,8 @@ public class RegistrationValidation {
 		  }
 	  }
 	  System.out.println(ssnNum);
-	  if(ssnNum < 9 || ssnNum > 9) {
+	  
+	  if(ssnNum != 10 || ssn.length() != 10) {
 		  errors.rejectValue("socialSecurityNumber", 
 				  "lengthOfSocialSecurityNumber.CustomerInformation.socialSecurityNumber",
 				  "SSN is invalid");
