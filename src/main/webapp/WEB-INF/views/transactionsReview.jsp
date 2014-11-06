@@ -126,10 +126,13 @@
 						<div class="col-lg-12">
 							<div class="panel panel-default">
 								<div class="panel-heading">
-									<h3 class="panel-title">
-										<i class="fa fa-bar-chart-o fa-fw">Tx</i> 
-									</h3>
+									<h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Invalid Input </h3>
 								</div>
+								<br/>
+								<c:if test="${not empty errorMsg }">
+												<h4><b>${errorMsg }</b></h4><br/>
+												<a href = "transactionReview"> <b> Click here to go back! </b></a>
+											</c:if>
 								<div class="panel-body">
 									<div id="morris-area-chart">
 										<div class="panel-body">
@@ -142,6 +145,8 @@
 												<input type="text" name="deleteTransactionID" /><br/>
 												<input type="submit" value="Delete Transaction" /><br/><br/><br/>
 											</form:form>
+											
+											<br/>
 											<c:if test="${not empty emptyBox }">
 												${emptyBox }
 											</c:if>

@@ -199,6 +199,8 @@ public class TransactionsController {
 
 	// GET Transactions
 	// Transactions Review
+	
+	List<String> t_id = new ArrayList<String>();
 	@RequestMapping(value = "/transactionReview", method = RequestMethod.GET)
 	public ModelAndView returnTransactionsReviewPage() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -212,6 +214,13 @@ public class TransactionsController {
 			userTransactions = custService.getUserTransactions(loggedInUser);
 
 			// Add the object to model
+			
+			for (UserTransactionsDTO userTransactionsEach : userTransactions) {
+				t_id.add(userTransactionsEach.getUsernameToAccountNumber());
+			}
+			
+			System.out.println("CHECK: "+userTransactions);
+			
 			modelAndView.addObject("userTransactions", userTransactions);
 			modelAndView.setViewName("transactionsReview");
 		} else {
@@ -226,8 +235,30 @@ public class TransactionsController {
 	public ModelAndView deleteSuccessPage(
 			@RequestParam("deleteTransactionID") String deleteTxID) {
 		ModelAndView modelAndView = new ModelAndView();
-
-		if (!deleteTxID.isEmpty()) {
+		
+		//----
+		int count = 0;
+		for (char c: deleteTxID.toCharArray()) {
+			if(Character.isDigit(c)) {
+				count ++;
+			}
+		}
+		
+		boolean flag = true;
+		if (!t_id.contains(deleteTxID)) {
+			flag = false;
+		}
+		else {
+			flag= true;
+		}
+		
+		if (deleteTxID.length() != count || deleteTxID.length() == 0 || deleteTxID.length() != 6 || flag==false) {
+			modelAndView.addObject("errorMsg", "Please enter the correct transaction ID!");
+			modelAndView.setViewName("transactionsReview");
+			return modelAndView;
+		}
+		
+		else if (!deleteTxID.isEmpty()) {
 			// Strip HTML to prevent XSS
 			Document doc = Jsoup.parse(deleteTxID);
 			String txID = doc.text();
