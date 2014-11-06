@@ -442,6 +442,7 @@ public class MainController {
 		return modelAndView;
 	}
 	
+	
 	//Verify whether account is actually locked or not.
 	@RequestMapping(value = "/unlockAccount", method = RequestMethod.POST)
 	public ModelAndView getVerfyUserForUnlock(
@@ -449,7 +450,11 @@ public class MainController {
 		ModelAndView modelAndView = new ModelAndView();
 		Document userInput = Jsoup.parse(customerDetail.getUsername());
 		customerDetail.setUsername(userInput.text());
-		if(customerDetail.getUsername().isEmpty()||customerDetail.getUsername()==null){
+		Pattern p1 = Pattern.compile("[!@#$%^&*+_.-]");
+		Matcher match = p1.matcher(customerDetail.getUsername().subSequence(0, customerDetail.getUsername().length()));
+		
+		if(customerDetail.getUsername().isEmpty()||customerDetail.getUsername()==null||match.find()==true||
+				customerDetail.getUsername().length()>10){
 			modelAndView.addObject("status", "Please Enter a valid Input.");
 		}
 		else{

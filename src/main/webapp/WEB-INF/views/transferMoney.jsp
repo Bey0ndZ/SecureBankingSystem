@@ -110,16 +110,16 @@ jQuery(window).load(function() {
 				<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
 				<div class="collapse navbar-collapse navbar-ex1-collapse">
 					<ul class="nav navbar-nav side-nav">
-						<li class="active"><a href="index.html"><i
+						<li><a href="index.html"><i
 								class="fa fa-fw fa-dashboard"></i> Account</a></li>
 						<li><a href="processBillPayment"><i
 								class="fa fa-fw fa-bar-chart-o"></i> Bill Pay</a></li>
-						<li><a href="javascript:;" data-toggle="collapse"
+						<li class="active"><a href="javascript:;" data-toggle="collapse"
 							data-target="#demo1"><i class="fa fa-fw fa-arrows-v"></i>
 								Transfer Money <i class="fa fa-fw fa-caret-down"></i></a>
 							<ul id="demo1" class="collapse">
-								<li><a href="transferMoney">Make a Transfer</a></li>
-								<li><a href="#">View Transfer Activity</a></li>
+								<li class="active"><a href="transferMoney">Make a Transfer</a></li>
+								<li><a href="transactionsReview">View Transfer Activity</a></li>
 							</ul></li>
 						<li><a href="javascript:;" data-toggle="collapse"
 							data-target="#demo2"><i class="fa fa-fw fa-arrows-v"></i>

@@ -53,7 +53,7 @@ public class TransactionsController {
 					counter1++;
 				}
 			}
-			if (counter > 0 || length1 != 10) {
+			if (counter > 0 || length1 != 8) {
 				modelAndView.addObject("errorMsg",
 						"Please enter the correct account number and amount!");
 				modelAndView.setViewName("billPay");
