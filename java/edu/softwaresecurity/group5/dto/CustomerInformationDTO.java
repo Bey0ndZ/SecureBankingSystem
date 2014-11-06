@@ -2,6 +2,12 @@ package edu.softwaresecurity.group5.dto;
 
 
 public class CustomerInformationDTO {
+	public String getSsn() {
+		return ssn;
+	}
+	public void setSsn(String ssn) {
+		this.ssn = ssn;
+	}
 	private String username;
 	private String firstname;
 	private String lastname;
@@ -12,7 +18,7 @@ public class CustomerInformationDTO {
 	private String address;
 	private int accountNumber;
 	private float accountBalance;
-	
+	private String ssn;
 	public int getAccountNumber() {
 		return accountNumber;
 	}
