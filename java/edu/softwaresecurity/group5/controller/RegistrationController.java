@@ -1,5 +1,6 @@
 package edu.softwaresecurity.group5.controller;
 
+import java.io.FileNotFoundException;
 import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +40,7 @@ public class RegistrationController {
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public ModelAndView registerCustomer(@Valid @ModelAttribute("registerForm") CustomerInformation custInfo,
-		   BindingResult result, HttpServletRequest request) throws NoSuchAlgorithmException {
+		   BindingResult result, HttpServletRequest request) throws NoSuchAlgorithmException, FileNotFoundException {
 		ModelAndView modelAndView = new ModelAndView();
 		
 		RegistrationValidation.validateForm(custInfo, result);

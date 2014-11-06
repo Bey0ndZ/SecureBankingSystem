@@ -1,5 +1,6 @@
 package edu.softwaresecurity.group5.service;
 
+import java.io.FileNotFoundException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import edu.softwaresecurity.group5.model.ModifyUserInformation;
 
 public interface CustomerService {
 
-	public String insertCustomerInformation(CustomerInformation custInfo) throws NoSuchAlgorithmException;
+	public String insertCustomerInformation(CustomerInformation custInfo) throws NoSuchAlgorithmException, FileNotFoundException;
 
 	public String insertAddUserInformation(AddUserInformation addInfo) throws NoSuchAlgorithmException;
 

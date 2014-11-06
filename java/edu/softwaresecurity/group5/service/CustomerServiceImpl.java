@@ -1,5 +1,6 @@
 package edu.softwaresecurity.group5.service;
 
+import java.io.FileNotFoundException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	CustomerDAO custDAO;
 	
-	public String insertCustomerInformation(CustomerInformation custInfo) throws NoSuchAlgorithmException {
+	public String insertCustomerInformation(CustomerInformation custInfo) throws NoSuchAlgorithmException, FileNotFoundException {
 		return custDAO.registerCustomer(custInfo);
 	}
 	
