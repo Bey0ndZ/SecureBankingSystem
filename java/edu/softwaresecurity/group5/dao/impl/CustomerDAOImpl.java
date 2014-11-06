@@ -758,7 +758,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 	public String removeAccountRequest(String username,
 			boolean deleteAccountOrNot) {
-
+		try {
 		String getDeleteAccountColumnValueQuery = "SELECT deleteaccount FROM deleteaccount WHERE username=?";
 		JdbcTemplate jdbcTemplateForDeleteAccountValue = new JdbcTemplate(
 				dataSource);
@@ -787,6 +787,29 @@ public class CustomerDAOImpl implements CustomerDAO {
 			}
 		} else {
 			return "You have already submitted a request for account deletion.";
+		}
+		} catch (EmptyResultDataAccessException dataAccessException) {
+			// Meaning, the user has not asked for a deleteAccount request
+			// Hence, they are not present in the deleteaccount table
+			// So, insert them into the table
+			if (deleteAccountOrNot) {
+				String updateModificationRequests = "INSERT INTO deleteaccount (username, deleteaccount) VALUES (?,?)";
+				JdbcTemplate updateTemplate = new JdbcTemplate(dataSource);
+				updateTemplate.update(updateModificationRequests, new Object[] {
+						username, deleteAccountOrNot });
+				String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected, requesttype)"
+						+ " VALUES (?,?,?,?,?)";
+				JdbcTemplate insertIntoTicketsTableTemplate = new JdbcTemplate(
+						dataSource);
+
+				insertIntoTicketsTableTemplate.update(insertIntoTicketsTable,
+						new Object[] { username, false, false, false,
+								Ticket_Type_Delete });
+
+				return "Request submitted. The internal user of admin will approve your request.";
+			} else {
+				return "You have selected No. Your account request has not been submitted for internal review.";
+			}
 		}
 	}
 
