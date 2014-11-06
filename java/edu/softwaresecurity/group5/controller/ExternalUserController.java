@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -113,8 +113,8 @@ public class ExternalUserController {
 			}
 			else {
 				// Removing the html tags (if present) using JSoup library
-				Document inputText = Jsoup.parse(debitAmount);
-				Float debitAmountFloat = Float.parseFloat(inputText.text());
+				String inputText = Jsoup.clean(debitAmount, Whitelist.basic());
+				Float debitAmountFloat = Float.parseFloat(inputText);
 				Authentication auth = SecurityContextHolder.getContext()
 						.getAuthentication();
 					if (!(auth instanceof AnonymousAuthenticationToken)) {
@@ -169,21 +169,29 @@ public class ExternalUserController {
 			@RequestParam("creditAmount") String creditAmount) {
 		ModelAndView modelAndView = new ModelAndView();
 		if (!creditAmount.isEmpty()) {
+			int len = creditAmount.length();
+			
 			int counter = 0;
 			for (char ch: creditAmount.toCharArray()) {
 				if (Character.isDigit(ch) == false) {
 					counter ++;
 				}
 			}
+			
 			if (counter>0) {
 				modelAndView.addObject("errorMsg", "Please enter the correct amount!");
 				modelAndView.setViewName("creditAmount");
 				return modelAndView;
 			}
+			else if (len>3) {
+				modelAndView.addObject("errorMsg", "You are not allowed to transfer more then $999 at a time!");
+				modelAndView.setViewName("creditAmount");
+				return modelAndView;
+			}
 			else {
 			// Removing the html tags (if present) using JSoup library
-				Document inputText = Jsoup.parse(creditAmount);
-				Float creditAmountFloat = Float.parseFloat(inputText.text());
+				String inputText = Jsoup.clean(creditAmount, Whitelist.basic());
+				Float creditAmountFloat = Float.parseFloat(inputText);
 				Authentication auth = SecurityContextHolder.getContext()
 						.getAuthentication();
 				if (!(auth instanceof AnonymousAuthenticationToken)) {
@@ -249,18 +257,20 @@ public class ExternalUserController {
 				String requestedForUsername = userDetail.getUsername();
 
 				// Using Jsoup to parse html (if present in input)
-				Document inputFirstname = Jsoup.parse(modInfo.getFirstname());
-				Document inputSex = Jsoup.parse(modInfo.getSex());
-				Document inputSelection = Jsoup.parse(modInfo.getSelection());
-				Document inputLastname = Jsoup.parse(modInfo.getLastname());
-				Document inputPhoneNumber = Jsoup.parse(modInfo.getPhonenumber());	
-				Document inputEmail = Jsoup.parse(modInfo.getEmail());
-				Document inputAddress = Jsoup.parse(modInfo.getAddress());
+				String inputFirstname = Jsoup.clean(modInfo.getFirstname(), Whitelist.basic());
+				String inputSex = Jsoup.clean(modInfo.getSex(), Whitelist.basic());
+				String inputSelection = Jsoup.clean(modInfo.getSelection(), Whitelist.basic());
+				String inputLastname = Jsoup.clean(modInfo.getLastname(), Whitelist.basic());
+				String inputPhoneNumber = Jsoup.clean(modInfo.getPhonenumber(), Whitelist.basic());
+				String inputEmail = Jsoup.clean(modInfo.getEmail(), Whitelist.basic());
+				String inputAddress = Jsoup.clean(modInfo.getAddress(), Whitelist.basic());
 				
-				String fn = inputFirstname.text();
-				String ln = inputLastname.text();
-				String phNum = inputPhoneNumber.text();
-				String address = inputAddress.text();
+				
+				
+				String fn = inputFirstname;
+				String ln = inputLastname;
+				String phNum = inputPhoneNumber;
+				String address = inputAddress;
 				int count = 0;
 				for (char c: phNum.toCharArray()) {
 					if (Character.isDigit(c)) {
@@ -292,13 +302,13 @@ public class ExternalUserController {
 				}
 				else {
 				
-					modInfo.setSex(inputSex.text());
-					modInfo.setFirstname(inputFirstname.text());
-					modInfo.setLastname(inputLastname.text());
-					modInfo.setSelection(inputSelection.text());
-					modInfo.setPhonenumber(inputPhoneNumber.text());
-					modInfo.setEmail(inputEmail.text());
-					modInfo.setAddress(inputAddress.text());
+					modInfo.setSex(inputSex);
+					modInfo.setFirstname(inputFirstname);
+					modInfo.setLastname(inputLastname);
+					modInfo.setSelection(inputSelection);
+					modInfo.setPhonenumber(inputPhoneNumber);
+					modInfo.setEmail(inputEmail);
+					modInfo.setAddress(inputAddress);
 	
 					String requestSubmitMessage = custService.modificationRequest(
 							requestedForUsername, modInfo);
@@ -361,8 +371,8 @@ public class ExternalUserController {
 			boolean deleteAccount;
 
 			// Using Jsoup to strip html tags (if present)
-			Document deleteAccountOption = Jsoup.parse(deleteAccountYesOrNo);
-
+			String deleteAccountOption = Jsoup.clean(deleteAccountYesOrNo, Whitelist.basic());
+			
 			// check if user is login
 			Authentication auth = SecurityContextHolder.getContext()
 					.getAuthentication();
@@ -370,7 +380,7 @@ public class ExternalUserController {
 				UserDetails userDetail = (UserDetails) auth.getPrincipal();
 
 				String requestedForUsername = userDetail.getUsername();
-				if (deleteAccountOption.text().equalsIgnoreCase("Yes")) {
+				if (deleteAccountOption.equalsIgnoreCase("Yes")) {
 					deleteAccount = true;
 					String requestSubmittedMessage = custService.deleteAccount(
 							requestedForUsername, deleteAccount);
@@ -403,8 +413,8 @@ public class ExternalUserController {
 			@RequestParam("username") String usernameSearch) {
 		ModelAndView modelAndView = new ModelAndView();
 
-		Document userInput = Jsoup.parse(usernameSearch);
-		String userName = userInput.text();
+		String userInput = Jsoup.clean(usernameSearch, Whitelist.basic());
+		String userName = userInput;
 
 		if (userName.length() == 0 || userName.length() > 15) {
 			modelAndView.addObject("status", "Please Do not modify the url!");

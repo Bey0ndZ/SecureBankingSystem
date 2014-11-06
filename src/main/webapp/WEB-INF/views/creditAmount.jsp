@@ -81,7 +81,7 @@
 				<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
 				<div class="collapse navbar-collapse navbar-ex1-collapse">
 					<ul class="nav navbar-nav side-nav">
-						<li class="active"><a href="index.html"><i
+						<li><a href="index.html"><i
 								class="fa fa-fw fa-dashboard"></i> Account</a></li>
 						<li><a href="processBillPayment"><i
 								class="fa fa-fw fa-bar-chart-o"></i> Bill Pay</a></li>
@@ -92,7 +92,7 @@
 								<li><a href="transferMoney">Make a Transfer</a></li>
 								<li><a href="transactionReview">Review Transactions</a></li>
 							</ul></li>
-						<li><a href="javascript:;" data-toggle="collapse"
+						<li class="active"><a href="javascript:;" data-toggle="collapse"
 							data-target="#demo2"><i class="fa fa-fw fa-arrows-v"></i>
 								Debit or Credit Funds <i class="fa fa-fw fa-caret-down"></i></a>
 							<ul id="demo2" class="collapse">

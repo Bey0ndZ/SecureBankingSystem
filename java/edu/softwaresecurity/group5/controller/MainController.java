@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.safety.Whitelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -192,8 +191,9 @@ public class MainController {
 			@RequestParam("account") String usernameSearch) {
 		ModelAndView modelAndView = new ModelAndView();
 
-		Document userInput = Jsoup.parse(usernameSearch);
-		String userName = userInput.text();
+		
+		String userName = Jsoup.clean(usernameSearch, Whitelist.basic());
+		
 
 		boolean status = custService.deleteAccountBYInternal(userName);
 		if (status) {
@@ -215,9 +215,9 @@ public class MainController {
 			@RequestParam("account") String usernameSearch) {
 		ModelAndView modelAndView = new ModelAndView();
 
-		Document userInput = Jsoup.parse(usernameSearch);
-		String userName = userInput.text();
-
+		
+		String userName = Jsoup.clean(usernameSearch, Whitelist.basic());
+		
 		boolean status = custService.deleteAccountBYExternal(userName);
 		if (status) {
 			modelAndView.addObject("status", "User Deleted Succefully!");
@@ -238,8 +238,9 @@ public class MainController {
 			@RequestParam("account") String usernameSearch) {
 		ModelAndView modelAndView = new ModelAndView();
 
-		Document userInput = Jsoup.parse(usernameSearch);
-		String userName = userInput.text();
+		
+		String userInput = Jsoup.clean(usernameSearch, Whitelist.basic());
+		String userName = userInput;
 
 		boolean status = custService.deleteAccountBYInternal(userName);
 		if (status) {
@@ -314,8 +315,9 @@ public class MainController {
 			@RequestParam("modifyUser") String accountNumber) {
 		ModelAndView modelAndView = new ModelAndView();
 
-		Document userInput = Jsoup.parse(accountNumber);
-		String userAccountNumber = userInput.text();
+		
+		String userInput = Jsoup.clean(accountNumber, Whitelist.basic());
+		String userAccountNumber = userInput;
 
 		EmployeeInformationDTO employeeDetails = new EmployeeInformationDTO();
 		employeeDetails = custService
@@ -452,8 +454,9 @@ public class MainController {
 	public ModelAndView getVerfyUserForUnlock(
 			@ModelAttribute("customerDetails") CustomerInformationDTO customerDetail) {
 		ModelAndView modelAndView = new ModelAndView();
-		Document userInput = Jsoup.parse(customerDetail.getUsername());
-		customerDetail.setUsername(userInput.text());
+		
+		String userInput = Jsoup.clean(customerDetail.getUsername(), Whitelist.basic());
+		customerDetail.setUsername(userInput);
 
 		Pattern p1 = Pattern.compile("[!@#$%^&*+_.-]");
 		Matcher match = p1.matcher(customerDetail.getUsername().subSequence(0, customerDetail.getUsername().length()));
@@ -524,7 +527,7 @@ public class MainController {
 					.addObject("status", "Success, Authorization Approved!");
 		} else {
 			modelAndView.addObject("status",
-					"Error Occured, Please contact admin!");
+					"Error Occured, Please check User's account balance for sufficient amount, Please contact admin!");
 		}
 		modelAndView.setViewName("ticketAuthorizedSuccess");
 		return modelAndView;
@@ -562,9 +565,10 @@ public class MainController {
 	public ModelAndView getOtp(@RequestParam("email") String emailOtp) {
 		ModelAndView modelAndView = new ModelAndView();
 		if (!emailOtp.isEmpty()) {
-			Document emailOtpDoc = Jsoup.parse(emailOtp);
+			
+			String emailOtpDoc = Jsoup.clean(emailOtp, Whitelist.basic());
 			String emailReset = "";
-			emailReset = custService.genOtp(emailOtpDoc.text());
+			emailReset = custService.genOtp(emailOtpDoc);
 			modelAndView.addObject("emailReset", emailReset);
 		} else {
 			modelAndView.addObject("emailReset", "Text-box cannot be left empty.");
