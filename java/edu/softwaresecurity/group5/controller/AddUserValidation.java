@@ -66,7 +66,7 @@ public class AddUserValidation {
 			  ssnNum++;
 		  }
 	  }
-	  if(ssnNum != 9 || ssn.length() != 9) {
+	  if(ssnNum != 10 || ssn.length() != 10) {
 		  errors.rejectValue("socialSecurityNumber", 
 				  "lengthOfSocialSecurityNumber.AddUserInformation.socialSecurityNumber",
 				  "Invalid SSN!");

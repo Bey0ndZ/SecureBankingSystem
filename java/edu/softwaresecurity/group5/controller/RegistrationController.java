@@ -32,6 +32,7 @@ public class RegistrationController {
 		CustomerInformation custInfo = new CustomerInformation();
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("customer", custInfo);
+	
 		modelAndView.setViewName("register");		
 		return modelAndView;
 	}	

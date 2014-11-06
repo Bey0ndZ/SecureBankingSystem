@@ -56,7 +56,7 @@ import edu.softwaresecurity.group5.model.ModifyUserInformation;
 public class CustomerDAOImpl implements CustomerDAO {
 	@Autowired
 	DataSource dataSource;
-
+	
 	private final String Ticket_Type_Delete = "Delete";
 	private final String Ticket_Type_Modify = "Modify";
 	private final String Ticket_Type_Authorize = "Authorize";
@@ -67,7 +67,6 @@ public class CustomerDAOImpl implements CustomerDAO {
 		addInfo.setUserLocked(1);
 		addInfo.setUserExpired(1);
 		addInfo.setUserDetailsExpired(1);
-
 		String addUserQuery = "INSERT into users"
 				+ "(username, password, confirmpassword,"
 				+ "firstname,"
@@ -97,7 +96,6 @@ public class CustomerDAOImpl implements CustomerDAO {
 		if (list1.size() != 0) {
 			return "UserName, Email and SSN must be unique!";
 		} else {
-
 			jdbcTemplateForRegisterCustomer.update(
 					addUserQuery,
 					new Object[] { addInfo.getUserName(), hash, hash,

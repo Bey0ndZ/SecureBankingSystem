@@ -63,7 +63,7 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
+               <!--  <ul class="nav navbar-nav">
                     <li>
                         <a href="#">About</a>
                     </li>
@@ -73,7 +73,7 @@
                     <li>
                         <a href="#">Contact</a>
                     </li>
-                </ul>
+                </ul> -->
             </div>
             <!-- /.navbar-collapse -->
         </div>
@@ -126,7 +126,7 @@
 									<b>Confirm Password:</b><br/> <input type="password" name="confirmPassword" id="cfrm_pwd" style="color:#999;" /><br/><br/>
 									<b>First Name:</b>  <FONT color="red"><form:errors path="firstname" /></FONT><br/> <input type="text" name="firstname" id="f_name" style="color:#999;" /><br/><br/>
 									<b>Last Name:</b>  <FONT color="red"><form:errors path="lastname" /></FONT><br/><input type="text" name="lastname" id="l_name" style="color:#999;" /><br/><br/>
-									<b>Sex: </b><br/> <input type="radio" name="sex" value="Male" id="male"/> Male <br/>
+									<b>Sex: </b><br/> <input type="radio" name="sex" value="Male" id="male" checked/> Male <br/>
 									<input type="radio" name="sex" value="Female" id="male"/> Female <br/><br/>
 									<b>Individual or Merchant:</b><br/>
 									<select name="selection">
