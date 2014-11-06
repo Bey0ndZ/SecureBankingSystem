@@ -1092,56 +1092,69 @@ public class CustomerDAOImpl implements CustomerDAO {
 			return true;
 		}
 
-	public boolean updatePending(String generatedFromUsernameFrom,
-			String account, String amount) {
-		float amountToTransfer = Float.parseFloat(amount);
-		String balanceFromS = "SELECT account.accountbalance from account "
-				+ " inner join users on " + "account.username=users.username "
-				+ "WHERE account.username=?";
-		String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
-				+ " inner join users on "
-				+ "account.username=users.username "
-				+ "where account.username=?";
+		public boolean updatePending(String generatedFromUsernameFrom,
+				String account, String amount) {
+			float amountToTransfer = Float.parseFloat(amount);
+			String balanceFromS = "SELECT account.accountbalance from account "
+					+ " inner join users on " + "account.username=users.username "
+					+ "WHERE account.username=?";
+			String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
+					+ " inner join users on "
+					+ "account.username=users.username "
+					+ "where account.username=?";
+			String debitS = "SELECT account.debit from account "
+					+ " inner join users on " + "account.username=users.username "
+					+ "WHERE account.username=?";
+			String insertIntoPendingFrom = "INSERT INTO pendingtransactions (username,amount,pending,accountnumberfrom,accountnumberto)"
+					+ "VALUES((SELECT username from account where accountnumber=?),?,?,?,?)";
+			String insertIntoAccountFrom = "UPDATE "
+					+ "account SET account.accountbalance=?, account.debit=?"
+					+ "WHERE account.username= ? ";
+			// Query to insert into user_tickets table
+			String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected,requesttype)"
+					+ " VALUES (?,?,?,?,?)";
 
-		String insertIntoPendingFrom = "INSERT INTO pendingtransactions (username,amount,pending,accountnumberfrom,accountnumberto)"
-				+ "VALUES((SELECT username from account where accountnumber=?),?,?,?,?)";
+			JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
+			JdbcTemplate jdbcTemplateForAccount = new JdbcTemplate(dataSource);
+			JdbcTemplate jdbcTemplateForPending = new JdbcTemplate(dataSource);
+			JdbcTemplate jdbcTemplateForUserTickets = new JdbcTemplate(dataSource);
 
-		// Query to insert into user_tickets table
-		String insertIntoTicketsTable = "INSERT into user_tickets(username, requestcompleted, requestapproved, requestrejected,requesttype)"
-				+ " VALUES (?,?,?,?,?)";
+			String getUsernameAccount = jdbcTemplateForAccountNumber
+					.queryForObject(getAccountDetailsFromUsernameFrom,
+							new Object[] { generatedFromUsernameFrom },
+							String.class);
+			String balanceFromString = jdbcTemplateForAccountNumber.queryForObject(
+					balanceFromS, new Object[] { generatedFromUsernameFrom },
+					String.class);
+			String debitString = jdbcTemplateForAccountNumber.queryForObject(
+					debitS, new Object[] { generatedFromUsernameFrom },
+					String.class);
 
-		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
-		JdbcTemplate jdbcTemplateForPending = new JdbcTemplate(dataSource);
-		JdbcTemplate jdbcTemplateForUserTickets = new JdbcTemplate(dataSource);
+			float balanceFrom = Float.parseFloat(balanceFromString);
+			float debit = Float.parseFloat(debitString);
+			balanceFrom = balanceFrom - amountToTransfer;
+			debit=debit+amountToTransfer;
+			if(balanceFrom<0){
+				return false;
+			}
+			int accountNumber = Integer.parseInt(getUsernameAccount);
+			int accountNumberTo = Integer.parseInt(account);
+			if (accountNumber == accountNumberTo) {
+				return false;
+			}
+			jdbcTemplateForPending.update(insertIntoPendingFrom, new Object[] {
+					accountNumber, amountToTransfer, " 1", accountNumber,
+					accountNumberTo });
+			jdbcTemplateForAccount.update(insertIntoAccountFrom, new Object[] {
+					balanceFrom, debit, generatedFromUsernameFrom });
+			
+			// Inserting into user_tickets
+			jdbcTemplateForUserTickets.update(insertIntoTicketsTable, new Object[] {
+					generatedFromUsernameFrom, false, false, false,
+					Ticket_Type_Authorize });
 
-		String getUsernameAccount = jdbcTemplateForAccountNumber
-				.queryForObject(getAccountDetailsFromUsernameFrom,
-						new Object[] { generatedFromUsernameFrom },
-						String.class);
-		String balanceFromString = jdbcTemplateForAccountNumber.queryForObject(
-				balanceFromS, new Object[] { generatedFromUsernameFrom },
-				String.class);
-		float balanceFrom = Float.parseFloat(balanceFromString);
-		balanceFrom = balanceFrom - amountToTransfer;
-		if(balanceFrom<0){
-			return false;
+			return true;
 		}
-		int accountNumber = Integer.parseInt(getUsernameAccount);
-		int accountNumberTo = Integer.parseInt(account);
-		if (accountNumber == accountNumberTo) {
-			return false;
-		}
-		jdbcTemplateForPending.update(insertIntoPendingFrom, new Object[] {
-				accountNumber, amountToTransfer, " 1", accountNumber,
-				accountNumberTo });
-
-		// Inserting into user_tickets
-		jdbcTemplateForUserTickets.update(insertIntoTicketsTable, new Object[] {
-				generatedFromUsernameFrom, false, false, false,
-				Ticket_Type_Authorize });
-
-		return true;
-	}
 
 
 	public List<UserTransactionsDTO> getUserTransactionList(String username) {
