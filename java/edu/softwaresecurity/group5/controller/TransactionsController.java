@@ -225,6 +225,7 @@ public class TransactionsController {
 										"Request cannot be proccessed.");
 					}
 				}
+				modelAndView.setViewName("transferMoney");
 			}
 			}
 				catch(Exception e)
