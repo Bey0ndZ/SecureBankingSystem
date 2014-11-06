@@ -25,29 +25,21 @@
 <link
 	href="${pageContext.request.contextPath}/resources/css/sb-admin.css"
 	rel="stylesheet">
+	
 
 <!-- Custom Fonts -->
 <link
 	href="${pageContext.request.contextPath}/resources/font-awesome-4.1.0/css/font-awesome.min.css"
 	rel="stylesheet" type="text/css">
 	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+	<script 
+		src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
 
-<script type="text/javascript">
-	jQuery(window).load(function() {
-		jQuery("#pendingButton").css("display","none");
-	//jQuery('.slider').flexslider();
-	 
-	// Create the dropdown base
-	jQuery("<select />").appendTo(".topmenu");
-	
-	// Create default option "Go to..."
-	jQuery("<option />", {
-	 "selected": "selected",
-	 "value"   : "",
-	 "text"    : "Menu"
-	}).appendTo(".topmenu select");
-	
+<script type="text/javascript" >
+jQuery(window).load(function() {
+	jQuery("#pendingButton").css("display","none");
+});
+	jQuery(document).ready(function(){
 	jQuery("#transfer_amount").change(function() {
 		
 		var value=jQuery("#transfer_amount").val();
@@ -55,16 +47,14 @@
 		if(value<10000) {
 			jQuery("#transferButton").css("display","block");
 			jQuery("#pendingButton").css("display","none");
-			//<input type="submit" name="pending" id="pendingButton" value="Approve Transfer" />
-			
-			//jQuery.append("<input type="submit" name="transfer" id="transferButton" value="Request" />")
 			}
 		else {
 			jQuery("#pendingButton").css("display","block");
 			jQuery("#transferButton").css("display","none");
-			//jQuery.append("<input type="submit" name="pending" id="pendingButton" value="Approve Transfer" />")
 			}
 	});
+	});
+	
 </script>
 
 </head>
@@ -120,16 +110,16 @@
 				<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
 				<div class="collapse navbar-collapse navbar-ex1-collapse">
 					<ul class="nav navbar-nav side-nav">
-						<li class="active"><a href="index.html"><i
+						<li><a href="index.html"><i
 								class="fa fa-fw fa-dashboard"></i> Account</a></li>
 						<li><a href="processBillPayment"><i
 								class="fa fa-fw fa-bar-chart-o"></i> Bill Pay</a></li>
-						<li><a href="javascript:;" data-toggle="collapse"
+						<li class="active"><a href="javascript:;" data-toggle="collapse"
 							data-target="#demo1"><i class="fa fa-fw fa-arrows-v"></i>
 								Transfer Money <i class="fa fa-fw fa-caret-down"></i></a>
 							<ul id="demo1" class="collapse">
-								<li><a href="transferMoney">Make a Transfer</a></li>
-								<li><a href="transactionReview">Review Transactions</a></li>
+								<li class="active"><a href="transferMoney">Make a Transfer</a></li>
+								<li><a href="transactionsReview">View Transfer Activity</a></li>
 							</ul></li>
 						<li><a href="javascript:;" data-toggle="collapse"
 							data-target="#demo2"><i class="fa fa-fw fa-arrows-v"></i>
@@ -137,8 +127,7 @@
 							<ul id="demo2" class="collapse">
 								<li><a href="debitFunds">Debit</a></li>
 								<li><a href="creditFunds">Credit</a></li>
-							</ul>
-						</li>
+							</ul></li>
 						<li><a href="deleteAccount"><i
 								class="fa fa-fw fa-bar-chart-o"></i> Delete Account</a></li>
 					</ul>
@@ -169,12 +158,10 @@
 								<div class="panel-body">
 									<div id="morris-area-chart">
 										<div class="panel-body">
-											
-                                    		
 											<form:form method="POST" action="transferMoney">
-												<b>Please enter account number of receiver:</b><br />
+												Account number to transfer to:<br />
 												<input type="text" name="accountNumber" />
-												<br /> <br/>
+												<br />
 												<input type="submit" value="Search User" />
 											</form:form>
 											<c:if test="${not empty errorMsg}">
@@ -195,7 +182,7 @@
 													modelAttribute="transfer">
 													<i><b>Transfer Money at Bank of G5!</b></i>
 													<br />
-													<p>Current Account Balance: PRINT BALANCE HERE --</p>
+													
 
 													<input type="text" name="accountNo" id="accountNo"
 														value="${param.accountNumber}"
@@ -209,7 +196,7 @@
 													<input type="submit" name="action" id="transferButton"
 														value="Transfer" />
 													<input type="submit" name="action" id="pendingButton"
-														value="Approve Transfer" />
+														value="Request Approval" />
 
 												</form:form>
 											</c:if>
@@ -232,7 +219,7 @@
 
 		</div>
 		<!-- /#wrapper -->
-
+		
 		<!-- jQuery Version 1.11.0 -->
 		<script
 			src="${pageContext.request.contextPath}/resources/js/jquery-1.11.0.js"></script>
