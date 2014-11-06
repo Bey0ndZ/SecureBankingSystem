@@ -169,14 +169,22 @@ public class ExternalUserController {
 			@RequestParam("creditAmount") String creditAmount) {
 		ModelAndView modelAndView = new ModelAndView();
 		if (!creditAmount.isEmpty()) {
+			int len = creditAmount.length();
+			
 			int counter = 0;
 			for (char ch: creditAmount.toCharArray()) {
 				if (Character.isDigit(ch) == false) {
 					counter ++;
 				}
 			}
+			
 			if (counter>0) {
 				modelAndView.addObject("errorMsg", "Please enter the correct amount!");
+				modelAndView.setViewName("creditAmount");
+				return modelAndView;
+			}
+			else if (len>3) {
+				modelAndView.addObject("errorMsg", "You are not allowed to transfer more then $999 at a time!");
 				modelAndView.setViewName("creditAmount");
 				return modelAndView;
 			}

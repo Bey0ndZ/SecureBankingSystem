@@ -41,6 +41,7 @@ public class TransactionsController {
 		if (!(accountNumber.isEmpty() || amountToBeTransferred.isEmpty())) {
 			int length1 = accountNumber.length();
 			int length2 = amountToBeTransferred.length();
+			
 			int counter = 0;
 			for (char ch : accountNumber.toCharArray()) {
 				if (Character.isDigit(ch) == false) {
@@ -63,7 +64,8 @@ public class TransactionsController {
 						"Please enter the correct account numebr and amount!");
 				modelAndView.setViewName("billPay");
 				return modelAndView;
-			} else {
+			}
+			else {
 				
 				
 				
@@ -144,11 +146,11 @@ public class TransactionsController {
 				modelAndView.setViewName("transferMoney");
 			}
 		}
-			catch(Exception e)
-			{
-				modelAndView.addObject("errorMsg", " Please enter the correct account no. ");
-				modelAndView.setViewName("transferMoney");
-			}
+		catch(Exception e)
+		{
+			modelAndView.addObject("errorMsg", " Please enter the correct account no. ");
+			modelAndView.setViewName("transferMoney");
+		}
 			return modelAndView;
 		}
 		// Getting the transfer/pending
@@ -165,16 +167,21 @@ public class TransactionsController {
 					UserDetails userDetail = (UserDetails) auth.getPrincipal();
 					String loggedInUser = userDetail.getUsername();
 					modelAndView.addObject("username", loggedInUser);
-
+					
+					int len = transfer.length();
+					if (len>3) {
+						modelAndView.addObject("errorMsg", "You are not allowed to transfer more then $999 at a time!");
+						modelAndView.setViewName("transferMoney");
+						return modelAndView;
+					}
+					
 					if (custService.transfer(loggedInUser, accountnumber, transfer)) {
+						
 						modelAndView.addObject("submitMessage",
 								"Transfer Processed.");
-						System.out.println("HERE 1");
+						
 					} else {
-						System.out.println("HERE 2");
-						modelAndView
-								.addObject("submitMessage",
-										"Request cannot be proccessed. ");
+						modelAndView.addObject("submitMessage",	"Request cannot be proccessed. ");
 					}
 				}
 				modelAndView.setViewName("transferMoney");
