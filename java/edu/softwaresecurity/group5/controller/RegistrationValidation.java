@@ -77,7 +77,7 @@ public class RegistrationValidation {
 	  }
 	  System.out.println(ssnNum);
 	  
-	  if(ssnNum != 10 || ssn.length() != 10) {
+	  if(ssnNum != 9 || ssn.length() != 9) {
 		  errors.rejectValue("socialSecurityNumber", 
 				  "lengthOfSocialSecurityNumber.CustomerInformation.socialSecurityNumber",
 				  "SSN is invalid");
