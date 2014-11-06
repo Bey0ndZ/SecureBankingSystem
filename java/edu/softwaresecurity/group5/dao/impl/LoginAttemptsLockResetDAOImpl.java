@@ -66,7 +66,7 @@ public class LoginAttemptsLockResetDAOImpl extends JdbcDaoSupport implements Log
 	public void unlockAccount(String username) {
 		// TODO Auto-generated method stub
 		 getJdbcTemplate().update(
-				 "UPDATE user_attempts SET attempts = attempts + 1, lastmodified = ? WHERE username = ?", new Object[] { new Date(),username });
+				 "UPDATE user_attempts SET attempts = 0, lastmodified = ? WHERE username = ?", new Object[] { new Date(),username });
 	 
 	}
 
