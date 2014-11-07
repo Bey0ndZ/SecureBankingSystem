@@ -19,34 +19,39 @@ import org.springframework.web.servlet.ModelAndView;
 import edu.softwaresecurity.group5.dto.CustomerInformationDTO;
 import edu.softwaresecurity.group5.dto.UserTransactionsDTO;
 import edu.softwaresecurity.group5.service.CustomerService;
+import edu.softwaresecurity.group5.service.PKIImpl;
 
 @Controller
 public class TransactionsController {
 	@Autowired
 	CustomerService custService;
+	@Autowired
+	PKIImpl pkiImpl;
 
 	@RequestMapping(value = "/processBillPayment", method = RequestMethod.GET)
 	public ModelAndView returnBillPayPage() {
 		ModelAndView modelAndView = new ModelAndView();
-		
+
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
-		UserDetails userDetail = (UserDetails) auth.getPrincipal();
-		String username = userDetail.getUsername();
-		
-		// Check whether the user is a merchant
-		if (custService.returnSelectionType(username)) {
-			// Merchant
-			// Do nothing?
-			modelAndView.addObject("isMerchant", "Initiate billPay, Merchant!");
-			modelAndView.setViewName("billPay");
-		} else {
-			// Individual - Cannot initiate billPay requests
-			modelAndView.addObject("isMerchant", "You are an individual, not a merchant");
-			modelAndView.setViewName("permission-denied");
-		}
-		
+			UserDetails userDetail = (UserDetails) auth.getPrincipal();
+			String username = userDetail.getUsername();
+
+			// Check whether the user is a merchant
+			if (custService.returnSelectionType(username)) {
+				// Merchant
+				// Do nothing?
+				modelAndView.addObject("isMerchant",
+						"Initiate billPay, Merchant!");
+				modelAndView.setViewName("billPay");
+			} else {
+				// Individual - Cannot initiate billPay requests
+				modelAndView.addObject("isMerchant",
+						"You are an individual, not a merchant");
+				modelAndView.setViewName("permission-denied");
+			}
+
 		} else {
 			modelAndView.setViewName("permission-denied");
 		}
@@ -62,7 +67,7 @@ public class TransactionsController {
 		if (!(accountNumber.isEmpty() || amountToBeTransferred.isEmpty())) {
 			int length1 = accountNumber.length();
 			int length2 = amountToBeTransferred.length();
-			
+
 			int counter = 0;
 			for (char ch : accountNumber.toCharArray()) {
 				if (Character.isDigit(ch) == false) {
@@ -85,14 +90,12 @@ public class TransactionsController {
 						"Please enter the correct account numebr and amount!");
 				modelAndView.setViewName("billPay");
 				return modelAndView;
-			}
-			else {
-				
-				
-				
-				
-				String inputAccountNumber = Jsoup.clean(accountNumber, Whitelist.basic());
-				String inputAmountToBeTransferred = Jsoup.clean(amountToBeTransferred, Whitelist.basic());
+			} else {
+
+				String inputAccountNumber = Jsoup.clean(accountNumber,
+						Whitelist.basic());
+				String inputAmountToBeTransferred = Jsoup.clean(
+						amountToBeTransferred, Whitelist.basic());
 
 				Authentication auth = SecurityContextHolder.getContext()
 						.getAuthentication();
@@ -102,8 +105,7 @@ public class TransactionsController {
 					modelAndView.addObject("username", loggedInUser);
 
 					if (custService.processBillPay(loggedInUser,
-							inputAccountNumber,
-							inputAmountToBeTransferred)) {
+							inputAccountNumber, inputAmountToBeTransferred)) {
 						modelAndView.addObject("submitMessage",
 								"Request submitted.");
 					} else {
@@ -142,45 +144,49 @@ public class TransactionsController {
 	}
 
 	// Getting the userdetails
-		@RequestMapping(value = "/transferMoney", method = RequestMethod.POST)
-		public ModelAndView getUserDetail(
-				@RequestParam("accountNumber") String accountnumber) {
-			
-			ModelAndView modelAndView = new ModelAndView();
-			int counter = 0;
-			try
-			{
-			for (char ch: accountnumber.toCharArray()) {
+	@RequestMapping(value = "/transferMoney", method = RequestMethod.POST)
+	public ModelAndView getUserDetail(
+			@RequestParam("accountNumber") String accountnumber) {
+
+		ModelAndView modelAndView = new ModelAndView();
+		int counter = 0;
+		try {
+			for (char ch : accountnumber.toCharArray()) {
 				if (Character.isDigit(ch)) {
-					counter ++;
+					counter++;
 				}
 			}
-			
+
 			if (counter != 8 || accountnumber.length() != 8) {
-				modelAndView.addObject("errorMsg", "Please enter the correct account number!");
+				modelAndView.addObject("errorMsg",
+						"Please enter the correct account number!");
 				modelAndView.setViewName("transferMoney");
-			}
-			else {
+			} else {
 				CustomerInformationDTO customerDetails = new CustomerInformationDTO();
 				customerDetails = custService.getUserFromAccount(accountnumber);
 				modelAndView.addObject("customerDetails", customerDetails);
 				modelAndView.setViewName("transferMoney");
 			}
-		}
-		catch(Exception e)
-		{
-			modelAndView.addObject("errorMsg", " Please enter the correct account no. ");
+		} catch (Exception e) {
+			modelAndView.addObject("errorMsg",
+					" Please enter the correct account no. ");
 			modelAndView.setViewName("transferMoney");
 		}
-			return modelAndView;
-		}
-		// Getting the transfer/pending
-		@RequestMapping(value = "/transferMoneyConfirmation", method = RequestMethod.POST)
-		public ModelAndView updateAccount(
-				@RequestParam("accountNo") String accountnumber,
-				@RequestParam("amount") String transfer, @RequestParam String action) {
-			ModelAndView modelAndView = new ModelAndView();
-			try{
+		return modelAndView;
+	}
+
+	// Getting the transfer/pending
+	@RequestMapping(value = "/transferMoneyConfirmation", method = RequestMethod.POST)
+	public ModelAndView updateAccount(
+			@RequestParam("accountNo") String accountnumber,
+			@RequestParam("amount") String transfer, @RequestParam String action) {
+		ModelAndView modelAndView = new ModelAndView();
+		// Call the PKIImpl
+		pkiImpl.generateKeys();
+		String signature = pkiImpl.sign(accountnumber);
+		boolean isValid = pkiImpl.verifySignature(accountnumber, signature);
+
+		try {
 			if (action.equals("Transfer")) {
 				Authentication auth = SecurityContextHolder.getContext()
 						.getAuthentication();
@@ -188,21 +194,29 @@ public class TransactionsController {
 					UserDetails userDetail = (UserDetails) auth.getPrincipal();
 					String loggedInUser = userDetail.getUsername();
 					modelAndView.addObject("username", loggedInUser);
-					
+
 					int len = transfer.length();
-					if (len>3) {
-						modelAndView.addObject("errorMsg", "You are not allowed to transfer more then $999 at a time!");
+					if (len > 3) {
+						modelAndView
+								.addObject("errorMsg",
+										"You are not allowed to transfer more then $999 at a time!");
 						modelAndView.setViewName("transferMoney");
 						return modelAndView;
 					}
-					
-					if (custService.transfer(loggedInUser, accountnumber, transfer)) {
-						
-						modelAndView.addObject("submitMessage",
-								"Transfer Processed.");
-						
+
+					if (isValid) {
+						if (custService.transfer(loggedInUser, accountnumber,
+								transfer)) {
+
+							modelAndView.addObject("submitMessage",
+									"Transfer Processed.");
+						} else {
+							modelAndView.addObject("submitMessage",
+									"Request cannot be processed");
+						}
 					} else {
-						modelAndView.addObject("submitMessage",	"Request cannot be proccessed. ");
+						modelAndView.addObject("submitMessage",
+								"Key mismatch. Try again. ");
 					}
 				}
 				modelAndView.setViewName("transferMoney");
@@ -215,31 +229,35 @@ public class TransactionsController {
 					String loggedInUser = userDetail.getUsername();
 					modelAndView.addObject("username", loggedInUser);
 
-					if (custService.pendingTransfer(loggedInUser, accountnumber,
-							transfer)) {
-						modelAndView.addObject("submitMessage",
-								"Request submitted.");
+					if (isValid) {
+						if (custService.pendingTransfer(loggedInUser,
+								accountnumber, transfer)) {
+							modelAndView.addObject("submitMessage",
+									"Request submitted.");
+						} else {
+							modelAndView.addObject("submitMessage",
+									"Request cannot be processed.");
+						}
 					} else {
 						modelAndView
 								.addObject("submitMessage",
-										"Request cannot be proccessed.");
+										"Request cannot be proccessed. Key mismatch. Try again.");
 					}
 				}
 			}
-			}
-				catch(Exception e)
-				{
-					modelAndView.addObject("errorMsg", " Please enter a correct amount ");
-					modelAndView.setViewName("transferMoney");
-				}
-				return modelAndView;
-				}
-
+		} catch (Exception e) {
+			modelAndView.addObject("errorMsg",
+					" Please enter a correct amount ");
+			modelAndView.setViewName("transferMoney");
+		}
+		return modelAndView;
+	}
 
 	// GET Transactions
 	// Transactions Review
-	
+
 	List<String> t_id = new ArrayList<String>();
+
 	@RequestMapping(value = "/transactionReview", method = RequestMethod.GET)
 	public ModelAndView returnTransactionsReviewPage() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -253,13 +271,13 @@ public class TransactionsController {
 			userTransactions = custService.getUserTransactions(loggedInUser);
 
 			// Add the object to model
-			
+
 			for (UserTransactionsDTO userTransactionsEach : userTransactions) {
 				t_id.add(userTransactionsEach.getUsernameToAccountNumber());
 			}
-			
-			System.out.println("CHECK: "+userTransactions);
-			
+
+			System.out.println("CHECK: " + userTransactions);
+
 			modelAndView.addObject("userTransactions", userTransactions);
 			modelAndView.setViewName("transactionsReview");
 		} else {
@@ -274,33 +292,33 @@ public class TransactionsController {
 	public ModelAndView deleteSuccessPage(
 			@RequestParam("deleteTransactionID") String deleteTxID) {
 		ModelAndView modelAndView = new ModelAndView();
-		
-		//----
+
+		// ----
 		int count = 0;
-		for (char c: deleteTxID.toCharArray()) {
-			if(Character.isDigit(c)) {
-				count ++;
+		for (char c : deleteTxID.toCharArray()) {
+			if (Character.isDigit(c)) {
+				count++;
 			}
 		}
-		
+
 		boolean flag = true;
 		if (!t_id.contains(deleteTxID)) {
 			flag = false;
+		} else {
+			flag = true;
 		}
-		else {
-			flag= true;
-		}
-		
-		if (deleteTxID.length() != count || deleteTxID.length() == 0 || deleteTxID.length() != 6 || flag==false) {
-			modelAndView.addObject("errorMsg", "Please enter the correct transaction ID!");
+
+		if (deleteTxID.length() != count || deleteTxID.length() == 0
+				|| deleteTxID.length() != 6 || flag == false) {
+			modelAndView.addObject("errorMsg",
+					"Please enter the correct transaction ID!");
 			modelAndView.setViewName("transactionsReview");
 			return modelAndView;
 		}
-		
+
 		else if (!deleteTxID.isEmpty()) {
 			// Strip HTML to prevent XSS
 			String txID = Jsoup.clean(deleteTxID, Whitelist.basic());
-			
 
 			Integer txIDInInt = Integer.parseInt(txID);
 
@@ -321,9 +339,9 @@ public class TransactionsController {
 		modelAndView.setViewName("deleteTransactionSuccess");
 		return modelAndView;
 	}
-	
+
 	// After a delete is processed, show the users the page
-	@RequestMapping(value="/deleteTransaction", method=RequestMethod.GET)
+	@RequestMapping(value = "/deleteTransaction", method = RequestMethod.GET)
 	public ModelAndView returnDeleteTransactionSuccessPage() {
 		// Call the getUserTransactions method
 		ModelAndView modelAndView = new ModelAndView();
@@ -344,28 +362,40 @@ public class TransactionsController {
 		}
 		return modelAndView;
 	}
-	
+
 	// billPay module
 	// Approve billPay
-	@RequestMapping(value="/approveBillPay", method=RequestMethod.POST)
-	public ModelAndView returnApproveBillPayPage(@RequestParam("merchantUsername") String merchantUsername) {
+	@RequestMapping(value = "/approveBillPay", method = RequestMethod.POST)
+	public ModelAndView returnApproveBillPayPage(
+			@RequestParam("merchantUsername") String merchantUsername) {
 		// Have a debit credit details in a new page
 		ModelAndView modelAndView = new ModelAndView();
-		
+
 		Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
 		if (!(auth instanceof AnonymousAuthenticationToken)) {
 			UserDetails userDetail = (UserDetails) auth.getPrincipal();
 			String username = userDetail.getUsername();
-			
+
 			// Call the methods
-			String billPayInformation = custService.approveBillPay(merchantUsername, username);
-			
-			modelAndView.addObject("billPayInformation", billPayInformation);
-			modelAndView.setViewName("billPaySuccess");
+			// Sign the methods and verify in service layer
+			pkiImpl.generateKeys();
+			String signature = pkiImpl.sign(merchantUsername);
+			boolean isValid = pkiImpl.verifySignature(merchantUsername,
+					signature);
+
+			if (isValid) {
+				// Call the approveBillPay method
+				String billPayInformation = custService.approveBillPay(
+						merchantUsername, username);
+
+				modelAndView
+						.addObject("billPayInformation", billPayInformation);
+				modelAndView.setViewName("billPaySuccess");
+			}
 		} else {
 			modelAndView.setViewName("permission-denied");
 		}
-		return modelAndView;	
+		return modelAndView;
 	}
 }

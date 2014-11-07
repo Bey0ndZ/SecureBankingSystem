@@ -182,8 +182,8 @@
 												</table>
 												<form:form method="POST" action="approveBillPay">
 													Enter the merchant name (All the payments will be approved):<br/>
-													<input type="text" name="merchantUsername" /><br/>
-													<input type="submit">
+													Merchant Name: <input type="text" name="merchantUsername" id="merchantUsername" /><br/><br/>
+													<input type="submit" value="Submit" />
 												</form:form>
 											</c:if>
 										</div>

@@ -190,6 +190,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 			
 			// PKI Infrastructure
 			// Creates a file
+			// This also generates public-private keypair
+			// Not using this for now
 			PrivateKey privateKey;
 			PublicKey publicKey;
 			
@@ -237,7 +239,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 								+ custInfo.getFirstname()
 								+ " Please click the link http://localhost:8080/SecureBankingSystem/activateAccount/"
 								+ custInfo.getUsername()
-								+ " to activate your account and your private key is "
+								+ " to activate your account.\n\n. For your secure transactions, use your private key: "
 								+ privateKey.getEncoded().toString());
 				return "Registration Successful!! Activation link has been sent at "
 						+ custInfo.getEmail();

@@ -1,7 +1,10 @@
 package edu.softwaresecurity.group5.service;
 
 import java.io.FileNotFoundException;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.Signature;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;

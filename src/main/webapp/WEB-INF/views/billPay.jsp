@@ -31,6 +31,17 @@
 	href="${pageContext.request.contextPath}/resources/font-awesome-4.1.0/css/font-awesome.min.css"
 	rel="stylesheet" type="text/css">
 
+<!-- PKI -->
+<script type="text/javascript">
+	function doSign() {
+		var rsa = new RSAKey();
+		rsa.readPrivateKeyFromPEMString('sun.security.rsa.RSAPrivateCrtKeyImpl@fff80ae2');
+		
+		var hashAlgorithm = "SHA1";
+		var hSig = rsa.signString(document.getElementById('merchantName').value);
+	}
+</script>
+
 </head>
 
 <body>
@@ -130,6 +141,7 @@
 								</div>
 								<div class="panel-body">
 									<div id="morris-area-chart">
+									
 										<!-- Bill pay request goes here -->
 										<c:if test="${not empty isMerchant }">
 											<form:form method="POST" action="processBillPayment">
@@ -168,6 +180,27 @@
 		<!-- Bootstrap Core JavaScript -->
 		<script
 			src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+			
+			<!-- Generating a signature in JavaScript -->
+			<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+			<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core.js"></script>
+			<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/md5.js"></script>
+			<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha1.js"></script>
+			<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha256.js"></script>
+			<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/ripemd160.js"></script>
+			<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+			<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha512.js"></script>
+			<script src="http://kjur.github.io/jsrsasign/ext/jsbn.js"></script>
+			<script src="http://kjur.github.io/jsrsasign/ext/jsbn2.js"></script>
+			<script src="http://kjur.github.io/jsrsasign/ext/rsa.js"></script>
+			<script src="http://kjur.github.io/jsrsasign/ext/rsa2.js"></script>
+			<script src="http://kjur.github.io/jsrsasign/ext/base64.js"></script>
+			<script src="http://kjur.github.io/jsrsasign/rsapem-1.1.js"></script>
+			<script src="http://kjur.github.io/jsrsasign/rsasign-1.2.js"></script>
+			<script src="http://kjur.github.io/jsrsasign/asn1hex-1.1.js"></script>
+			<script src="http://kjur.github.io/jsrsasign/x509-1.1.js"></script>
+			<script src="http://kjur.github.io/jsrsasign/crypto-1.1.js"></script>			
+			
 	</sec:authorize>
 </body>
 
