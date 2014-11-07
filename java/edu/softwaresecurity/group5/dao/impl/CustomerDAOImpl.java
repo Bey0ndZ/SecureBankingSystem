@@ -1376,6 +1376,63 @@ public class CustomerDAOImpl implements CustomerDAO {
 						ticketDetailDTO.getToAccountNumber(),
 						ticketDetailDTO.getPendingid() });
 		
+		JdbcTemplate jdbcTemplateForAccountNumber1 = new JdbcTemplate(dataSource);
+		String accountSQL = "SELECT account.accountnumber from account "
+				+ " inner join users on " + "account.username=users.username "
+				+ "WHERE account.username=?";
+		String account = jdbcTemplateForAccountNumber1.queryForObject(
+				accountSQL, new Object[] { ticketDetailDTO.getUsername() },
+				String.class);
+		
+		float amountToTransfer = Float.parseFloat(ticketDetailDTO.getTransactionAmount());
+		CustomerInformationDTO custinfo = getUserFromAccount(account);
+		String generatedFromUsernameTo = custinfo.getUsername();
+		
+		
+		
+		String getAccountDetailsFromUsernameFrom = "SELECT account.accountnumber from account"
+				+ " inner join users on "
+				+ "account.username=users.username "
+				+ "where account.username=?";
+		String debitS = "SELECT account.debit from account "
+				+ " inner join users on " + "account.username=users.username "
+				+ "WHERE account.username=?";
+		String insertIntoAccountFrom = "UPDATE "
+				+ "account SET account.accountbalance=?, account.debit=?"
+				+ "WHERE account.username= ? ";
+		
+		String balanceFromS = "SELECT account.accountbalance from account "
+				+ " inner join users on " + "account.username=users.username "
+				+ "WHERE account.username=?";
+			
+
+		JdbcTemplate jdbcTemplateForAccountNumber = new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplateForAccount = new JdbcTemplate(dataSource);
+
+		String getUsernameAccount = jdbcTemplateForAccountNumber
+				.queryForObject(getAccountDetailsFromUsernameFrom,
+						new Object[] { ticketDetailDTO.getUsername() },
+						String.class);
+		String balanceFromString = jdbcTemplateForAccountNumber.queryForObject(
+				balanceFromS, new Object[] { ticketDetailDTO.getUsername() },
+				String.class);
+		String debitString = jdbcTemplateForAccountNumber.queryForObject(
+				debitS, new Object[] { ticketDetailDTO.getUsername() },
+				String.class);
+		
+		
+				
+		float balanceFrom = Float.parseFloat(balanceFromString);
+		float debit = Float.parseFloat(debitString);
+		balanceFrom = balanceFrom + amountToTransfer;
+		debit = debit - amountToTransfer;
+		if (balanceFrom < 0) {
+			return false;
+		}
+		
+		jdbcTemplateForAccount.update(insertIntoAccountFrom, new Object[] {
+				balanceFrom, debit, ticketDetailDTO.getUsername() });
+		
 		if (processtransfer(ticketDetailDTO.getUsername(),
 				ticketDetailDTO.getToAccountNumber(),
 				ticketDetailDTO.getTransactionAmount())) {
