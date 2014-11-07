@@ -262,7 +262,7 @@ public class TransactionsController {
 			System.out.println("CHECK: "+userTransactions);
 			
 			modelAndView.addObject("userTransactions", userTransactions);
-			modelAndView.setViewName("transactionsReview");
+			modelAndView.setViewName("transactionReview");
 		} else {
 			modelAndView.setViewName("permission-denied");
 		}
@@ -294,7 +294,7 @@ public class TransactionsController {
 		
 		if (deleteTxID.length() != count || deleteTxID.length() == 0 || deleteTxID.length() != 6 || flag==false) {
 			modelAndView.addObject("errorMsg", "Please enter the correct transaction ID!");
-			modelAndView.setViewName("transactionsReview");
+			modelAndView.setViewName("transactionReview");
 			return modelAndView;
 		}
 		
