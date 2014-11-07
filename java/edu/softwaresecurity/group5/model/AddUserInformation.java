@@ -24,7 +24,7 @@ public class AddUserInformation {
     private String password;
     @NotEmpty(message = "Please enter your password again to confirm.")
     private String confirmPassword;
-    @Size(min = 10, max = 10, message = "")
+    @Size(min = 9, max = 9, message = "")
     private String socialSecurityNumber;
     private String selection;
 	private int userExpired;

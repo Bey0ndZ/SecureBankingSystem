@@ -22,6 +22,13 @@ public class TicketDetailDTO {
 	private boolean requestrejected;
 	private boolean deleteaccount;
 	private int accountNumber;
+	private String accountNumberString;
+	public String getAccountNumberString() {
+		return accountNumberString;
+	}
+	public void setAccountNumberString(String accountNumberString) {
+		this.accountNumberString = accountNumberString;
+	}
 	private float transactionamountInfloat;
 	public float getTransactionamountInfloat() {
 		return transactionamountInfloat;
