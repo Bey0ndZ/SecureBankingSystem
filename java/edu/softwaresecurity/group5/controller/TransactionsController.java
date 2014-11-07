@@ -310,7 +310,7 @@ public class TransactionsController {
 		}
 
 		if (deleteTxID.length() != count || deleteTxID.length() == 0
-				|| deleteTxID.length() != 6 || flag == false) {
+				|| deleteTxID.length() != 6 ) {
 			modelAndView.addObject("errorMsg",
 					"Please enter the correct transaction ID!");
 			modelAndView.setViewName("transactionsReview");

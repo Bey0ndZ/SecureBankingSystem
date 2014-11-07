@@ -124,7 +124,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 			// Generating random account numbers
 			Random rand = new Random();
-			int accountNumber = 10000000 + rand.nextInt(90000000);
+			int accountNumber = 10000000 + rand.nextInt(80000000);
 
 			jdbcTemplateForAccounts.update(addUserIntoAccountsTable,
 					new Object[] { addInfo.getUserName(), accountNumber,
@@ -184,7 +184,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 			// Generating random account numbers
 			Random randAccounts = new Random();
-			int accountNumber = 10000100 + randAccounts.nextInt(99999999);
+			int accountNumber = 10000100 + randAccounts.nextInt(80000000);
 
 			jdbcTemplateForAccounts.update(insertIntoAccountsTable,
 					new Object[] { custInfo.getUsername(), accountNumber,
@@ -563,7 +563,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		// Generating random tx IDs
 		Random randGenerator = new Random();
-		int txID = 100000 + randGenerator.nextInt(999999);
+		int txID = 100000 + randGenerator.nextInt(800000);
 
 		// Generating timestamp
 		Calendar calendarForTx = Calendar.getInstance();
@@ -658,7 +658,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 			// Generating random tx IDs
 			Random randGenerator = new Random();
-			int txID = 100000 + randGenerator.nextInt(999999);
+			int txID = 100000 + randGenerator.nextInt(800000);
 
 			// Generating timestamp
 			Calendar calendarForTx = Calendar.getInstance();
@@ -725,7 +725,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		// Generating random tx IDs
 		Random randGenerator = new Random();
-		int txID = 100000 + randGenerator.nextInt(999999);
+		int txID = 100000 + randGenerator.nextInt(800000);
 
 		// Generating timestamp
 		Calendar calendarForTx = Calendar.getInstance();
@@ -1123,7 +1123,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		
 		// Generating random tx IDs
 		Random randGenerator = new Random();
-		int txID = 100000 + randGenerator.nextInt(999999);
+		int txID = 100000 + randGenerator.nextInt(800000);
 		
 		// Get the current timestamp
 		Calendar calendar = Calendar.getInstance();
@@ -1208,7 +1208,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 		
 		// Generating random tx IDs
 		Random randGenerator = new Random();
-		int txID = 100000 + randGenerator.nextInt(999999);
+		int txID = 100000 + randGenerator.nextInt(800000);
 		
 		// Get the current timestamp
 		Calendar calendar = Calendar.getInstance();

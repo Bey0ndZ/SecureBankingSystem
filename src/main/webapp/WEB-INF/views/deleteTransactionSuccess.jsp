@@ -113,8 +113,7 @@ function disableclick(event)
 							<ul id="demo2" class="collapse">
 								<li><a href="debitFunds">Debit</a></li>
 								<li><a href="creditFunds">Credit</a></li>
-							</ul>
-						</li>
+							</ul></li>
 						<li><a href="deleteAccount"><i
 								class="fa fa-fw fa-bar-chart-o"></i> Delete Account</a></li>
 					</ul>

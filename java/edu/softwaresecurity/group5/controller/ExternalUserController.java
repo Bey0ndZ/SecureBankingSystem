@@ -40,7 +40,7 @@ public class ExternalUserController {
 	CustomerService custService;
 
 	@RequestMapping(value = "/accountSummary", method = RequestMethod.GET)
-	public ModelAndView returnCustomerPage(HttpServletRequest session) {
+	public ModelAndView returnCustomerPage() {
 		ModelAndView modelAndView = new ModelAndView();
 		List<CustomerInformationDTO> custInfoFromDTO = new ArrayList<CustomerInformationDTO>();
 		List<BillPayDTO> billPayFromDTO = new ArrayList<BillPayDTO>();
