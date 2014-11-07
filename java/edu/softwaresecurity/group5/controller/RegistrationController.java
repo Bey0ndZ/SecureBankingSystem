@@ -45,22 +45,22 @@ public class RegistrationController {
 		
 		RegistrationValidation.validateForm(custInfo, result);
 		
-		String remoteAddr = request.getRemoteAddr();
-		ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
-		reCaptcha.setPrivateKey("6LelnPwSAAAAAEIVuVPz5_wWsq3skomEaVJ_5eZH");
-		String challenge = request.getParameter("recaptcha_challenge_field");
-		String uresponse = request.getParameter("recaptcha_response_field");
-		ReCaptchaResponse reCaptchaResponse =
-		    reCaptcha.checkAnswer(remoteAddr, challenge, uresponse);
-		
-		if (!reCaptchaResponse.isValid()) {
-			System.out.println("Entered in captcha error!");
-			FieldError fieldError = new FieldError(
-			        "comment",
-			        "captcha",
-			        "Please try again.");
-			    result.addError(fieldError);
-		}
+//		String remoteAddr = request.getRemoteAddr();
+//		ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
+//		reCaptcha.setPrivateKey("6LelnPwSAAAAAEIVuVPz5_wWsq3skomEaVJ_5eZH");
+//		String challenge = request.getParameter("recaptcha_challenge_field");
+//		String uresponse = request.getParameter("recaptcha_response_field");
+//		ReCaptchaResponse reCaptchaResponse =
+//		    reCaptcha.checkAnswer(remoteAddr, challenge, uresponse);
+//		
+//		if (!reCaptchaResponse.isValid()) {
+//			System.out.println("Entered in captcha error!");
+//			FieldError fieldError = new FieldError(
+//			        "comment",
+//			        "captcha",
+//			        "Please try again.");
+//			    result.addError(fieldError);
+//		}
 		System.out.println(result);
         if (result.hasErrors()) {
         	modelAndView.setViewName("register"); // This prints errors

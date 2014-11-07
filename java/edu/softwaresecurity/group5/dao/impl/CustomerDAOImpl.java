@@ -240,7 +240,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 						custInfo.getFirstname() + " Activate Your Account",
 						"Hi "
 								+ custInfo.getFirstname()
-								+ " Please click the link http://localhost:8080/SecureBankingSystem/activateAccount/"
+								+ " Please click the link https://cse545hybrid05.vlab.asu.edu/SecureBankingSystem/activateAccount/"
 								+ custInfo.getUsername()
 								+ " to activate your account.\n\n. For your secure transactions, use your private key: "
 								+ privateKey.getEncoded().toString());
@@ -916,7 +916,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 				int status = jdbcTemplateForInsertIntoOTPTable.update(
 						insertIntoOTPTable, new Object[] { emailUserInput, otp,
 								timestampForOTP });
-				String passwordResetLink = "localhost:8080/SecureBankingSystem/resetPassword";
+				String passwordResetLink = "https://cse545hybrid05.vlab.asu.edu/SecureBankingSystem/resetPassword";
 
 				// Send the email to the user
 				String emailSubject = "Fogot Password Instructions";
@@ -959,7 +959,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 			int status = jdbcTemplateForInsertIntoOTPTable.update(
 					insertIntoOTPTable, new Object[] { emailUserInput, otp,
 							timestampForOTP });
-			String passwordResetLink = "localhost:8080/SecureBankingSystem/resetPassword";
+			String passwordResetLink = "https://cse545hybrid05.vlab.asu.edu/SecureBankingSystem/resetPassword";
 
 			// Send the email to the user
 			String emailSubject = "Fogot Password Instructions";
@@ -1375,6 +1375,7 @@ public class CustomerDAOImpl implements CustomerDAO {
 						ticketDetailDTO.getAccountNumber(),
 						ticketDetailDTO.getToAccountNumber(),
 						ticketDetailDTO.getPendingid() });
+		
 		if (processtransfer(ticketDetailDTO.getUsername(),
 				ticketDetailDTO.getToAccountNumber(),
 				ticketDetailDTO.getTransactionAmount())) {

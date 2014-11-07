@@ -8,43 +8,43 @@
 	<!-- enable use-expressions -->
 	<http auto-config="true" use-expressions="true">
 		<!-- These are admin/internal user specific -->
-		<intercept-url pattern="/welcomeAdmin**" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/employee**" access="hasRole('ROLE_EMPLOYEE')" />
-		<intercept-url pattern="/addUser**" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
+		<intercept-url pattern="/welcomeAdmin**" access="hasRole('ROLE_ADMIN')" requires-channel="https"/>
+		<intercept-url pattern="/employee**" access="hasRole('ROLE_EMPLOYEE')" requires-channel="https"/>
+		<intercept-url pattern="/addUser**" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" requires-channel="https" />
 <!-- 		<intercept-url pattern="/removeUser*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" /> -->
 <!-- 		<intercept-url pattern="/viewUser*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" /> -->
-		<intercept-url pattern="/getList*" access="hasRole('ROLE_ADMIN')" />
-		<intercept-url pattern="/modifyUser" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
-        <intercept-url pattern="/viewQueue*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
-		<intercept-url pattern="/removeUserDB*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
-		<intercept-url pattern="/removeUserExternal*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
-		<intercept-url pattern="/ticketDetails*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
-		<intercept-url pattern="/modifyUserExternal*" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/viewTicket*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
-		<intercept-url pattern="/modifyExternalUserByInternal*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
-		<intercept-url pattern="/authorizeTransactions*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
-		<intercept-url pattern="/deleteTransactionSuccess*" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/viewPII*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
+		<intercept-url pattern="/getList*" access="hasRole('ROLE_ADMIN')" requires-channel="https"/>
+		<intercept-url pattern="/modifyUser" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" requires-channel="https"/>
+        <intercept-url pattern="/viewQueue*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" requires-channel="https"/>
+		<intercept-url pattern="/removeUserDB*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" requires-channel="https"/>
+		<intercept-url pattern="/removeUserExternal*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" requires-channel="https"/>
+		<intercept-url pattern="/ticketDetails*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" requires-channel="https"/>
+		<intercept-url pattern="/modifyUserExternal*" access="hasRole('ROLE_USER')" requires-channel="https"/>
+		<intercept-url pattern="/viewTicket*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" requires-channel="https"/>
+		<intercept-url pattern="/modifyExternalUserByInternal*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" requires-channel="https"/>
+		<intercept-url pattern="/authorizeTransactions*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" requires-channel="https"/>
+		<intercept-url pattern="/deleteTransactionSuccess*" access="hasRole('ROLE_USER')" requires-channel="https"/>
+		<intercept-url pattern="/viewPII*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" requires-channel="https" />
 		
 		<!-- These are permitAll -->
-		<intercept-url pattern="/accountSummary*" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/transferMoney*" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/transferActivity*" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/verifyUser*" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/debitAmount*" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/creditAmount*" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/transactionsReview*" access="hasRole('ROLE_USER')" />
-		<intercept-url pattern="/authorizePII*" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/accountSummary*" access="hasRole('ROLE_USER')" requires-channel="https" />
+		<intercept-url pattern="/transferMoney*" access="hasRole('ROLE_USER')" requires-channel="https"/>
+		<intercept-url pattern="/transferActivity*" access="hasRole('ROLE_USER')" requires-channel="https"/>
+		<intercept-url pattern="/verifyUser*" access="hasRole('ROLE_USER')" requires-channel="https"/>
+		<intercept-url pattern="/debitAmount*" access="hasRole('ROLE_USER')" requires-channel="https"/>
+		<intercept-url pattern="/creditAmount*" access="hasRole('ROLE_USER')" requires-channel="https" />
+		<intercept-url pattern="/transactionsReview*" access="hasRole('ROLE_USER')" requires-channel="https"/>
+		<intercept-url pattern="/authorizePII*" access="hasRole('ROLE_USER')" requires-channel="https"/>
 
 		<!-- These are external user specific -->
-        <intercept-url pattern="/index*" access="permitAll"/>
-		<intercept-url pattern="/register*" access="permitAll" />
-		<intercept-url pattern="/unlockAccount*" access="permitAll" />
+        <intercept-url pattern="/index*" access="permitAll" requires-channel="https"/>
+		<intercept-url pattern="/register*" access="permitAll" requires-channel="https" />
+		<intercept-url pattern="/unlockAccount*" access="permitAll" requires-channel="https"/>
 <!-- 		<intercept-url pattern="/**" access="permitAll" /> -->
-		<intercept-url pattern="/changePassword*" access="permitAll" />
-		<intercept-url pattern="/activateAccount*" access="permitAll" />
-		<intercept-url pattern="/activateAccount/activateAccount*" access="permitAll" />
-		<intercept-url pattern="/resetPassword*" access="permitAll" />
+		<intercept-url pattern="/changePassword*" access="permitAll" requires-channel="https"/>
+		<intercept-url pattern="/activateAccount*" access="permitAll" requires-channel="https" />
+		<intercept-url pattern="/activateAccount/activateAccount*" access="permitAll" requires-channel="https"/>
+		<intercept-url pattern="/resetPassword*" access="permitAll" requires-channel="https"/>
 
 		<!-- access denied page -->
 		<access-denied-handler error-page="/403" />
@@ -55,7 +55,16 @@
 		<logout logout-success-url="/index?logout" />
 		<!-- enable csrf protection -->
 		<csrf />
-
+<port-mappings>
+        <!-- Default ports -->
+        <port-mapping http="80" https="443"/>
+        <!-- Websphere default ports -->
+        <port-mapping http="9080" https="9443"/>
+        <!-- Tomcat default ports -->
+        <port-mapping http="8080" https="8443"/>
+        <!-- Jetty custom ports -->
+        <port-mapping http="7777" https="7443"/>
+    </port-mappings>
 		<session-management>
 			<concurrency-control max-sessions="1"
 				error-if-maximum-exceeded="true" />

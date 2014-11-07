@@ -149,24 +149,24 @@ function disableclick(event)
 									<b>Email Address:</b> <br/><input type="email" name="email" id="email" style="color:#999;" /><br/><br/>
 									<b>Social Security Number:</b> <FONT color="red"><form:errors path="socialSecurityNumber" /> </FONT><br/><input type="text" name="socialSecurityNumber" id="socialSecurityNumber" style="color:#999;" /><br/><br/>
 									<b>Address:</b><FONT color="red"> <form:errors path="address" /></FONT><br/><input type="text" name="address" id="add" style="color:#999;" /><br/><br/>
-									<b>Captcha:</b><br/>	
-									<%-- <%
-				          				ReCaptcha c = ReCaptchaFactory.newReCaptcha("6LelnPwSAAAAAEdizJnYFeutV2At7VHSkC9PYxZX", "6LelnPwSAAAAAEIVuVPz5_wWsq3skomEaVJ_5eZH", false);
-				          				out.print(c.createRecaptchaHtml(null, null));
-				        			%>	 --%>
+<!-- 									<b>Captcha:</b><br/>	 -->
+<%-- 									<%
+<%-- 				          				ReCaptcha c = ReCaptchaFactory.newReCaptcha("6LelnPwSAAAAAEdizJnYFeutV2At7VHSkC9PYxZX", "6LelnPwSAAAAAEIVuVPz5_wWsq3skomEaVJ_5eZH", false); --%>
+<%-- 				          				out.print(c.createRecaptchaHtml(null, null)); --%>
+<%-- 				        			%>	 --%> --%>
 				        			
-				        			<script type="text/javascript"
-									   src="https://www.google.com/recaptcha/api/challenge?k=6LelnPwSAAAAAEdizJnYFeutV2At7VHSkC9PYxZX">
-									</script>
+<!-- 				        			<script type="text/javascript" -->
+<!-- 									   src="https://www.google.com/recaptcha/api/challenge?k=6LelnPwSAAAAAEdizJnYFeutV2At7VHSkC9PYxZX"> -->
+<!-- 									</script> -->
 									
-									<noscript>
-									   <iframe src="https://www.google.com/recaptcha/api/noscript?k=6LelnPwSAAAAAEdizJnYFeutV2At7VHSkC9PYxZX"
-									       height="300" width="500" frameborder="0"></iframe><br>
-									   <textarea name="recaptcha_challenge_field" rows="3" cols="40">
-									   </textarea>
-									   <input type="hidden" name="recaptcha_response_field"
-									       value="manual_challenge">
-									</noscript>	
+<!-- 									<noscript> -->
+<!-- 									   <iframe src="https://www.google.com/recaptcha/api/noscript?k=6LelnPwSAAAAAEdizJnYFeutV2At7VHSkC9PYxZX" -->
+<!-- 									       height="300" width="500" frameborder="0"></iframe><br> -->
+<!-- 									   <textarea name="recaptcha_challenge_field" rows="3" cols="40"> -->
+<!-- 									   </textarea> -->
+<!-- 									   <input type="hidden" name="recaptcha_response_field" -->
+<!-- 									       value="manual_challenge"> -->
+<!-- 									</noscript>	 -->
 													
 									<br/><h4><input type="submit" style="margin-right: 5%" name="login" id="log_in" value="Register" /></h4>
 									
