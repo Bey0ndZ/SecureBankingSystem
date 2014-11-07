@@ -145,7 +145,7 @@ function disableclick(event)
 									     <td>${user.id}</td>  
 									     <td>${user.username}</td>  
 									     <td>${user.requesttype}</td>   
-									     <td><form:form method="post" action="viewTicket" modelAttribute="ticketDetail">					
+									     <td><form:form method="post" action="viewTicket" modelAttribute="ticketDetail" autocomplete="off">					
 										 <input type="hidden" name="id" id="ticketId" value="${user.id}" style="color:#999;" />
 										<input type="hidden" name="username" id="ticketId" value="${user.username}" style="color:#999;" />
 										 <input type="hidden" name="requesttype" id="ticketId" value="${user.requesttype}" style="color:#999;" />

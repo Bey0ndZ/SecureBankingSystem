@@ -152,7 +152,7 @@ function disableclick(event)
 											<!-- Bill pay information -->
 											<c:if test="${not empty userTransactions}">
 											
-											<form:form method="POST" action="deleteTransaction" >
+											<form:form method="POST" action="deleteTransaction" autocomplete="off" >
 												Transaction ID to delete:<br/>
 												<input type="text" name="deleteTransactionID" /><br/>
 												<input type="submit" value="Delete Transaction" /><br/><br/><br/>

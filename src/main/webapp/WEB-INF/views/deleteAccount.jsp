@@ -174,7 +174,7 @@ function disableclick(event)
 												<!-- New form to update only Lastname,
 										Sex, Selection, Phonenumber, Email and Address -->
 												<form:form method="POST" action="deleteAccount"
-													modelAttribute="modifyExternalUserAttributes">
+													modelAttribute="modifyExternalUserAttributes" autocomplete="off">
 													<b> Do you wish to delete your account? </b>
 													<br />
 													<input type="radio" name="deleteAccount" value="Yes" /> Yes <br />

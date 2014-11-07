@@ -194,7 +194,7 @@ function disableclick(event)
 														</c:forEach>
 													</tbody>
 												</table>
-												<form:form method="POST" action="approveBillPay">
+												<form:form method="POST" action="approveBillPay" autocomplete="off">
 													Enter the merchant name (All the payments will be approved):<br/>
 													Merchant Name: <input type="text" name="merchantUsername" id="merchantUsername" /><br/><br/>
 													<input type="submit" value="Submit" />

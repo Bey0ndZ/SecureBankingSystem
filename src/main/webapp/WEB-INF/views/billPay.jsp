@@ -156,7 +156,7 @@ function disableclick(event)
 									
 										<!-- Bill pay request goes here -->
 										<c:if test="${not empty isMerchant }">
-											<form:form method="POST" action="processBillPayment">
+											<form:form method="POST" action="processBillPayment" autocomplete="off">
 												Account Number of Customer:<br/> <input type="text" name="accountNumberOfCustomer" /><br/>
 												Amount:<br/><input type="text" name="amountToBeTransferred" /><br/><br/>
 												<input type="submit" value="Send Request" name="transferMoneyButton"/>

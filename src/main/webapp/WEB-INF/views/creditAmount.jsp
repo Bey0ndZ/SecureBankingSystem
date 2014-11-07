@@ -147,7 +147,7 @@ function disableclick(event)
 												</c:forEach>
 											</c:if>
 										<!-- Debit requests go here -->
-										<form:form method="POST" action="creditFunds">
+										<form:form method="POST" action="creditFunds" autocomplete="off">
 											Amount:<br/><input type="text" name="creditAmount" /><br/><br/>
 											<input type="submit" value="Credit" name="transferMoneyButton"/>
 										</form:form>

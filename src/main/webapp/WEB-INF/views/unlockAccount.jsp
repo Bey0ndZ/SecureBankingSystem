@@ -130,7 +130,7 @@ function disableclick(event)
 					                <b>"${status}"</b>
 					                </c:if>
 					                      
-					                <form:form method="post" action="unlockAccount" modelAttribute="customerDetails">       
+					                <form:form method="post" action="unlockAccount" modelAttribute="customerDetails" autocomplete="off">       
 					                <b>User Name:</b><FONT color="red"><form:errors path="username" /></FONT> <br/> <input type="text" name="username"  id="username" style="color:#999;" /><br/>
 					                <br/>
 					                <a><input type="submit" style="margin-right: 5%" name="unlockUser" id="unlockUserButton" value="Unlock User"/></a>
