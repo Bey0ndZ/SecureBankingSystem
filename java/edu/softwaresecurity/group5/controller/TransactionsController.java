@@ -195,14 +195,14 @@ public class TransactionsController {
 					String loggedInUser = userDetail.getUsername();
 					modelAndView.addObject("username", loggedInUser);
 
-					int len = transfer.length();
-					if (len > 3) {
-						modelAndView
-								.addObject("errorMsg",
-										"You are not allowed to transfer more then $999 at a time!");
-						modelAndView.setViewName("transferMoney");
-						return modelAndView;
-					}
+//					int len = transfer.length();
+//					if (len > 3) {
+//						modelAndView
+//								.addObject("errorMsg",
+//										"You are not allowed to transfer more then $999 at a time!");
+//						modelAndView.setViewName("transferMoney");
+//						return modelAndView;
+//					}
 
 					if (isValid) {
 						if (custService.transfer(loggedInUser, accountnumber,
