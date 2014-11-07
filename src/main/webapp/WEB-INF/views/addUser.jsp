@@ -141,7 +141,7 @@ function disableclick(event)
                                 <h4> 8. Address should not be empty. It should not exceed 50 characters.</h4>
                                 <h4> 9. No special characters are allowed in: First name, last name, user name, address</h4>
                                 <br/> <br/>
-                                <form:form method="POST" action="addUser" modelAttribute="addUserForm">					
+                                <form:form method="POST" action="addUser" modelAttribute="addUserForm" autocomplete="off">					
 									<c:if test="${not empty errorMsg}">
 										<h3> ${errorMsg} </h3>
                                     </c:if>

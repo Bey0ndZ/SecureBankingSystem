@@ -140,7 +140,7 @@ function disableclick(event)
 						               		<b>"${status}"</b>
 						                </c:if>
 						                      
-						                <form:form method="post" action="getList" modelAttribute="customerDetails">              
+						                <form:form method="post" action="getList" modelAttribute="customerDetails" autocomplete="off">              
 							                <b>First Name:</b> <br/> <input type="text" name="firstname" id="f_name_modifyUser" value="${customerDetails.firstname}" style="color:#999;" /><br/>
 							                <b>Last Name:</b> <br/> <input type="text" name="lastname" id="l_name_modifyUser" value="${customerDetails.lastname}" style="color:#999;" /><br/>
 							                <b>Contact:</b> <br/> <input type="text" name="phonenumber" id="contact_modifyUser" value="${customerDetails.phonenumber}" style="color:#999;" /><br/>

@@ -156,7 +156,7 @@ function disableclick(event)
 									     <td>${ticketDetailDTO.phonenumber}</td>  
 									     <td>${ticketDetailDTO.email}</td> 
 									     <td>${ticketDetailDTO.address}</td>  
-									     <td><form:form method="post" action="modifyExternalUserByInternal" modelAttribute="modifyExternalUserByAdmin">                    
+									     <td><form:form method="post" action="modifyExternalUserByInternal" modelAttribute="modifyExternalUserByAdmin" autocomplete="off">                    
 					                     <input type="hidden" name="username" id="accountNumber_RemoveUser" value="${ticketDetailDTO.username}" style="color:#999;" />
 					                     <input type="hidden" name="firstname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.firstname}" style="color:#999;" />
 					               		 <input type="hidden" name="lastname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.lastname}" style="color:#999;" />
@@ -230,7 +230,7 @@ function disableclick(event)
 									     <td>${ticketDetailDTO.transactionAmount}</td> 
 									     <td>${ticketDetailDTO.toAccountNumber}</td> 
 									     <td>${ticketDetailDTO.billpay}</td> 
-									     <td><form:form method="post" action="authorizeTransactionsApprove" modelAttribute="authorizeTransactions">                    
+									     <td><form:form method="post" action="authorizeTransactionsApprove" modelAttribute="authorizeTransactions" autocomplete="off">                    
 					                     <input type="hidden" name="accountNumber" id="accountNumber_RemoveUser" value="${ticketDetailDTO.accountNumber}" style="color:#999;" />
 					                     <input type="hidden" name="username" id="accountNumber_RemoveUser" value="${ticketDetailDTO.username}" style="color:#999;" />
 					                     <input type="hidden" name="firstname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.firstname}" style="color:#999;" />
@@ -247,7 +247,7 @@ function disableclick(event)
 					                    
 					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="modifyUserButton" value="Approve" /></a>
 					                        </form:form></td>  
-									     <td> <form:form method="post" action="authorizeTransactionsReject" modelAttribute="authorizeTransactions">					
+									     <td> <form:form method="post" action="authorizeTransactionsReject" modelAttribute="authorizeTransactions" autocomplete="off">					
 										 <input type="hidden" name="accountNumber" id="accountNumber_RemoveUser" value="${ticketDetailDTO.accountNumber}" style="color:#999;" />
 					                     <input type="hidden" name="username" id="accountNumber_RemoveUser" value="${ticketDetailDTO.username}" style="color:#999;" />
 					                     <input type="hidden" name="firstname" id="accountNumber_RemoveUser" value="${ticketDetailDTO.firstname}" style="color:#999;" />

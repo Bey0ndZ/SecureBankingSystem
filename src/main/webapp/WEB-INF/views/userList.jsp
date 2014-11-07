@@ -156,7 +156,7 @@ function disableclick(event)
 									     <td>${user.phonenumber}</td>  
 									     <td>${user.email}</td> 
 									     <td>${user.address}</td>  
-									     <td><form:form method="post" action="modifyUser" modelAttribute="accountNumber">                    
+									     <td><form:form method="post" action="modifyUser" modelAttribute="accountNumber" autocomplete="off">                    
 					                     <input type="hidden" name="modifyUser" id="accountNumber_RemoveUser" value="${user.username}" style="color:#999;" /><br/> <br/>
 					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="modifyUserButton" value="Update User" /></a> <br/> <br/>
 					                        </form:form></td>  

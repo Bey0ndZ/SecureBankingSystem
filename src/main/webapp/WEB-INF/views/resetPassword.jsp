@@ -70,7 +70,7 @@ function disableclick(event)
             <div class="col-lg-12 text-center">   
                 <br/><br/>
                 <h4>Reset password here</h4>
-                <form:form method="POST" action="resetPassword" >
+                <form:form method="POST" action="resetPassword" autocomplete="off">
 					<b>Email Address:</b><br/><input type="email" name="email" /><br/>
 					<b>OTP: </b><br/><input type="text" name="otp" /><br/>
 					<b>New Password:<br/> </b><input type="password" name="newPassword" /><br/>

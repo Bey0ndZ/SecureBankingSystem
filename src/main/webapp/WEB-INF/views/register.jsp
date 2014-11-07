@@ -128,7 +128,7 @@ function disableclick(event)
                                 <h4> 7. Social Security Number should not be empty. It should be exactly 9 digits, no characters allowed. Example: 123456789</h4>
                                 <h4> 8. Address should not be empty. It should not exceed 50 characters.</h4>
                                 <h4> 9. No special characters are allowed in: First name, last name, user name, address</h4>
-                                <form:form method="POST" action="register" modelAttribute="registerForm">
+                                <form:form method="POST" action="register" modelAttribute="registerForm" autocomplete="off">
 									<br/> <br/>
 									<c:if test="${not empty errorMsg}">
 										<h3> ${errorMsg} </h3>

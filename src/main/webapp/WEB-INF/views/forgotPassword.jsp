@@ -70,7 +70,7 @@ function disableclick(event)
             <div class="col-lg-12 text-center">   
                 <br/><br/>
                 <h4>Forgot Password?</h4>
-                <form:form method="POST" action="forgotPassword" >
+                <form:form method="POST" action="forgotPassword" autocomplete="off">
 					<b>Email Address:</b> <input type="email" name="email" id="email" style="color:#999;" /><br/>
 					<br/><input type="submit" name="genOtp" id="genOtp" value="Get OTP" />
 				</form:form>

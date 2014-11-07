@@ -135,7 +135,7 @@ function disableclick(event)
             
                             <div class="panel-body">
                                 <div id="morris-area-chart">
-	                                <form:form method="post" action="viewUser" modelAttribute="accountNumber">                  
+	                                <form:form method="post" action="viewUser" modelAttribute="accountNumber" autocomplete="off">                  
 	                    				<b>Account Number :</b> <br/> <input type="text" name="viewUser" id="accountNumber_RemoveUser" style="color:#999;" /><br/> <br/>
 					                    <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Search User" /></a> <br/> <br/>
 					                    <c:if test="${not empty errorMsg}">

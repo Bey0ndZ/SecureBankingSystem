@@ -550,7 +550,8 @@ public class CustomerDAOImpl implements CustomerDAO {
 				+ " inner join users on "
 				+ "account.username=users.username "
 				+ "where account.username=?";
-
+		
+		
 		String insertIntoPendingTransactions = "INSERT INTO "
 				+ "pendingtransactions(username, amount, pending, accountnumberfrom,"
 				+ "accountnumberto, billpay) " + "VALUES (?,?,?,?,?,?)";
@@ -582,7 +583,9 @@ public class CustomerDAOImpl implements CustomerDAO {
 
 		int accountNumber = Integer.parseInt(getUsernameAccount);
 		int accountNumberFrom = Integer.parseInt(account);
-
+		if(accountNumber== accountNumberFrom){
+			return false;
+		}
 		// Getting the username of the merchant
 		JdbcTemplate getMerchantUsername = new JdbcTemplate(dataSource);
 		String merchantUsernameQuery = "SELECT username FROM account WHERE accountnumber=?";

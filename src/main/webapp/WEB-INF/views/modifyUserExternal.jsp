@@ -102,8 +102,8 @@ function disableclick(event)
 							data-target="#demo1"><i class="fa fa-fw fa-arrows-v"></i>
 								Transfer Money <i class="fa fa-fw fa-caret-down"></i></a>
 							<ul id="demo1" class="collapse">
-								<li><a href="#">Make a Transfer</a></li>
-								<li><a href="#">View Transfer Activity</a></li>
+								<li><a href="transferMoney">Make a Transfer</a></li>
+								<li><a href="transactionReview">View Transfer Activity</a></li>
 							</ul></li>
 						<li><a href="javascript:;" data-toggle="collapse"
 							data-target="#demo2"><i class="fa fa-fw fa-arrows-v"></i>
@@ -171,7 +171,7 @@ function disableclick(event)
 										</c:if>
 										<!-- New form to update only Lastname,
 										Sex, Selection, Phonenumber, Email and Address -->
-										<form:form method="POST" action="modifyUserExternal" modelAttribute="modifyExternalUserAttributes">
+										<form:form method="POST" action="modifyUserExternal" modelAttribute="modifyExternalUserAttributes" autocomplete="off">
 											<c:if test="${not empty errorMsg1}">
 												<h4> ${errorMsg1} </h4>
                                     		</c:if>

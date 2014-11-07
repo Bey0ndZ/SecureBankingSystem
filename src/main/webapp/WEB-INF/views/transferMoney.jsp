@@ -192,7 +192,7 @@ function disableclick(event)
 												<b></b>
 
 												<form:form method="post" action="transferMoneyConfirmation"
-													modelAttribute="transfer">
+													modelAttribute="transfer" autocomplete="off">
 													<i><b>Transfer Money at Bank of G5!</b></i>
 													<br />
 													

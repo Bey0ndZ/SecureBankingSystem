@@ -81,7 +81,7 @@ function disableclick(event)
                     <b>"${status}"</b>
                 </c:if>
 
-                <form:form method="post" action="activateAccount" modelAttribute="usernameSearch">                  
+                <form:form method="post" action="activateAccount" modelAttribute="usernameSearch" autocomplete="off">                  
                     <b>User Name :</b> <br/> <input type="text" name="username" id="accountNumber_RemoveUser" value ="${account}" style="color:#999;" /><br/> <br/>
                     <a> <input type="submit" style="margin-right: 5%" name="SearchUser" id="searchUserButton" value="Activate Account" /></a> <br/> <br/>
                     <c:if test="${not empty errorMsg}">

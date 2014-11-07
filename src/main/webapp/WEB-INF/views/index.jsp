@@ -100,7 +100,7 @@ function disableclick(event)
 					</c:if>
 			
 					<form name='loginForm' class="form-signin" role="form"
-						action="<c:url value='/j_spring_security_check' />" method='POST'>
+						action="<c:url value='/j_spring_security_check' />" method='POST' autocomplete="off">
 					
 						<input type="text" name="username" size="10" class="form-control" placeholder="Username" required autofocus>
 				        <input type="password" name="password" id="password" size="10" class="form-control keyboardInput" placeholder="Password" required>
