@@ -44,7 +44,7 @@ jQuery(window).load(function() {
 		
 		var value=jQuery("#transfer_amount").val();
 		
-		if(value<10000) {
+		if(value<1000) {
 			jQuery("#transferButton").css("display","block");
 			jQuery("#pendingButton").css("display","none");
 			}
@@ -59,7 +59,19 @@ jQuery(window).load(function() {
 
 </head>
 
-<body>
+<script>
+document.onmousedown=disableclick;
+status="Right Click Disabled";
+function disableclick(event)
+{
+  if(event.button==2)
+   {
+     alert(status);
+     return false;    
+   }
+}
+</script>
+<body oncontextmenu="return false">
 	<sec:authorize access="hasRole('ROLE_USER')">
 		<div id="wrapper">
 

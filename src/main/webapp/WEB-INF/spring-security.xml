@@ -24,6 +24,7 @@
 		<intercept-url pattern="/modifyExternalUserByInternal*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
 		<intercept-url pattern="/authorizeTransactions*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
 		<intercept-url pattern="/deleteTransactionSuccess*" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/viewPII*" access="hasAnyRole('ROLE_EMPLOYEE', 'ROLE_ADMIN')" />
 		
 		<!-- These are permitAll -->
 		<intercept-url pattern="/accountSummary*" access="hasRole('ROLE_USER')" />
@@ -33,6 +34,7 @@
 		<intercept-url pattern="/debitAmount*" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/creditAmount*" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/transactionsReview*" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/authorizePII*" access="hasRole('ROLE_USER')" />
 
 		<!-- These are external user specific -->
         <intercept-url pattern="/index*" access="permitAll"/>

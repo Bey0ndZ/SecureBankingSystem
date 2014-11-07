@@ -25,6 +25,7 @@ import javax.sql.DataSource;
 import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.TinyBitSet;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -49,6 +50,8 @@ import edu.softwaresecurity.group5.jdbc.TicketDetailMapper;
 import edu.softwaresecurity.group5.jdbc.TicketRowMapper;
 import edu.softwaresecurity.group5.jdbc.UserRowMapper;
 import edu.softwaresecurity.group5.jdbc.UserTransactionsMapper;
+import edu.softwaresecurity.group5.jdbc.UserWithSSNExtractor;
+import edu.softwaresecurity.group5.jdbc.UserWithSSNRowMapper;
 import edu.softwaresecurity.group5.mail.EmailService;
 import edu.softwaresecurity.group5.model.AccountAttempts;
 import edu.softwaresecurity.group5.model.AddUserInformation;
@@ -1528,5 +1531,67 @@ public class CustomerDAOImpl implements CustomerDAO {
 			}
 		}
 		return "Processed Bill Pay.";
+	}
+
+	public boolean authorizeDeauthorizeDao(String userName) {
+		try{
+			String authorizedQuery = "SELECT authorized from usersPII where username=?";
+		    JdbcTemplate jdbc = new JdbcTemplate(
+					dataSource);
+		    byte  status = jdbc.queryForObject(authorizedQuery, new Object[] { userName },Byte.class);
+			if (status==1) {
+				return true;
+			} else {
+				return false;
+			}
+		}catch(Exception e){
+			return false;
+		}
+	}
+	public boolean authorizeDeauthorizeRequestDao(String userName) {
+	    JdbcTemplate jdbcRequest = new JdbcTemplate(
+				dataSource);
+	    
+		try{
+			String authorizedQuery = "SELECT authorized from usersPII where username=?";
+		    JdbcTemplate jdbc = new JdbcTemplate(
+					dataSource);
+		    boolean  status = jdbc.queryForObject(authorizedQuery, new Object[] { userName },Boolean.class);
+			if (status) {
+				String authorizedRequestQuery = "UPDATE usersPII SET authorized=false where username= ?";
+			    int  status1 = jdbcRequest.update(authorizedRequestQuery, new Object[] { userName });
+				if (status1>0) {
+					return false;
+				}
+			} else {
+				String authorizedRequestQuery = "UPDATE usersPII SET authorized=true where username= ?";
+				int  status1 = jdbcRequest.update(authorizedRequestQuery, new Object[] { userName });
+				if (status1>0) {
+					return true;
+				}
+			}
+		}catch(Exception e){
+			String authorizedRequestQuery = "INSERT into usersPII (username,authorized) Values (?, ?)";
+			int  status1 = jdbcRequest.update(authorizedRequestQuery, new Object[] { userName,true });
+			if (status1>0) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return false;
+	}
+	// This method will return all the external users which are active, and have opted PII
+		// is used in admin.
+	public List<CustomerInformationDTO> getUserPIIList() {
+		List<CustomerInformationDTO> userList = new ArrayList<CustomerInformationDTO>();
+
+		String sql = "SELECT users.username, users.firstname, users.lastname, users.sex, users.MerchantorIndividual, "
+				+ " users.phonenumber, users.email, users.address, users.SSN from users inner join "
+				+ "user_roles on users.username = user_roles.username inner join usersPII on users.username=usersPII.username where users.enabled = true and users.userDetailsExpired=true and users.userDetailsExpired=true and user_roles.role='ROLE_USER' and usersPII.authorized=true";
+
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+		userList = jdbcTemplate.query(sql, new UserWithSSNRowMapper());
+		return userList;
 	}
 }

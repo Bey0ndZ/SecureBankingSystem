@@ -30,7 +30,19 @@ jQuery(document).ready(function(){
 	$("#password").keydown(false);
 });
 </script>
-<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+<script>
+document.onmousedown=disableclick;
+status="Right Click Disabled";
+function disableclick(event)
+{
+  if(event.button==2)
+   {
+     alert(status);
+     return false;    
+   }
+}
+</script>
+<body id="page-top" data-spy="scroll" oncontextmenu="return false" data-target=".navbar-fixed-top">
 
     <!-- Navigation -->
     <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">

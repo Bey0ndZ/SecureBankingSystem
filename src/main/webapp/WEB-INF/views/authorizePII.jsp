@@ -1,7 +1,13 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@page session="true"%>
+<%@ taglib
+    prefix="c"
+    uri="http://java.sun.com/jsp/jstl/core" 
+%>
 <%@taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,19 +19,37 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Welcome <sec:authentication property="principal.username" />!</title>
+    <title>OPT-IN OPT-OUT PII</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
     <link href="${pageContext.request.contextPath}/resources/css/sb-admin.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/keyboard.css" rel="stylesheet" type="text/css">
 
     <!-- Custom Fonts -->
     <link href="${pageContext.request.contextPath}/resources/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- Logout Script -->
+    <script type="text/javascript">
+        function formSubmit() {
+            document.getElementById("logoutForm").submit();
+        }
+    </script>
 
 </head>
-
+<script src="${pageContext.request.contextPath}/resources/js/jquery.js"></script>
+<script>
+jQuery(document).ready(function(){
+	$("#password").keydown(false);
+});
+</script>
+<script>
+jQuery(document).ready(function(){
+	$("#confirmPassword").keydown(false);
+});
+</script>
 <script>
 document.onmousedown=disableclick;
 status="Right Click Disabled";
@@ -39,7 +63,7 @@ function disableclick(event)
 }
 </script>
 <body oncontextmenu="return false">
-	<sec:authorize access="hasRole('ROLE_EMPLOYEE')">
+
     <div id="wrapper">
 
         <!-- Navigation -->
@@ -68,34 +92,18 @@ function disableclick(event)
             
             <!-- Logout feature implementation -->
             <c:url value="/j_spring_security_logout" var="logoutUrl" />
-			<form action="${logoutUrl}" method="post" id="logoutForm">
-				<input type="hidden" name="${_csrf.parameterName}"
-					value="${_csrf.token}" />
-			</form>
-			
-			<!-- Logout Script -->
-		    <script type="text/javascript">
-				function formSubmit() {
-					document.getElementById("logoutForm").submit();
-				}
-			</script>
-            <!-- Sidebar <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-			<%@page session="true"%>Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <form action="${logoutUrl}" method="post" id="logoutForm">
+                <input type="hidden" name="${_csrf.parameterName}"
+                    value="${_csrf.token}" />
+            </form>
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li>
-                        <a href="addUser"><i class="fa fa-fw fa-dashboard"></i> Add User</a>
+                        <a href="accountSummary"><i class="fa fa-fw fa-dashboard"></i> Back to DashBoard</a>
                     </li>
-                     <li>
-                        <a href="viewQueue"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
-                    </li>
-                    <li>
-                        <a href="changePassword"><i class="fa fa-fw fa-dashboard"></i>Change Password (SELF)</a>
-                    </li>
-                    <li>
-                        <a href="viewPII"><i class="fa fa-fw fa-dashboard"></i>View CUST info who authorized PII</a>
-                    </li>
-                 </ul>
+                    
+                </ul>
             </div>
             <!-- /.navbar-collapse -->
         </nav>
@@ -108,22 +116,29 @@ function disableclick(event)
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                           General Information
+                          PII
                         </h1>
                     </div>
                 </div>
-                <!-- /.ro<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-				<%@page session="true"%>w -->
+                <!-- /.row -->
 
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Home</h3>
+                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Authorize/Revoke Authorization</h3>
                             </div>
+          						    <c:if test="${not empty status}">
+					                	<b>"${status}"</b>
+					                </c:if>
                             <div class="panel-body">
                                 <div id="morris-area-chart">
-                                <h4><font COLOR=RED SIZE=16px> <b>Welcome <sec:authentication property="principal.username" />!</b></font></h4>
+	                                 <form:form method="post" action="authorizePII" modelAttribute="customerDetails">              
+						                <a><input type="submit" style="margin-right: 5%" name="modifyUser" id="modifyUserButton" value="Authorize/Revoke"/></a>
+					                </form:form>
+					                <c:if test="${not empty errorMsg}">
+											<h4> ${errorMsg} </h4>
+	                                </c:if> <br/> <br/>
                                 </div>
                             </div>
                         </div>
@@ -146,8 +161,7 @@ function disableclick(event)
     <!-- Bootstrap Core JavaScript -->
     <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
     
-    </sec:authorize>
-
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/keyboard.js" charset="UTF-8"></script>
 </body>
 
 </html>

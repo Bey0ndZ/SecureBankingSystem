@@ -1,7 +1,13 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@page session="true"%>
+<%@ taglib
+    prefix="c"
+    uri="http://java.sun.com/jsp/jstl/core" 
+%>
 <%@taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,7 +19,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Welcome <sec:authentication property="principal.username" />!</title>
+    <title>View All</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
@@ -23,6 +29,13 @@
 
     <!-- Custom Fonts -->
     <link href="${pageContext.request.contextPath}/resources/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- Logout Script -->
+    <script type="text/javascript">
+        function formSubmit() {
+            document.getElementById("logoutForm").submit();
+        }
+    </script>
 
 </head>
 
@@ -39,7 +52,7 @@ function disableclick(event)
 }
 </script>
 <body oncontextmenu="return false">
-	<sec:authorize access="hasRole('ROLE_EMPLOYEE')">
+
     <div id="wrapper">
 
         <!-- Navigation -->
@@ -68,34 +81,29 @@ function disableclick(event)
             
             <!-- Logout feature implementation -->
             <c:url value="/j_spring_security_logout" var="logoutUrl" />
-			<form action="${logoutUrl}" method="post" id="logoutForm">
-				<input type="hidden" name="${_csrf.parameterName}"
-					value="${_csrf.token}" />
-			</form>
-			
-			<!-- Logout Script -->
-		    <script type="text/javascript">
-				function formSubmit() {
-					document.getElementById("logoutForm").submit();
-				}
-			</script>
-            <!-- Sidebar <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-			<%@page session="true"%>Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <form action="${logoutUrl}" method="post" id="logoutForm">
+                <input type="hidden" name="${_csrf.parameterName}"
+                    value="${_csrf.token}" />
+            </form>
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li>
                         <a href="addUser"><i class="fa fa-fw fa-dashboard"></i> Add User</a>
                     </li>
-                     <li>
+                    <li>
                         <a href="viewQueue"><i class="fa fa-fw fa-dashboard"></i> View Queue</a>
+                    </li>
+                    <li class="active">
+                        <a href="getList"><i class="fa fa-fw fa-dashboard"></i>View All Regular Employee</a>
                     </li>
                     <li>
                         <a href="changePassword"><i class="fa fa-fw fa-dashboard"></i>Change Password (SELF)</a>
                     </li>
                     <li>
-                        <a href="viewPII"><i class="fa fa-fw fa-dashboard"></i>View CUST info who authorized PII</a>
+                        <a href="viewPII"><i class="fa fa-fw fa-dashboard"></i>PII opt-in USERS</a>
                     </li>
-                 </ul>
+                </ul>
             </div>
             <!-- /.navbar-collapse -->
         </nav>
@@ -108,22 +116,48 @@ function disableclick(event)
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                           General Information
+                          View All
                         </h1>
                     </div>
                 </div>
-                <!-- /.ro<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-				<%@page session="true"%>w -->
+                <!-- /.row -->
 
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Home</h3>
+                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> User Details</h3>
                             </div>
+            
                             <div class="panel-body">
                                 <div id="morris-area-chart">
-                                <h4><font COLOR=RED SIZE=16px> <b>Welcome <sec:authentication property="principal.username" />!</b></font></h4>
+                                 <b> <u> <h4> LIST OF USERS Who OPT-IN for PII - </h4> </u> </b>
+									  <table border="1">  
+									   <tr>  
+									    <td class="heading">User Name</td>  
+									    <td class="heading">First Name</td>  
+									    <td class="heading">Last Name</td>  
+									    <td class="heading">User Type</td>  
+									    <td class="heading">Sex</td> 
+									    <td class="heading">Contact Number</td>  
+									    <td class="heading">Email</td>
+									    <td class="heading">Address</td>
+									    <td class="heading">SSN</td>
+									   </tr>  
+									   <c:forEach var="user" items="${userList}">  
+									    <tr>  
+									     <td>${user.username}</td>  
+									     <td>${user.firstname}</td>  
+									     <td>${user.lastname}</td> 
+									     <td>${user.selection}</td>  
+									     <td>${user.sex}</td> 
+									     <td>${user.phonenumber}</td>  
+									     <td>${user.email}</td> 
+									     <td>${user.address}</td> 
+									     <td>${user.ssn}</td> 
+									    </tr>  
+									   </c:forEach>
+									  </table>
                                 </div>
                             </div>
                         </div>
@@ -145,9 +179,8 @@ function disableclick(event)
 
     <!-- Bootstrap Core JavaScript -->
     <script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
-    
-    </sec:authorize>
 
 </body>
 
-</html>
+</html>  
+	

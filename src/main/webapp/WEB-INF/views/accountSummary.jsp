@@ -34,7 +34,19 @@
 
 </head>
 
-<body>
+<script>
+document.onmousedown=disableclick;
+status="Right Click Disabled";
+function disableclick(event)
+{
+  if(event.button==2)
+   {
+     alert(status);
+     return false;    
+   }
+}
+</script>
+<body oncontextmenu="return false">
 	<sec:authorize access="hasRole('ROLE_USER')">
 		<div id="wrapper">
 
@@ -152,7 +164,9 @@
 												</c:forEach>
 											</c:if>
 
-
+												<div class="text-left">
+                                   					<a href="authorizePII">Authorize/Deauthorize Admin for PII <i class="fa fa-arrow-circle-right"></i></a>
+                               					</div>
 											<div class="text-right">
 												<a href="modifyUserExternal">Update Details <i
 													class="fa fa-arrow-circle-right"></i></a>

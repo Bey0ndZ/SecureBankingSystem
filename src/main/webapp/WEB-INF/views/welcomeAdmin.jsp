@@ -26,7 +26,19 @@
 
 </head>
 
-<body>
+<script>
+document.onmousedown=disableclick;
+status="Right Click Disabled";
+function disableclick(event)
+{
+  if(event.button==2)
+   {
+     alert(status);
+     return false;    
+   }
+}
+</script>
+<body oncontextmenu="return false">
 	<sec:authorize access="hasRole('ROLE_ADMIN')">
     <div id="wrapper">
 
@@ -82,6 +94,9 @@
                     </li>
                     <li>
                         <a href="changePassword"><i class="fa fa-fw fa-dashboard"></i>Change Password (SELF)</a>
+                    </li>
+                    <li>
+                        <a href="viewPII"><i class="fa fa-fw fa-dashboard"></i>View CUST info who authorized PII</a>
                     </li>
                  </ul>
             </div>
